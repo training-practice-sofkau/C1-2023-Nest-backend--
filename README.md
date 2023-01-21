@@ -45,7 +45,25 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## License
+## How to deliver the workshop
 
-Nest is [MIT licensed](LICENSE).
+```
+# Title of the delivery
+[Workshop Week 1 - Day 1] - Nest (Estructura de proyecto)
 
+# Body of the delivery
+[Any short description]
+```
+
+## Workshop
+
+The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
+
+1. Identify missing folders.
+2. Create missing folders.
+3. Create files corresponding to each folder.
+
+To identify the missing folders, you can use the documentation in the following link:
+[Nest documentation](https://docs.nestjs.com/).
+
+Please use the information from the following link to create the corresponding files in each folder using the [Nest CLI](https://docs.nestjs.com/cli/overview).
