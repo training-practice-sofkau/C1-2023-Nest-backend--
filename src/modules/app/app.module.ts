@@ -12,11 +12,30 @@ import { CustomerModule } from '../customer/customer.module';
 import { DepositService } from '../../services/deposit/deposit.service';
 import { TransferService } from '../../services/transfer/transfer.service';
 import { CustomerService } from '../../services/customer/customer.service';
-import { ServicesService } from '../../services/services.service';
+import { AppService } from '../../services/app/app.service';
 
 @Module({
   imports: [AccountModule, TransferModule, DepositModule, CustomerModule],
-  controllers: [SecurityController, CustomerController, AccountController, TransferController, DepositController],
-  providers: [AccountService, DepositService, TransferService, CustomerService, ServicesService],
+  controllers: [
+    SecurityController,
+    CustomerController,
+    AccountController,
+    TransferController,
+    DepositController,
+  ],
+  providers: [
+    AccountService,
+    DepositService,
+    TransferService,
+    CustomerService,
+    AppService,
+  ],
+  exports: [
+    AccountService,
+    DepositService,
+    TransferService,
+    CustomerService,
+    AppService,
+  ],
 })
 export class AppModule {}
