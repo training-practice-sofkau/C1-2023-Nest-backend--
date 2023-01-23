@@ -8,7 +8,7 @@ export class DocumentTypeController {
         return "Devuelve todos los documentos"
     }
     @Get(":id")
-    getDocument(@Param() id: string): string {
+    getDocument(@Param("id") id: string): string {
         return "Devuelve el documento con ID: " + id
     }
 
