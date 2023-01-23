@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-import { AccountTp } from "src/dtos/accounttp/create-accounttp.dto";
+import { AccountTpDTO } from "src/dtos/accounttp/create-accounttp.dto";
 
 @Controller("accounttp")
 export class AccountTpController {
@@ -10,12 +10,12 @@ export class AccountTpController {
     }
 
     @Post()
-    createAccountTp(@Body() accounttp: AccountTp): string {
+    createAccountTp(@Body() accounttp: AccountTpDTO): string {
         return "Se crea el tipo de cuenta"
     }
 
     @Put(":AccountID")
-    modifyAccountTp(@Param("AccountID") id: string, @Body() accounttp: AccountTp): string {
+    modifyAccountTp(@Param("AccountID") id: string, @Body() accounttp: AccountTpDTO): string {
         return "Se modifica la informacion de la cuenta " + id
     }
 
