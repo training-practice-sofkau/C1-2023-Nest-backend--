@@ -2,15 +2,20 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 
 @Controller("user")
 export class UserController {
+
+    @Get()
+    getUsers() {
+        return "Devuelve todos los usuarios"
+    }
+
     @Get(":id")
     getUser(@Param("id") id: string): string {
         return "Devuelve un usuario con id " + id
     }
 
     @Post()
-    createUser(@Body() user: {}): string {
-        console.log(user)
-        return "Se crea Usuario"
+    createUser(@Body() user: { name: string }): string {
+        return "Se crea Usuario con: " + user.name
     }
 
     @Put(":id")
