@@ -11,10 +11,11 @@ import { CustomerService } from './customer/customer.service';
 import { TransfersService } from './transfers/transfers.service';
 import { AccountService } from './account/account.service';
 import { AccountService } from './services/account/account.service';
+import { AuthModule } from './modules/auth/auth.module';
 import { AccountService } from './services/account/account.service';
 
 @Module({
-  imports: [],
+  imports: [AuthModule],
   controllers: [SecurityController, AccountController, CustomerController, TransfersController, DepositController],
   providers: [AccountService, AccountsService, DepositService, CustomerService, TransfersService],
 })
