@@ -1,0 +1,4 @@
+/* 
+este archivo contendra todas las querys
+que vamos a realizar sobre nuestro modelo
+*/
