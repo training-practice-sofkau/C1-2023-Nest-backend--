@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DocumentTypeModel } from './';
+import { DocumentTypeModel } from '.';
 
 export interface CustomerModel {
   id: string;

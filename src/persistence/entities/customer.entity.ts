@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { v4 as uuid } from 'uuid';
 import { DocumentTypeEntity } from './';
 import { CustomerModel } from '../../models';
