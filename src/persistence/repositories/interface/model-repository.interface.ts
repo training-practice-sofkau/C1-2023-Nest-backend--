@@ -1,7 +1,7 @@
-export interface BodyRepositoryInterface {
-    register(entity: any): any;
-    update(id: string, entity: any): any;
+export interface BodyRepositoryInterface<T> {
+    register(entity: T): T;
+    update(id: string, entity: T): T;
     delete(id: string, soft?: boolean): void;
-    findAll(): [];
-    findOneById(id: string): any;
+    findAll(): T[];
+    findOneById(id: string): T;
 }
