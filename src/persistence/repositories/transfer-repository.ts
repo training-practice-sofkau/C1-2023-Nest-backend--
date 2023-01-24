@@ -1,20 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { DocumentTypeEntity } from '../entities';
+import { transferEntity } from '../entities/transfer-entity';
 
 @Injectable()
-export class DocumentTypeRepository {
-  private readonly database: Array<DocumentTypeEntity>;
+export class TransferRepository {
+  private readonly database: Array<transferEntity>;
 
   constructor() {
-    this.database = new Array<DocumentTypeEntity>();
+    this.database = new Array<transferEntity>();
   }
 
-  register(entity: DocumentTypeEntity): DocumentTypeEntity {
+  register(entity: transferEntity): transferEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
+  update(id: string, entity: transferEntity): transferEntity {
     throw new Error('This method is not implemented');
   }
 
@@ -22,11 +22,11 @@ export class DocumentTypeRepository {
     throw new Error('This method is not implemented');
   }
 
-  findAll(): DocumentTypeEntity[] {
+  findAll(): transferEntity[] {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): DocumentTypeEntity {
+  findOneById(id: string): transferEntity {
     throw new Error('This method is not implemented');
   }
 }
