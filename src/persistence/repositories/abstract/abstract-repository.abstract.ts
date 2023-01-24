@@ -1,6 +1,6 @@
 import { BodyRepositoryInterface } from "../interface/model-repository.interface";
 
-export abstract class RepositoryBodyAbstract<entity> implements BodyRepositoryInterface<entity> {
+export abstract class BodyRepositoryAbstract<entity> implements BodyRepositoryInterface<entity> {
     private readonly database: Array<entity>;
     constructor() {
         this.database = new Array<entity>();
