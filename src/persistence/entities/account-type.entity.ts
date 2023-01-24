@@ -6,5 +6,5 @@ export class AccountTypeEntity implements AccountTypeModel {
 
   name: string;
 
-  state: true;
+  state = true;
 }

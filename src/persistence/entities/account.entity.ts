@@ -12,7 +12,7 @@ export class AccountEntity implements AccountModel {
 
   balance: number;
 
-  state: string;
+  state = true;
 
   deletedAt?: Date | number;
 }
