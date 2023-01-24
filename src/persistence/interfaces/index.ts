@@ -1,2 +1,2 @@
-export * from './customer.repository';
-export * from './document-type.repository';
+export * from '../repositories/customer.repository';
+export * from '../repositories/document-type.repository';
