@@ -1,9 +1,17 @@
-export abstract class IGenericRepository<T> {
-  abstract getAll(): Promise<T[]>;
-
-  abstract get(id: string): Promise<T>;
-
-  abstract create(item: T): Promise<T>;
-
-  //abstract update(id: string, item: T);
+export abstract class IGenericRepository<T> implements generic<T> {
+  register(t: T): T {
+    throw new Error('Method not implemented.');
+  }
+  update(id: string, entity: T): T {
+    throw new Error('Method not implemented.');
+  }
+  delete(id: string, soft?: boolean | undefined): void {
+    throw new Error('Method not implemented.');
+  }
+  findAll(): T[] {
+    throw new Error('Method not implemented.');
+  }
+  findOneById(id: string): T {
+    throw new Error('Method not implemented.');
+  }
 }
