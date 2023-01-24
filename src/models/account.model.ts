@@ -1,10 +1,10 @@
 import { CustomerModel } from './';
-import { DocumentTypeModel } from './';
+import { AccountTypeModel } from './';
 
 export interface AccountModel {
   id: string;
   customer: CustomerModel;
-  documentType: DocumentTypeModel;
+  accountType: AccountTypeModel;
   balance: number;
   state: boolean;
   deletedAt?: Date | number;

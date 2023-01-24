@@ -1,8 +1,8 @@
-import { AccountTypeModel } from './';
+import { AccountModel } from './';
 
-export interface TransferModel {
+export interface DepositModel {
   id: string;
-  account: AccountTypeModel;
+  account: AccountModel;
   amount: number;
   dateTime: Date | number;
   deletedAt?: Date | number;
