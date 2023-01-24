@@ -1,12 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { AccountEntity } from "../entities";
-import { BodyRepositoryAbstract } from "./abstract/abstrac-repository.abstract";
+import { BodyRepositoryAbstract } from "./abstract/abstract-repository.abstract";
 
 @Injectable()
 export class AccountRepository extends BodyRepositoryAbstract<AccountEntity>{
 
-
-    
     register(entity: AccountEntity): AccountEntity {
         throw new Error('This method is not implemented');
     }
