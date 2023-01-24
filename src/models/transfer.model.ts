@@ -1,6 +1,6 @@
 import { AccountModel } from './';
 
-export interface Transfer {
+export interface TransferModel {
   id: string;
   outCome: AccountModel;
   inCome: AccountModel;
