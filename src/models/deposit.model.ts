@@ -2,7 +2,7 @@ import { AccountModel } from "./";
 
 export interface DepositModel {
     id: string;
-    account_id: AccountModel;
+    accountId: AccountModel;
     amount: number;
     dateTime: Date | number;
     deletedAt?: Date | number
