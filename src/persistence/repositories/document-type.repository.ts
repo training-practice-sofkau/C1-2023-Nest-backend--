@@ -1,34 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
-import { BaseRepository } from './base.repository';
+import { BaseRepository } from './base/';
+import { BaseRepositoryInterface } from './interfaces/';
 
 @Injectable()
 export class DocumentTypeRepository
-  implements BaseRepository<DocumentTypeEntity>
+  extends BaseRepository<DocumentTypeEntity>
+  implements BaseRepositoryInterface<DocumentTypeEntity>
 {
-  private readonly database: Array<DocumentTypeEntity>;
-
-  constructor() {
-    this.database = new Array<DocumentTypeEntity>();
-  }
-
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean | undefined): void {
+    throw new Error('Method not implemented.');
   }
-
   findAll(): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
 }
