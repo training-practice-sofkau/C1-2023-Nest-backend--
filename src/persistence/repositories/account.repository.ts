@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { AccountEntity } from '../entities/account.entity';
+import { BaseRepository } from './base';
+import { AccountRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class AccountRepository {
-  private readonly database: Array<AccountEntity>;
-
-  constructor() {
-    this.database = new Array<AccountEntity>();
-  }
-
+export class AccountRepository
+  extends BaseRepository<AccountEntity>
+  implements AccountRepositoryInterface
+{
   register(entity: AccountEntity): AccountEntity {
     throw new Error('This method is not implemented');
   }
@@ -27,5 +26,9 @@ export class AccountRepository {
 
   findOneById(id: string): AccountEntity {
     throw new Error('This method is not implemented');
+  }
+
+  fun(accountId: string): void {
+    throw new Error('Method not implemented.');
   }
 }
