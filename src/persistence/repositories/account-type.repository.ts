@@ -6,20 +6,49 @@ import { AccountTypeRepositoryInterface } from './interface/account-type/account
 @Injectable()
 export class AccountTypeRepository
   extends BodyRepositoryAbstract<AccountTypeEntity>
-  implements AccountTypeRepositoryInterface {
-    register(entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('This method is not implemented');
-    }
-    update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('This method is not implemented');
-    }
-    delete(id: string, soft?: boolean | undefined): void {
-        throw new Error('This method is not implemented');
-    }
-    findAll(): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
-    }
-    findOneById(id: string): AccountTypeEntity {
-        throw new Error('This method is not implemented');
-    }
+  implements AccountTypeRepositoryInterface
+{
+  register(entity: AccountTypeEntity): AccountTypeEntity {
+    this.database.push(entity);
+    const accountTypeIndex = this.database.findIndex(
+      (customer) => customer.id === entity.id,
+    );
+    return this.database[accountTypeIndex];
   }
+  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+    const accountTypeIndex = this.database.findIndex(
+      (customer) => customer.id === id,
+    );
+    const data = this.database[accountTypeIndex];
+    this.database[accountTypeIndex] = {
+      ...data,
+      ...entity,
+      id: id,
+    };
+    return this.database[accountTypeIndex];
+  }
+  delete(id: string, soft?: boolean | undefined): void {
+    const accountTypeIndex = this.database.findIndex(
+      (customer) => customer.id === id,
+    );
+    this.database.splice(accountTypeIndex, 1);
+  }
+  findAll(): AccountTypeEntity[] {
+    return this.database;
+  }
+  findOneById(id: string): AccountTypeEntity {
+    const accountTypeIndex = this.database.findIndex(
+      (customer) => customer.id === id,
+    );
+    return this.database[accountTypeIndex];
+  }
+  findByState(state: boolean): AccountTypeEntity[] {
+    let arrayState: AccountTypeEntity[] = [];
+    this.database.map((documentType) => {
+      if (documentType.state === state) {
+        arrayState.push(documentType);
+      }
+    });
+    return arrayState;
+  }
+}

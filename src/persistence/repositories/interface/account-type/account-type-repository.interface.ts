@@ -1,4 +1,7 @@
-import { AccountTypeEntity } from "src/persistence/entities";
-import { BodyRepositoryInterface } from "../model-repository.interface";
+import { AccountTypeEntity } from 'src/persistence/entities';
+import { BodyRepositoryInterface } from '../model-repository.interface';
 
-export interface AccountTypeRepositoryInterface extends BodyRepositoryInterface<AccountTypeEntity>{}
+export interface AccountTypeRepositoryInterface
+  extends BodyRepositoryInterface<AccountTypeEntity> {
+  findByState(state: boolean): AccountTypeEntity[];
+}
