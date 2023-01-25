@@ -1,7 +1,8 @@
-export interface deposit {
-    depId: string;
-    depAccountId: string;
-    depAmount: number;
-    depDateTime: Date | number;
-    deletedAt: Date | number;
-  }
+import { AccountModel } from './account.model';
+export interface DepositModuls {
+  id: string;
+  accountId: AccountModel;
+  amount: number;
+  dateTime: Date | number;
+  deletedAt?: Date | number;
+}

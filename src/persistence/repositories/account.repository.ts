@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {AccountEntity } from '../entities';
+import { AccountEntity } from '../entities';
 
 @Injectable()
 export class AccountRepository {

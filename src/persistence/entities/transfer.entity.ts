@@ -1,15 +1,11 @@
-import { AccountEntity } from './account-type.entity';
-
-
-
-export class transferntity implements Transfermodels {
-    id: string;
-    outcome_id: AccountEntity;
-    income_id: AccountEntity;
-    amount:number;
-    reason:string;
-    date_time: Date | number;
-    deleted_at: Date | number;
-
+import { AccountModel, TranfersModel } from 'src/models';
+import { v4 as uuid } from 'uuid';
+export class transferEntity implements TranfersModel {
+  id: uuid();
+  outcome: AccountModel;
+  income: AccountModel;
+  amount: number;
+  reason: string;
+  dateTime: number | Date;
+  deletedAt?: number | Date;
 }
-    

@@ -16,7 +16,19 @@ import { AccountService } from './services/account/account.service';
 
 @Module({
   imports: [AuthModule],
-  controllers: [SecurityController, AccountController, CustomerController, TransfersController, DepositController],
-  providers: [AccountService, AccountsService, DepositService, CustomerService, TransfersService],
+  controllers: [
+    SecurityController,
+    AccountController,
+    CustomerController,
+    TransfersController,
+    DepositController,
+  ],
+  providers: [
+    AccountService,
+    AccountsService,
+    DepositService,
+    CustomerService,
+    TransfersService,
+  ],
 })
 export class AppModule {}

@@ -1,13 +1,13 @@
-import {base} from
+import { Injectable } from '@nestjs/common';
+import { depositEntity } from '../entities';
 
-export astract class base<T> implements base<T> {
-    private readonly database: Array<T>;
+@Injectable()
+export class dispositRepository {
+  private readonly database: Array<depositEntity>;
 
-  constructor(repository: Array<T> ) {
-    this._repository = repository;
-
+  constructor() {
+    this.database = new Array<depositEntity>();
   }
-
 
   register(entity: depositEntity): depositEntity {
     throw new Error('This method is not implemented');
