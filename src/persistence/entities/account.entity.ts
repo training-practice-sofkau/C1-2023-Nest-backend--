@@ -1,7 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { AccountModel } from '../../models';
-import { AccountTypeEntity } from './account-type.entity';
-import { CustomerEntity } from './customer.entity';
+import { AccountTypeEntity, CustomerEntity } from './';
 
 export class AccountEntity implements AccountModel {
   id = uuid();

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
-import { DepositModel } from 'src/models/deposit.model';
-import { AccountEntity } from './account.entity';
+import { DepositModel } from '../../models';
+import { AccountEntity } from './';
 
 export class DepositEntity implements DepositModel {
   id = uuid();

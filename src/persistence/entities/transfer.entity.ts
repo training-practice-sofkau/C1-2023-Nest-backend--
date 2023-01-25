@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { TransferModel } from 'src/models/transfer.model';
+import { TransferModel } from '../../models';
 
 export class TransferEntity implements TransferModel {
   id = uuid();

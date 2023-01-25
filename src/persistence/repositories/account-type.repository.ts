@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { AccountTypeEntity } from '../entities/account-type.entity';
+import { IGenericRepository } from './base/generic.base';
 
 @Injectable()
-export class AccountTypeRepository {
+export class AccountTypeRepository extends IGenericRepository<AccountTypeEntity> {
   private readonly database: Array<AccountTypeEntity>;
 
   constructor() {
+    super();
     this.database = new Array<AccountTypeEntity>();
   }
 
