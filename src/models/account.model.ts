@@ -1,10 +1,10 @@
 import { CustomerModel } from './customer.model';
-import { DocumentTypeModel } from './document-type.model';
+import { AccountTypeModel } from './account-type.model';
 
-export interface Account {
+export interface AccountModel {
   id: string;
   customerId: CustomerModel;
-  typeId: DocumentTypeModel;
+  typeId: AccountTypeModel;
   balance: number;
   state: boolean;
   delatedAd?: Date | number;

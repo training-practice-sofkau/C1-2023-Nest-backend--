@@ -1,11 +1,11 @@
-import { Account } from './account.model';
+import { AccountModel } from './account.model';
 
 export interface TransferModel {
   id: string;
-  outcome: Account;
-  income: Account;
-  amount: number;
+  outcome: AccountModel;
+  income: AccountModel;
+  amount: string;
   reason: string;
-  date_time: Date;
-  deleteAt: Date | number;
+  date_time: Date | number;
+  deleteAt?: Date | number;
 }
