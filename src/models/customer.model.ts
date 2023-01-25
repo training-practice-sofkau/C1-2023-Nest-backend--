@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DocumentTypeModel } from '.';
 
 export interface CustomerModel {
@@ -11,5 +10,5 @@ export interface CustomerModel {
   password: string;
   avatarUrl?: string;
   state: boolean;
-  deletedAt?: Date | number;
+  deletedAt?: Date | number; //el signo ? quiere decir que no es obligatorio el dato
 }

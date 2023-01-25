@@ -1,18 +1,13 @@
-/* eslint-disable prettier/prettier */
-import { account } from 'src/models/account';
+import { AccountModel } from 'src/models';
+import { TransferModel } from 'src/models/transfer.model';
 import { v4 as uuid } from 'uuid';
 
-import { transfer } from '../../models/transfer';
-
-export class transferEntity implements transfer {
-    id = uuid();
-    trfId: string;
-    trfOutcome: account;
-    trfIncome: string;
-    trfAmount: string;
-    trfReason: string;
-    trfDateTime: number | Date;
-    trfDelaateAt?: number | Date | undefined;
-    
-    
+export class TransferEntity implements TransferModel {
+  id = uuid();
+  outCome: AccountModel;
+  inCome: AccountModel;
+  amount: string;
+  reason: string;
+  dateTime: number | Date;
+  deletedAt?: number | Date | undefined;
 }
