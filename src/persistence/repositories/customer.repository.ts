@@ -8,18 +8,58 @@ export class CustomerRepository
   extends BodyRepositoryAbstract<CustomerEntity>
   implements CustomerRepositoryInterface {
     register(entity: CustomerEntity): CustomerEntity {
-      throw new Error('This method is not implemented');
+      this.database.push(entity);
+      const customerIndex = this.database.findIndex(
+        (customer) => customer.id === entity.id
+      );
+      return this.database[customerIndex];
     }
     update(id: string, entity: CustomerEntity): CustomerEntity {
-      throw new Error('This method is not implemented');
+      const customerIndex = this.database.findIndex(
+        (customer) => customer.id === id
+      );
+      const data = this.database[customerIndex];
+      this.database[customerIndex] = {
+        ...data,
+        ...entity,
+        id: id,
+      };
+      return this.database[customerIndex];
     }
     delete(id: string, soft?: boolean | undefined): void {
-      throw new Error('This method is not implemented');
+      const customerIndex = this.database.findIndex(
+        (customer) => customer.id === id
+      );
+      this.database.splice(customerIndex, 1);
     }
     findAll(): CustomerEntity[] {
-      throw new Error('This method is not implemented');
+      return this.database;
     }
     findOneById(id: string): CustomerEntity {
-      throw new Error('This method is not implemented');
+      const customerIndex = this.database.findIndex(
+        (customer) => customer.id === id
+      );
+      return this.database[customerIndex];
+    }
+    findByDocumentTypeId(documentTypeId: string): CustomerEntity {
+      const customerIndex = this.database.findIndex(
+        (customer) => customer.documentType.id === documentTypeId
+      );
+      return this.database[customerIndex];
+    }
+    findByEmail(email: string): CustomerEntity {
+      const customerIndex = this.database.findIndex(
+        (customer) => customer.email === email
+      );
+      return this.database[customerIndex];
+    }
+    findByState(state: boolean): CustomerEntity[] {
+      let arrayState: CustomerEntity[] = [];
+      this.database.map((customer) => {
+        if (customer.state === state) {
+          arrayState.push(customer);
+        }
+      });
+      return arrayState;
     }
   }
