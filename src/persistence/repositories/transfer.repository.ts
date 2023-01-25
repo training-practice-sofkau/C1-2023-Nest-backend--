@@ -9,15 +9,15 @@ export class TransferRepository {
     this.database = new Array<TransferEntity>();
   }
 
-  register(entity: TransferEntity): TransferEntity {
+  register(): TransferEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: TransferEntity): TransferEntity {
+  update(): TransferEntity {
     throw new Error('This method is not implemented');
   }
 
-  delete(id: string, soft?: boolean): void {
+  delete(): void {
     throw new Error('This method is not implemented');
   }
 
@@ -25,7 +25,7 @@ export class TransferRepository {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): TransferEntity {
+  findOneById(): TransferEntity {
     throw new Error('This method is not implemented');
   }
 }

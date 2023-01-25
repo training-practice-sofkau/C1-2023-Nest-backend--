@@ -9,15 +9,15 @@ export class CustomerRepository {
     this.database = new Array<CustomerEntity>();
   }
 
-  register(entity: CustomerEntity): CustomerEntity {
+  register(): CustomerEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: CustomerEntity): CustomerEntity {
+  update(): CustomerEntity {
     throw new Error('This method is not implemented');
   }
 
-  delete(id: string, soft?: boolean): void {
+  delete(): void {
     throw new Error('This method is not implemented');
   }
 
@@ -25,7 +25,7 @@ export class CustomerRepository {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): CustomerEntity {
+  findOneById(): CustomerEntity {
     throw new Error('This method is not implemented');
   }
 }

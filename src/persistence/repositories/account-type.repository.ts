@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AccountTypeEntity } from 'src/persistence/entities/account-type.entity';
+import { AccountTypeEntity } from '../entities';
 @Injectable()
 export class DocumentTypeRepository {
   private readonly database: Array<AccountTypeEntity>;
@@ -8,15 +8,15 @@ export class DocumentTypeRepository {
     this.database = new Array<AccountTypeEntity>();
   }
 
-  register(entity: AccountTypeEntity): AccountTypeEntity {
+  register(): AccountTypeEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+  update(): AccountTypeEntity {
     throw new Error('This method is not implemented');
   }
 
-  delete(id: string, soft?: boolean): void {
+  delete(): void {
     throw new Error('This method is not implemented');
   }
 
@@ -24,7 +24,7 @@ export class DocumentTypeRepository {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): AccountTypeEntity {
+  findOneById(): AccountTypeEntity {
     throw new Error('This method is not implemented');
   }
 }

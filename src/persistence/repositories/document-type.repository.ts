@@ -9,15 +9,15 @@ export class DocumentTypeRepository {
     this.database = new Array<DocumentTypeEntity>();
   }
 
-  register(entity: DocumentTypeEntity): DocumentTypeEntity {
+  register(): DocumentTypeEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
+  update(): DocumentTypeEntity {
     throw new Error('This method is not implemented');
   }
 
-  delete(id: string, soft?: boolean): void {
+  delete(): void {
     throw new Error('This method is not implemented');
   }
 
@@ -25,7 +25,7 @@ export class DocumentTypeRepository {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): DocumentTypeEntity {
+  findOneById(): DocumentTypeEntity {
     throw new Error('This method is not implemented');
   }
 }

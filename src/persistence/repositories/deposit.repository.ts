@@ -9,15 +9,15 @@ export class DepositRepository {
     this.database = new Array<DepositEntity>();
   }
 
-  register(entity: DepositEntity): DepositEntity {
+  register(): DepositEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: DepositEntity): DepositEntity {
+  update(): DepositEntity {
     throw new Error('This method is not implemented');
   }
 
-  delete(id: string, soft?: boolean): void {
+  delete(): void {
     throw new Error('This method is not implemented');
   }
 
@@ -25,7 +25,7 @@ export class DepositRepository {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): DepositEntity {
+  findOneById(): DepositEntity {
     throw new Error('This method is not implemented');
   }
 }
