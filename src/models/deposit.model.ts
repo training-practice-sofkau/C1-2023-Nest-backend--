@@ -1,8 +1,8 @@
-import { AccountModel } from "./account.model";
+import { AccountModel } from './account.model';
 export interface DepositModel {
   id: string;
-  accountId: AccountModel;
+  account: AccountModel;
   amount: number;
-  date_time: Date | number;
+  dateTime: Date | number;
   deleteAt: Date | number;
 }

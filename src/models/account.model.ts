@@ -3,9 +3,9 @@ import { AccountTypeModel } from './account-type.model';
 
 export interface AccountModel {
   id: string;
-  customerId: CustomerModel;
-  typeId: AccountTypeModel;
+  customer: CustomerModel;
+  accountType: AccountTypeModel;
   balance: number;
   state: boolean;
-  delatedAd?: Date | number;
+  delatedAt?: Date | number;
 }
