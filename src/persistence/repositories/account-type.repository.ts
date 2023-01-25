@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentTypeEntity as AccountTypeEntity } from '../entities';
+import { AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base/base.repository';
 import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
 
@@ -11,7 +11,6 @@ export class AccountTypeRepository
   register(entity: AccountTypeEntity): AccountTypeEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
-    throw new Error('This method is not implemented');
   }
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {

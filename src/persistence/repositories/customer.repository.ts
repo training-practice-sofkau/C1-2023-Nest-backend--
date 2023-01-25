@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
+import { BaseRepository } from './base/base.repository';
+import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
 
 @Injectable()
-export class CustomerRepository {
-  private readonly database: Array<CustomerEntity>;
-
-  constructor() {
-    this.database = new Array<CustomerEntity>();
-  }
-
+export class CustomerRepository
+  extends BaseRepository<CustomerEntity>
+  implements BaseRepositoryInterface<CustomerEntity>
+{
   register(entity: CustomerEntity): CustomerEntity {
     throw new Error('This method is not implemented');
   }
