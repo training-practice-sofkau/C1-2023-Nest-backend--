@@ -1,15 +1,13 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { DespositEntity } from '../entities/deposit.entity';
+import { BaseRepository } from './base/base.repository';
+import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
 
 @Injectable()
-export class DepositRepository {
-  private readonly database: Array<DespositEntity>;
-
-  constructor() {
-    this.database = new Array<DespositEntity>();
-  }
-
+export class DepositRepository
+  extends BaseRepository<DespositEntity>
+  implements BaseRepositoryInterface<DespositEntity>
+{
   register(entity: DespositEntity): DespositEntity {
     throw new Error('This method is not implemented');
   }

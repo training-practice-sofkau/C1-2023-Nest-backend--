@@ -9,5 +9,5 @@ export class TransferEntity implements TransferModel {
   amount: string;
   reason: string;
   dateTime: number | Date;
-  deletedAt?: number | Date | undefined;
+  deletedAt?: number | Date;
 }

@@ -1,14 +1,13 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { AccountTypeEntity } from '../entities';
+import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
+import { AccountTypeEntity } from '../entities/account-type.entity';
+import { BaseRepository } from './base/base.repository';
+
 @Injectable()
-export class TypeAccountRepository {
-  private readonly database: Array<AccountTypeEntity>;
-
-  constructor() {
-    this.database = new Array<AccountTypeEntity>();
-  }
-
+export class TypeAccountRepository
+  extends BaseRepository<AccountTypeEntity>
+  implements BaseRepositoryInterface<AccountTypeEntity>
+{
   register(entity: AccountTypeEntity): AccountTypeEntity {
     throw new Error('This method is not implemented');
   }

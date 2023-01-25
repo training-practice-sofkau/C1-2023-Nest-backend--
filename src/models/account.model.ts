@@ -3,7 +3,7 @@ import { CustomerModel } from './customer.model';
 
 export interface AccountModel {
   id: string;
-  custumer: CustomerModel;
+  customer: CustomerModel;
   accountType: AccountTypeModel;
   balance: number;
   state: boolean;
