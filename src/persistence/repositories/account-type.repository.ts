@@ -24,7 +24,9 @@ export class AccountTypeRepository
   }
 
   findByName(name: string): AccountTypeEntity[] {
-    const currentAccountTypes = this.database.filter((n) => n.name === name);
+    const currentAccountTypes = this.database.filter(
+      (n) => n.name.toLowerCase().indexOf(name.toLowerCase()) !== -1,
+    );
     if ((currentAccountTypes.length = 0)) {
       throw new NotFoundException(
         `No existen tipos de cuentas con el nombre ${name}`,
