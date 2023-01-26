@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
 
 @Injectable()
@@ -14,12 +14,27 @@ export class DocumentTypeRepository {
     return this.database.at(-1) ?? entity;
   }
 
-  update(): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+  update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
+    const index = this.database.findIndex((item) => item.id === id);
+
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      } as DocumentTypeEntity;
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
 
-  delete(): void {
-    throw new Error('This method is not implemented');
+  delete(id: string): void {
+    const index = this.database.findIndex((item) => item.id === id);
+    if (index == -1) {
+      throw new Error('Method is not implemented');
+    }
+    this.database.splice(index, 1);
   }
 
   findAll(): DocumentTypeEntity[] {

@@ -63,15 +63,7 @@ export class CustomerRepository
     return index >= 0 ? true : false;
   }
 
-  findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
-    document: string,
-  ): CustomerEntity {
-    const index = this.database.findIndex(
-      (item) => item.documentType === documentTypeId && item.document === document,
-    );
-    return index >= 0 ? true : false;
-  }
+  findOneByDocumentTypeAndDocument(): CustomerEntity {}
 
   findOneByEmail(/*email: string*/): CustomerEntity {
     throw new Error('This method is not implemented');
