@@ -2,7 +2,7 @@ import { AccountModel } from 'src/models';
 import { v4 as uuid } from 'uuid';
 import { DepositModuls } from '../../models/deposit.module';
 
-export class depositEntity implements DepositModuls {
+export class DepositEntity implements DepositModuls {
   id = uuid();
   accountId: AccountModel;
   amount: number;
