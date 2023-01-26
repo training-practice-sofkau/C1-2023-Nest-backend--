@@ -38,7 +38,7 @@ export class TransferRepository
       const index = this.database.findIndex(
         (item) => item.id === id && (item.deletedAt ?? true) === true,
       );
-      this.database.splice(index, 1);
+      this.hardDelete(index);
     }
   }
 
