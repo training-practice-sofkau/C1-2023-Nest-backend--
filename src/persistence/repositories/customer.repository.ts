@@ -88,18 +88,18 @@ export class CustomerRepository
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    const stadof = this.database.filter(
+    const estado = this.database.filter(
       //filtra segun una condicion y devuelve un array
       (item) => item.state == state && typeof item.deletedAt === 'undefined',
     );
-    return stadof;
+    return estado;
   }
   findByFullName(fullName: string): CustomerEntity[] {
-    const nombrec = this.database.filter(
+    const nombre = this.database.filter(
       //filtra segun una condicion y devuelve un array
       (item) =>
         item.fullName == fullName && typeof item.deletedAt === 'undefined',
     );
-    return nombrec;
+    return nombre;
   }
 }

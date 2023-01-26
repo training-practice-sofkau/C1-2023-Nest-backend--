@@ -46,18 +46,36 @@ export class AccountRepository
   }
 
   findOneById(id: string): AccountEntity {
-    throw new Error('This method is not implemented');
+    const account = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (account) return account;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
   findByState(state: boolean): AccountEntity[] {
-    throw new Error('This method is not implemented');
+    const estado = this.database.filter(
+      //filtra segun una condicion y devuelve un array
+      (item) => item.state == state && typeof item.deletedAt === 'undefined',
+    );
+    return estado;
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
-    throw new Error('This method is not implemented');
+    const client = this.database.filter(
+      //filtra segun una condicion y devuelve un array
+      (item) =>
+        item.customerId == customerId && typeof item.deletedAt === 'undefined',
+    );
+    return client;
   }
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
-    throw new Error('This method is not implemented');
+    const accountType = this.database.filter(
+      //filtra segun una condicion y devuelve un array
+      (item) =>
+        item.accountTypeId == accountTypeId && typeof item.deletedAt === 'undefined',
+    );
+    return accountType;
   }
 }
