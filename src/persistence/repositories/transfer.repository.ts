@@ -59,14 +59,23 @@ export class TransferRepository
     dateInit: number | Date,
     dateEnd: number | Date,
   ): TransferEntity[] {
-    throw new Error('Method not implemented.');
+    const transfers = this.database.filter(
+      (item: TransferEntity) =>
+        dateInit >= item.dateTime && dateEnd <= item.dateTime,
+    );
+    return transfers;
   }
+
   findIncomeByDataRange(
     accountId: string,
     dateInit: number | Date,
     dateEnd: number | Date,
   ): TransferEntity[] {
-    throw new Error('Method not implemented.');
+    const transfers = this.database.filter(
+      (item: TransferEntity) =>
+        dateInit >= item.dateTime && dateEnd <= item.dateTime,
+    );
+    return transfers;
   }
 
   private hardDelete(index: number): void {
