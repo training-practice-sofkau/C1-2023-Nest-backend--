@@ -11,13 +11,13 @@ export class DocumentTypeRepository
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     this.database.push(entity);
     const documentTypeIndex = this.database.findIndex(
-      (customer) => customer.id === entity.id,
+      (documentType) => documentType.id === entity.id,
     );
     return this.database[documentTypeIndex];
   }
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
     const documentTypeIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (documentType) => documentType.id === id,
     );
     const data = this.database[documentTypeIndex];
     this.database[documentTypeIndex] = {
@@ -29,7 +29,7 @@ export class DocumentTypeRepository
   }
   delete(id: string, soft?: boolean | undefined): void {
     const documentTypeIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (documentType) => documentType.id === id,
     );
     this.database.splice(documentTypeIndex, 1);
   }
@@ -38,7 +38,7 @@ export class DocumentTypeRepository
   }
   findOneById(id: string): DocumentTypeEntity {
     const documentTypeIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (documentType) => documentType.id === id,
     );
     return this.database[documentTypeIndex];
   }

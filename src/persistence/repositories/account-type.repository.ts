@@ -11,13 +11,13 @@ export class AccountTypeRepository
   register(entity: AccountTypeEntity): AccountTypeEntity {
     this.database.push(entity);
     const accountTypeIndex = this.database.findIndex(
-      (customer) => customer.id === entity.id,
+      (accountType) => accountType.id === entity.id,
     );
     return this.database[accountTypeIndex];
   }
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
     const accountTypeIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (accountType) => accountType.id === id,
     );
     const data = this.database[accountTypeIndex];
     this.database[accountTypeIndex] = {
@@ -29,7 +29,7 @@ export class AccountTypeRepository
   }
   delete(id: string, soft?: boolean | undefined): void {
     const accountTypeIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (accountType) => accountType.id === id,
     );
     this.database.splice(accountTypeIndex, 1);
   }
@@ -38,7 +38,7 @@ export class AccountTypeRepository
   }
   findOneById(id: string): AccountTypeEntity {
     const accountTypeIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (accountType) => accountType.id === id,
     );
     return this.database[accountTypeIndex];
   }
