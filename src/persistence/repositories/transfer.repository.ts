@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferEntity } from '../entities';
 import { BaseRepository } from './base/';
 import { BaseRepositoryInterface } from './interfaces/';
@@ -9,18 +9,84 @@ export class CustomerRepository
   implements BaseRepositoryInterface<TransferEntity>
 {
   register(entity: TransferEntity): TransferEntity {
-    throw new Error('Method not implemented.');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
+
   update(id: string, entity: TransferEntity): TransferEntity {
-    throw new Error('Method not implemented.');
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      } as TransferEntity;
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
-  delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+
+  delete(id: string, soft?: boolean): void {
+    this.findOneById(id);
+    if (soft || soft === undefined) {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
+    } else {
+      const index = this.database.findIndex(
+        (item) => item.id === id && (item.deletedAt ?? true) === true,
+      );
+      this.hardDelete(index);
+    }
   }
+
+  private hardDelete(index: number): void {
+    this.database.splice(index, 1);
+  }
+
+  private softDelete(index: number): void {
+    const account = this.database[index];
+    account.deletedAt = Date.now();
+    this.update(account.id, account);
+  }
+
   findAll(): TransferEntity[] {
-    throw new Error('Method not implemented.');
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
+
   findOneById(id: string): TransferEntity {
-    throw new Error('Method not implemented.');
+    const account = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (account) return account;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+  }
+
+  findOutcomeByDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[] {
+    return this.database.filter(
+      (item) =>
+        item.dateTime <= dateInit &&
+        item.dateTime >= dateEnd &&
+        item.outCome.id === accountId,
+    );
+  }
+
+  findIncomeByDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[] {
+    return this.database.filter(
+      (item) =>
+        item.dateTime <= dateInit &&
+        item.dateTime >= dateEnd &&
+        item.inCome.id === accountId,
+    );
   }
 }
