@@ -9,8 +9,9 @@ export class DepositRepository {
     this.database = new Array<DepositEntity>();
   }
 
-  register(): DepositEntity {
-    throw new Error('This method is not implemented');
+  register(entity: DepositEntity): DepositEntity {
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(): DepositEntity {

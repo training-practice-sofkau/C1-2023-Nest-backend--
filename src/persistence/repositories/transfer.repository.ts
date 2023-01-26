@@ -9,8 +9,9 @@ export class TransferRepository {
     this.database = new Array<TransferEntity>();
   }
 
-  register(): TransferEntity {
-    throw new Error('This method is not implemented');
+  register(entity: TransferEntity): TransferEntity {
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(): TransferEntity {

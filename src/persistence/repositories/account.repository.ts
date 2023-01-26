@@ -9,10 +9,10 @@ export class AccountRepository {
     this.database = new Array<AccountEntity>();
   }
 
-  register(): AccountEntity {
-    throw new Error('This method is not implemented');
+  register(entity: AccountEntity): AccountEntity {
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
-
   update(): AccountEntity {
     throw new Error('This method is not implemented');
   }
