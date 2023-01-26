@@ -36,4 +36,11 @@ export class AccountTypeRepository
   findOneById(id: string): AccountTypeEntity {
     throw new Error('This method is not implemented');
   }
+  findByState(state: boolean): AccountTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByName(name: string): AccountTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
 }
