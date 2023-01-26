@@ -27,7 +27,7 @@ export class DocumentTypeRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean): void {
+  delete(id: string, _soft?: boolean): void {
     const index = this.database.findIndex((item) => item.id === id);
     this.database.splice(index, 1);
   }
