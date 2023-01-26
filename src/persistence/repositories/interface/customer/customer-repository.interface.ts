@@ -6,4 +6,6 @@ export interface CustomerRepositoryInterface
   findByDocumentTypeId(documentTypeId: string): CustomerEntity;
   findByEmail(email: string): CustomerEntity;
   findByState(state: boolean): CustomerEntity[];
+  findEmailAndPassword(email: string, password: string): boolean
+  findByFullName(name: string): CustomerEntity[]
 }
