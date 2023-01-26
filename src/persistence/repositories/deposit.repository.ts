@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { AccountEntity, DepositEntity } from '../entities';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
 import { DepositREpositoryInterface } from './interfaces';
 
@@ -8,25 +12,85 @@ export class DepositRepository
   extends BaseRepository<DepositEntity>
   implements DepositREpositoryInterface
 {
-  constructor() {
-    super();
+  findByAccountId(accoundId: string): DepositEntity[] {
+    const currentDeposits = this.findAll().filter(
+      (d) => d.account.id === accoundId,
+    );
+    if (currentDeposits.length == 0) {
+      throw new NotFoundException(
+        `No existen depositos para la cuenta con el id: ${accoundId}`,
+      );
+    }
+    return currentDeposits;
   }
-  findByAccount(account: AccountEntity): DepositEntity[] {
-    throw new Error('Method not implemented.');
+
+  findByDataRange(
+    dateInit: number | Date,
+    dateEnd: number | Date,
+  ): DepositEntity[] {
+    const currentDeposits = this.findAll().filter(
+      (d) => d.dateTime <= dateEnd && d.dateTime >= dateInit,
+    );
+    return currentDeposits;
   }
+
   register(entity: DepositEntity): DepositEntity {
-    throw new Error('Method not implemented.');
+    const currentDeposits = this.findAll().find((d) => d.id === entity.id);
+    if (currentDeposits) {
+      throw new ConflictException(
+        'El deposito que intenta registrar ya existe en la base de datos',
+      );
+    } else {
+      this.database.push(entity);
+    }
+    return this.database.at(-1) ?? entity;
   }
+
   upate(id: string, entity: DepositEntity): DepositEntity {
-    throw new Error('Method not implemented.');
+    const currentDeposit = this.findOneById(id);
+    if (currentDeposit === entity) {
+      throw new ConflictException('Los datos a actualizar ya existen');
+    }
+    const index = this.database.findIndex((i) => i.id === id);
+    this.database[index] = {
+      ...currentDeposit,
+      ...entity,
+      id: id,
+    };
+    return this.database[index];
   }
+
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    const currentDeposit = this.findOneById(id);
+    const index = this.database.findIndex((i) => i.id === id);
+    if (soft && currentDeposit) {
+      this.softDelete(index);
+    }
+    this.hardDelete(index);
   }
+
+  private hardDelete(index: number): void {
+    this.database.slice(index, 1);
+  }
+
+  private softDelete(index: number): void {
+    const currentAccount = this.database[index];
+    currentAccount.deletedAt = Date.now();
+    this.upate(currentAccount.id, currentAccount);
+  }
+
   findAll(): DepositEntity[] {
-    throw new Error('Method not implemented.');
+    return this.database.filter((a) => a.deletedAt === undefined);
   }
+
   findOneById(id: string): DepositEntity {
-    throw new Error('Method not implemented.');
+    const currentDeposit = this.findAll().find((a) => a.id === id);
+    if (currentDeposit) {
+      return currentDeposit;
+    } else {
+      throw new NotFoundException(
+        `El deposito con el Id ${id} no existe en la base de datos`,
+      );
+    }
   }
 }

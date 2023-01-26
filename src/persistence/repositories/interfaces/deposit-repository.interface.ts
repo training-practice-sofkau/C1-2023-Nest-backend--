@@ -1,7 +1,11 @@
-import { AccountEntity, DepositEntity } from 'src/persistence/entities';
+import { DepositEntity } from 'src/persistence/entities';
 import { BaseRepositoryInterface } from './base';
 
 export interface DepositREpositoryInterface
   extends BaseRepositoryInterface<DepositEntity> {
-  findByAccount(account: AccountEntity): Array<DepositEntity>;
+  findByAccountId(accoundId: string): Array<DepositEntity>;
+  findByDataRange(
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): Array<DepositEntity>;
 }
