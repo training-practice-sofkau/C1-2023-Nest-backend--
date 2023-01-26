@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositEntity } from '../entities/deposite.entity';
 import { BaseRepository } from './base/base.repository';
 import { DpositeRepositoryInterface } from './interfaces/deposite.repository.interface';
@@ -9,16 +9,55 @@ export class DepositeRepository extends BaseRepository<DepositEntity> implements
     return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: DepositEntity): DepositEntity {
-    throw new Error('Method not implemented.');
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      }
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
-  delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+
+  delete(id: string, soft = true): void {
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (index >= 0) {
+      if (soft) {
+        this.database[index].deletedAt = new Date();
+      } else {
+        this.database.splice(index, 1);
+      }
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
   }
+
   findAll(): DepositEntity[] {
-    throw new Error('Method not implemented.');
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
   findOneById(id: string): DepositEntity {
-    throw new Error('Method not implemented.');
+    const customer = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (customer) return customer;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
-  
+  findByAccountId(accountId: string): DepositEntity[] {
+    return this.database.filter((item) => item.account.id === accountId && (item.deletedAt ?? true) === true);
+  }
+  findByDataRange(
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): DepositEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
 }
+
