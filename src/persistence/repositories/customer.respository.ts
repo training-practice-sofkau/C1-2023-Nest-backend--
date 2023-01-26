@@ -55,24 +55,61 @@ export class CustomerRepository
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
-    throw new Error('Method not implemented.');
+    const index = this.database.findIndex(
+      (item) =>
+        item.email === email &&
+        item.password === password &&
+        typeof item.deletedAt === 'undefined',
+    );
+    return index >= 0 ? true : false;
   }
+
   findOneByDocumentTypeAndDocument(
     documentTypeId: string,
     document: string,
   ): CustomerEntity {
-    throw new Error('Method not implemented.');
+    const customer = this.database.find(
+      (item: CustomerEntity) =>
+        item.documentType.id === documentTypeId &&
+        item.document === document &&
+        typeof item.deletedAt === 'undefined',
+    );
+    if (customer) return customer;
+    else
+      throw new NotFoundException(
+        `El ID ${documentTypeId} y DOCUMENTE ${document} no existe en base de datos`,
+      );
   }
+
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('Method not implemented.');
+    const customer = this.database.find(
+      (item: CustomerEntity) =>
+        item.email === email && typeof item.deletedAt === 'undefined',
+    );
+    if (customer) return customer;
+    else
+      throw new NotFoundException(`El ID ${email} no existe en base de datos`);
   }
+
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('Method not implemented.');
+    const customer = this.database.find(
+      (item: CustomerEntity) =>
+        item.phone === phone && typeof item.deletedAt === 'undefined',
+    );
+    if (customer) return customer;
+    else
+      throw new NotFoundException(`El ID ${phone} no existe en base de datos`);
   }
+
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('Method not implemented.');
+    const customers = this.database.filter((item) => item.state === state);
+    return customers;
   }
+
   findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('Method not implemented.');
+    const customers = this.database.filter(
+      (item) => item.fullName === fullName,
+    );
+    return customers;
   }
 }
