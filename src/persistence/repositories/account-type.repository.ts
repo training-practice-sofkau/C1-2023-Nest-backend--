@@ -47,14 +47,12 @@ export class AccountTypeRepository
 
   findByState(state: boolean): AccountTypeEntity[] {
     const accountType = this.database.filter((item) => item.state === state);
-    if (accountType) return accountType;
-    return [];
+    return accountType;
   }
 
   findByName(name: string): AccountTypeEntity[] {
     const accountType = this.database.filter((item) => item.name === name);
-    if (accountType) return accountType;
-    return [];
+    return accountType;
   }
 }
 

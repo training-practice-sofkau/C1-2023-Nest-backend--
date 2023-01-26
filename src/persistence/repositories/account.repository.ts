@@ -57,24 +57,21 @@ export class AccountRepository
 
   findByState(state: boolean): AccountEntity[] {
     const accounts = this.database.filter((item) => item.state === state);
-    if (accounts) return accounts;
-    return [];
+    return accounts;
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
     const accounts = this.database.filter(
       (item) => item.customer.id === customerId,
     );
-    if (accounts) return accounts;
-    return [];
+    return accounts;
   }
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
     const accounts = this.database.filter(
       (item) => item.accountType.id === accountTypeId,
     );
-    if (accounts) return accounts;
-    return [];
+    return accounts;
   }
   private hardDelete(index: number): void {
     this.database.splice(index, 1);
