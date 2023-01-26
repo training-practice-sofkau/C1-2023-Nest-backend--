@@ -56,20 +56,33 @@ export class AccountRepository
   }
 
   findByState(state: boolean): AccountEntity[] {
-    throw new Error('Method not implemented.');
+    const accounts = this.database.filter((item) => item.state === state);
+    if (accounts) return accounts;
+    return [];
   }
+
   findByCustomer(customerId: string): AccountEntity[] {
-    throw new Error('Method not implemented.');
+    const accounts = this.database.filter(
+      (item) => item.customer.id === customerId,
+    );
+    if (accounts) return accounts;
+    return [];
   }
+
   findByAccountType(accountTypeId: string): AccountEntity[] {
-    throw new Error('Method not implemented.');
+    const accounts = this.database.filter(
+      (item) => item.accountType.id === accountTypeId,
+    );
+    if (accounts) return accounts;
+    return [];
   }
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
+    this.update(this.database[index].id, this.database[index]);
   }
 }
 
