@@ -5,7 +5,8 @@ import { DpositeRepositoryInterface } from './interfaces/deposite.repository.int
 @Injectable()
 export class DepositeRepository extends BaseRepository<DepositEntity> implements DpositeRepositoryInterface {
   register(entity: DepositEntity): DepositEntity {
-    throw new Error('Method not implemented.');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: DepositEntity): DepositEntity {
     throw new Error('Method not implemented.');

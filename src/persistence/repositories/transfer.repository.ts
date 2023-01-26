@@ -7,7 +7,8 @@ import { TransferRepositoryInterface } from './interfaces/transfer.repository.in
 @Injectable()
 export class TransferReoisitory extends BaseRepository<TransferEntity> implements TransferRepositoryInterface{
   register(entity: TransferEntity): TransferEntity {
-    throw new Error('Method not implemented.');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: TransferEntity): TransferEntity {
     throw new Error('Method not implemented.');

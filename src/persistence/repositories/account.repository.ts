@@ -6,7 +6,8 @@ import { CustomerRepositoryInterface } from './interfaces/customer.repository.in
 @Injectable()
 export class CustomerRepository extends BaseRepository<CustomerEntity> implements CustomerRepositoryInterface {
   register(entity: CustomerEntity): CustomerEntity {
-    throw new Error('Method not implemented.');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: CustomerEntity): CustomerEntity {
     throw new Error('Method not implemented.');
