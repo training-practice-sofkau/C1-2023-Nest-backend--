@@ -31,10 +31,10 @@ export class AccountRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const customer = this.findOneById(id);
+    const account = this.findOneById(id);
     if (soft || soft === undefined) {
-      customer.deletedAt = Date.now();
-      this.update(id, customer);
+      account.deletedAt = Date.now();
+      this.update(id, account);
     } else {
       const index = this.database.findIndex(
         (item) => item.id === id && (item.deletedAt ?? true) === true,
@@ -48,10 +48,10 @@ export class AccountRepository
   }
 
   findOneById(id: string): AccountEntity {
-    const customer = this.database.find(
+    const account = this.database.find(
       (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
-    if (customer) return customer;
+    if (account) return account;
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
