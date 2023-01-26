@@ -8,9 +8,7 @@ export class AccountTypeRepository
   implements AccountTypeRepositoryInterface
 {
   register(entity: AccountTypeEntity): AccountTypeEntity {
-    //this.database = [...entity, this.database];
-    //this.database.push(entity);
-    console.log('DATABASE', this.database);
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -18,8 +16,16 @@ export class AccountTypeRepository
     const index = this.database.findIndex(
       (item: AccountTypeEntity) => item.id === id,
     );
-    this.database.splice(index, 1, entity);
-    return entity;
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      } as AccountTypeEntity;
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
 
   delete(id: string, soft?: boolean | undefined): void {
@@ -32,26 +38,27 @@ export class AccountTypeRepository
   findAll(): AccountTypeEntity[] {
     return this.database;
   }
-  findOneById(id: string): AccountTypeEntity {
-    const item = dataAccountType.find((d: AccountTypeEntity) => d.id === id);
-    const i = {
-      id: '',
-      name: '',
-      state: false,
-    };
 
-    return item ?? i;
+  findOneById(id: string): AccountTypeEntity {
+    const item = this.database.find((d: AccountTypeEntity) => d.id === id);
+    if (item) return item;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
   findByState(state: boolean): AccountTypeEntity[] {
-    throw new Error('Method not implemented.');
+    const accountType = this.database.filter((item) => item.state === state);
+    if (accountType) return accountType;
+    return [];
   }
+
   findByName(name: string): AccountTypeEntity[] {
-    throw new Error('Method not implemented.');
+    const accountType = this.database.filter((item) => item.name === name);
+    if (accountType) return accountType;
+    return [];
   }
 }
 
-const dataAccountType: AccountTypeEntity[] = [
+/*const dataAccountType: AccountTypeEntity[] = [
   {
     id: '1',
     name: 'corriente1',
@@ -119,3 +126,21 @@ function findAll(): AccountTypeEntity[] {
   return dataAccountType;
 }
 console.log('find all ', findAll(), '\n');
+
+function findByState(state: boolean): AccountTypeEntity[] {
+  const accountType = dataAccountType.filter(
+    (item: AccountTypeEntity) => item.state === state,
+  );
+  if (accountType) return accountType;
+  else throw new NotFoundException(`El ID ${state} no existe en base de datos`);
+}
+function findByName(name: string): AccountTypeEntity[] {
+  const accountType = dataAccountType.filter(
+    (item: AccountTypeEntity) => item.name === name,
+  );
+  if (accountType) return accountType;
+  else throw new NotFoundException(`El ID ${name} no existe en base de datos`);
+}
+
+console.log('FIND BY STATE ', findByState(false));
+console.log('FIND BY NAME ', findByName('corriente1'));*/
