@@ -61,7 +61,9 @@ export class TransferRepository
   ): TransferEntity[] {
     const transfers = this.database.filter(
       (item: TransferEntity) =>
-        dateInit >= item.dateTime && dateEnd <= item.dateTime,
+        dateInit >= item.dateTime &&
+        dateEnd <= item.dateTime &&
+        item.income === accountId,
     );
     return transfers;
   }
@@ -73,7 +75,9 @@ export class TransferRepository
   ): TransferEntity[] {
     const transfers = this.database.filter(
       (item: TransferEntity) =>
-        dateInit >= item.dateTime && dateEnd <= item.dateTime,
+        dateInit >= item.dateTime &&
+        dateEnd <= item.dateTime &&
+        item.income === accountId,
     );
     return transfers;
   }
