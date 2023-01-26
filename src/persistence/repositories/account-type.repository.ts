@@ -14,29 +14,19 @@ export class AccountTypeRepository
   implements AccountTypeRepositoryInterface
 {
   findByState(state: boolean): AccountTypeEntity[] {
-    const currentAccountTypes = this.database.filter((n) => n.state === state);
-    if ((currentAccountTypes.length = 0)) {
-      throw new NotFoundException(
-        `No hay tipos de cuentas en estado ${state ? 'activo' : 'inactivo'}`,
-      );
-    }
-    return this.database.filter((n) => n.state === state);
+    const currentAccountTypes = this.database.filter((a) => a.state === state);
+    return currentAccountTypes;
   }
 
   findByName(name: string): AccountTypeEntity[] {
     const currentAccountTypes = this.database.filter(
       (n) => n.name.toLowerCase().indexOf(name.toLowerCase()) !== -1,
     );
-    if ((currentAccountTypes.length = 0)) {
-      throw new NotFoundException(
-        `No existen tipos de cuentas con el nombre ${name}`,
-      );
-    }
     return currentAccountTypes;
   }
 
   register(entity: AccountTypeEntity): AccountTypeEntity {
-    const currentAccountType = this.database.find((i) => i.id === entity.id);
+    const currentAccountType = this.database.find((a) => a.id === entity.id);
     if (currentAccountType) {
       throw new ConflictException(
         'El tipo de cuenta que intenta registrar ya existe en la base de datos',
@@ -52,7 +42,7 @@ export class AccountTypeRepository
     if (accountType === entity) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((a) => a.id === id);
     this.database[index] = {
       ...accountType,
       ...entity,
@@ -68,7 +58,7 @@ export class AccountTypeRepository
         'El borrado lógico no está implementado para tipos de cuentas',
       );
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((a) => a.id === id);
     this.database.slice(index, 1);
   }
 

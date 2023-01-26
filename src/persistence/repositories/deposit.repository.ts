@@ -16,11 +16,6 @@ export class DepositRepository
     const currentDeposits = this.findAll().filter(
       (d) => d.account.id === accoundId,
     );
-    if (currentDeposits.length == 0) {
-      throw new NotFoundException(
-        `No existen depositos para la cuenta con el id: ${accoundId}`,
-      );
-    }
     return currentDeposits;
   }
 
@@ -51,7 +46,7 @@ export class DepositRepository
     if (currentDeposit === entity) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((d) => d.id === id);
     this.database[index] = {
       ...currentDeposit,
       ...entity,
@@ -62,7 +57,7 @@ export class DepositRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const currentDeposit = this.findOneById(id);
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((d) => d.id === id);
     if (soft && currentDeposit) {
       this.softDelete(index);
     }
@@ -84,7 +79,7 @@ export class DepositRepository
   }
 
   findOneById(id: string): DepositEntity {
-    const currentDeposit = this.findAll().find((a) => a.id === id);
+    const currentDeposit = this.findAll().find((d) => d.id === id);
     if (currentDeposit) {
       return currentDeposit;
     } else {

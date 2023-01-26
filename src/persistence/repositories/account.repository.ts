@@ -13,24 +13,14 @@ export class AccountRepository
   implements AccountRepositoryInterface
 {
   findByState(state: boolean): AccountEntity[] {
-    const currentAccounts = this.findAll().filter((n) => n.state === state);
-    if ((currentAccounts.length = 0)) {
-      throw new NotFoundException(
-        `No hay cuentas en estado ${state ? 'activo' : 'inactivo'}`,
-      );
-    }
-    return this.database.filter((n) => n.state === state);
+    const currentAccounts = this.findAll().filter((a) => a.state === state);
+    return currentAccounts;
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
     const currentAccounts = this.findAll().filter(
       (c) => c.customer.id === customerId,
     );
-    if ((currentAccounts.length = 0)) {
-      throw new NotFoundException(
-        `No existen cuentas registradas con el id de cliente: ${customerId}`,
-      );
-    }
     return currentAccounts;
   }
 
@@ -38,16 +28,11 @@ export class AccountRepository
     const currentAccounts = this.findAll().filter(
       (c) => c.acountType.id === accountTypeId,
     );
-    if ((currentAccounts.length = 0)) {
-      throw new NotFoundException(
-        `No existen cuentas registradas con el id de cliente: ${accountTypeId}`,
-      );
-    }
     return currentAccounts;
   }
 
   register(entity: AccountEntity): AccountEntity {
-    const currentAccounts = this.findAll().find((i) => i.id === entity.id);
+    const currentAccounts = this.findAll().find((a) => a.id === entity.id);
     if (currentAccounts) {
       throw new ConflictException(
         'La cuenta que intenta registrar ya existe en la base de datos',
@@ -74,7 +59,7 @@ export class AccountRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const currentAccount = this.findOneById(id);
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((a) => a.id === id);
     if (soft && currentAccount) {
       this.softDelete(index);
     }

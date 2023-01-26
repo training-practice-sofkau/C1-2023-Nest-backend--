@@ -14,29 +14,19 @@ export class DocumentTypeRepository
   implements DocumentTypeRepositoryInterface
 {
   findByState(state: boolean): DocumentTypeEntity[] {
-    const currentDocumentTypes = this.database.filter((n) => n.state === state);
-    if ((currentDocumentTypes.length = 0)) {
-      throw new NotFoundException(
-        `No hay tipos de documentos en estado ${state ? 'activo' : 'inactivo'}`,
-      );
-    }
-    return this.database.filter((n) => n.state === state);
+    const currentDocumentTypes = this.database.filter((d) => d.state === state);
+    return currentDocumentTypes;
   }
 
   findByName(name: string): DocumentTypeEntity[] {
     const currentDocumentTypes = this.database.filter(
       (n) => n.name.toLowerCase().indexOf(name.toLowerCase()) !== -1,
     );
-    if ((currentDocumentTypes.length = 0)) {
-      throw new NotFoundException(
-        `No existen tipos de documentos con el nombre ${name}`,
-      );
-    }
     return currentDocumentTypes;
   }
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    const currentDocumentType = this.database.find((i) => i.id === entity.id);
+    const currentDocumentType = this.database.find((d) => d.id === entity.id);
     if (currentDocumentType) {
       throw new ConflictException(
         'El tipo de documento que intenta registrar ya existe en la base de datos',
@@ -52,7 +42,7 @@ export class DocumentTypeRepository
     if (currentDocumentType === entity) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((d) => d.id === id);
     this.database[index] = {
       ...currentDocumentType,
       ...entity,
@@ -68,7 +58,7 @@ export class DocumentTypeRepository
         'El borrado lógico no está implementado para tipos de documentos',
       );
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((d) => d.id === id);
     this.database.slice(index, 1);
   }
 
@@ -77,7 +67,7 @@ export class DocumentTypeRepository
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    const currentDocumentType = this.database.find((a) => a.id === id);
+    const currentDocumentType = this.database.find((d) => d.id === id);
     if (currentDocumentType) {
       return currentDocumentType;
     } else {

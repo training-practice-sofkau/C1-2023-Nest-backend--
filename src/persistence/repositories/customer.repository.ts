@@ -63,11 +63,6 @@ export class CustomerRepository
 
   findByState(state: boolean): CustomerEntity[] {
     const currentCustomers = this.findAll().filter((c) => c.state === state);
-    if (currentCustomers.length == 0) {
-      throw new NotFoundException(
-        `No hay clientes en estado ${state ? 'activo' : 'inactivo'}`,
-      );
-    }
     return currentCustomers;
   }
 
@@ -75,16 +70,11 @@ export class CustomerRepository
     const currentCustomers = this.findAll().filter(
       (c) => c.fullName.toLowerCase().indexOf(fullName.toLowerCase()) !== -1,
     );
-    if (currentCustomers.length == 0) {
-      throw new NotFoundException(
-        `No hay clientes con el nombre:  ${fullName}`,
-      );
-    }
     return currentCustomers;
   }
 
   register(entity: CustomerEntity): CustomerEntity {
-    const currentCustomers = this.findAll().find((i) => i.id === entity.id);
+    const currentCustomers = this.findAll().find((c) => c.id === entity.id);
     if (currentCustomers) {
       throw new ConflictException(
         'El cliente que intenta registrar ya existe en la base de datos',
@@ -100,7 +90,7 @@ export class CustomerRepository
     if (currentCustomer === entity) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((c) => c.id === id);
     this.database[index] = {
       ...currentCustomer,
       ...entity,
@@ -111,7 +101,7 @@ export class CustomerRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const currentAccount = this.findOneById(id);
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((c) => c.id === id);
     if (soft && currentAccount) {
       this.softDelete(index);
     }
@@ -133,7 +123,7 @@ export class CustomerRepository
   }
 
   findOneById(id: string): CustomerEntity {
-    const currentCustomer = this.findAll().find((a) => a.id === id);
+    const currentCustomer = this.findAll().find((c) => c.id === id);
     if (currentCustomer) {
       return currentCustomer;
     } else {

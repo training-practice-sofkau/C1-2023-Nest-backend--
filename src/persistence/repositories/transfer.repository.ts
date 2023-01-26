@@ -32,7 +32,7 @@ export class TransferRepository
     dateEnd: number | Date,
   ): TransferEntity[] {
     const currentTransfers = this.findByOutcomeAccount(accountId).filter(
-      (a) => a.dateTime <= dateEnd && a.dateTime >= dateInit,
+      (t) => t.dateTime <= dateEnd && t.dateTime >= dateInit,
     );
     return currentTransfers;
   }
@@ -43,7 +43,7 @@ export class TransferRepository
     dateEnd: number | Date,
   ): TransferEntity[] {
     const currentTransfers = this.findByIncomeAccount(accountId).filter(
-      (a) => a.dateTime <= dateEnd && a.dateTime >= dateInit,
+      (t) => t.dateTime <= dateEnd && t.dateTime >= dateInit,
     );
     return currentTransfers;
   }
@@ -65,7 +65,7 @@ export class TransferRepository
     if (currentTransfer === entity) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((t) => t.id === id);
     this.database[index] = {
       ...currentTransfer,
       ...entity,
@@ -76,7 +76,7 @@ export class TransferRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const currentTransfer = this.findOneById(id);
-    const index = this.database.findIndex((i) => i.id === id);
+    const index = this.database.findIndex((t) => t.id === id);
     if (soft && currentTransfer) {
       this.softDelete(index);
     }
@@ -94,11 +94,11 @@ export class TransferRepository
   }
 
   findAll(): TransferEntity[] {
-    return this.database.filter((a) => a.deletedAt === undefined);
+    return this.database.filter((t) => t.deletedAt === undefined);
   }
 
   findOneById(id: string): TransferEntity {
-    const currentDeposit = this.findAll().find((a) => a.id === id);
+    const currentDeposit = this.findAll().find((t) => t.id === id);
     if (currentDeposit) {
       return currentDeposit;
     } else {
