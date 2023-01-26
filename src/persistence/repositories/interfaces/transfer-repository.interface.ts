@@ -3,5 +3,15 @@ import { TransferEntity } from '../../entities';
 
 export interface TransferRepositoryInterface
   extends BaseRepositoryInterface<TransferEntity> {
-  fun(accountId: string): void; // una funcion unica
+  findOutcomeByDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[];
+
+  findIncomeByDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[];
 }

@@ -3,5 +3,12 @@ import { DepositEntity } from '../../entities';
 
 export interface DepositRepositoryInterface
   extends BaseRepositoryInterface<DepositEntity> {
-  fun(accountId: string): void; // una funcion unica para la cuenta
+  findOneById(id: string): DepositEntity;
+
+  findByAccountId(accountId: string): DepositEntity[];
+
+  findByDataRange(
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): DepositEntity[];
 }
