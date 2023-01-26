@@ -13,7 +13,7 @@ export class AccountRepository
   implements AccountRepositoryInterface
 {
   findByState(state: boolean): AccountEntity[] {
-    const currentAccounts = this.database.filter((n) => n.state === state);
+    const currentAccounts = this.findAll().filter((n) => n.state === state);
     if ((currentAccounts.length = 0)) {
       throw new NotFoundException(
         `No hay cuentas en estado ${state ? 'activo' : 'inactivo'}`,
@@ -23,7 +23,7 @@ export class AccountRepository
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
-    const currentAccounts = this.database.filter(
+    const currentAccounts = this.findAll().filter(
       (c) => c.customer.id === customerId,
     );
     if ((currentAccounts.length = 0)) {
@@ -35,7 +35,7 @@ export class AccountRepository
   }
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
-    const currentAccounts = this.database.filter(
+    const currentAccounts = this.findAll().filter(
       (c) => c.acountType.id === accountTypeId,
     );
     if ((currentAccounts.length = 0)) {
@@ -47,7 +47,7 @@ export class AccountRepository
   }
 
   register(entity: AccountEntity): AccountEntity {
-    const currentAccounts = this.database.find((i) => i.id === entity.id);
+    const currentAccounts = this.findAll().find((i) => i.id === entity.id);
     if (currentAccounts) {
       throw new ConflictException(
         'La cuenta que intenta registrar ya existe en la base de datos',
@@ -59,13 +59,13 @@ export class AccountRepository
   }
 
   upate(id: string, entity: AccountEntity): AccountEntity {
-    const account = this.findOneById(id);
-    if (account === entity) {
+    const currentAccount = this.findOneById(id);
+    if (currentAccount === entity) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
     const index = this.database.findIndex((i) => i.id === id);
     this.database[index] = {
-      ...account,
+      ...currentAccount,
       ...entity,
       id: id,
     };
@@ -96,7 +96,7 @@ export class AccountRepository
   }
 
   findOneById(id: string): AccountEntity {
-    const currentAccount = this.database.find((a) => a.id === id);
+    const currentAccount = this.findAll().find((a) => a.id === id);
     if (currentAccount) {
       return currentAccount;
     } else {
