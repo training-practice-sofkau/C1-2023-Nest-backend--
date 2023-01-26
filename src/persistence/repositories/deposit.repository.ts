@@ -55,8 +55,12 @@ export class DepositRepository
   }
 
   findByAccountId(accountId: string): DepositEntity[] {
-    throw new Error('Method not implemented.');
+    const deposits = this.database.filter(
+      (item) => item.account.id === accountId,
+    );
+    return deposits;
   }
+
   findByDataRange(
     dateInit: number | Date,
     dateEnd: number | Date,
