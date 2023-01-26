@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { AcountModel, TransferModel } from "src/models";
+import {TransferModel } from "src/models";
 import { AccountEntity } from "./account.entity";
 
 
