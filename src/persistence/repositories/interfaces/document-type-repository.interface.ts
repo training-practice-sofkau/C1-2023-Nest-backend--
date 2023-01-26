@@ -3,5 +3,5 @@ import { BaseRepositoryInterface } from './base';
 
 export interface DocumentTypeRepositoryInterface
   extends BaseRepositoryInterface<DocumentTypeEntity> {
-  findDocumentTypeByState(State: boolean): Array<DocumentTypeEntity>;
+  findDocumentTypeByState(state: boolean): Array<DocumentTypeEntity>;
 }

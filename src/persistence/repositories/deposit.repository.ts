@@ -11,7 +11,7 @@ export class DepositRepository
   constructor() {
     super();
   }
-  findByAccount(Account: AccountEntity): DepositEntity[] {
+  findByAccount(account: AccountEntity): DepositEntity[] {
     throw new Error('Method not implemented.');
   }
   register(entity: DepositEntity): DepositEntity {

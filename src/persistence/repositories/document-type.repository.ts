@@ -11,7 +11,7 @@ export class DocumentTypeRepository
   constructor() {
     super();
   }
-  findDocumentTypeByState(State: boolean): DocumentTypeEntity[] {
+  findDocumentTypeByState(state: boolean): DocumentTypeEntity[] {
     throw new Error('Method not implemented.');
   }
   register(entity: DocumentTypeEntity): DocumentTypeEntity {

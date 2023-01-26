@@ -11,10 +11,10 @@ export class TransferRepository
   constructor() {
     super();
   }
-  findByIncome(Account: AccountEntity): TransferEntity[] {
+  findByIncome(account: AccountEntity): TransferEntity[] {
     throw new Error('Method not implemented.');
   }
-  findByOutcome(Account: AccountEntity): TransferEntity[] {
+  findByOutcome(account: AccountEntity): TransferEntity[] {
     throw new Error('Method not implemented.');
   }
   register(entity: TransferEntity): TransferEntity {

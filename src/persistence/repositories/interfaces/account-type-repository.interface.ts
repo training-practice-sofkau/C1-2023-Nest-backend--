@@ -3,5 +3,6 @@ import { BaseRepositoryInterface } from './base';
 
 export interface AccountTypeRepositoryInterface
   extends BaseRepositoryInterface<AccountTypeEntity> {
-  findAccountTypeByState(State: boolean): Array<AccountTypeEntity>;
+  findByState(state: boolean): Array<AccountTypeEntity>;
+  findByName(name: string): Array<AccountTypeEntity>;
 }
