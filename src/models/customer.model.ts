@@ -10,5 +10,5 @@ export interface CustomerModel {
   password: string;
   avatarUrl?: string;
   state: boolean;
-  deletedAt?: Date | string;
+  deletedAt?: Date | number;
 }

@@ -7,5 +7,5 @@ export interface AccountModel {
   acountType: AccountTypeModel;
   balance: number;
   state: boolean;
-  deletedAt?: Date | string;
+  deletedAt?: Date | number;
 }

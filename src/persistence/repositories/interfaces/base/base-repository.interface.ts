@@ -1,4 +1,4 @@
-export interface CustomerInterface<T> {
+export interface BaseRepositoryInterface<T> {
   register(entity: T): T;
   upate(id: string, entity: T): T;
   delete(id: string, soft?: boolean): void;

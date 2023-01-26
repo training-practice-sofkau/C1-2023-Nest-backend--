@@ -1,29 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { DepositEntity } from '../entities';
-import { DepositBase } from './base';
+import { AccountEntity, DepositEntity } from '../entities';
+import { BaseRepository } from './base';
+import { DepositREpositoryInterface } from './interfaces';
 
 @Injectable()
-export class DepositRepository extends DepositBase<DepositEntity> {
+export class DepositRepository
+  extends BaseRepository<DepositEntity>
+  implements DepositREpositoryInterface
+{
   constructor() {
     super();
   }
+  findByAccount(Account: AccountEntity): DepositEntity[] {
+    throw new Error('Method not implemented.');
+  }
   register(entity: DepositEntity): DepositEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
-  update(id: string, entity: DepositEntity): DepositEntity {
-    throw new Error('This method is not implemented');
+  upate(id: string, entity: DepositEntity): DepositEntity {
+    throw new Error('Method not implemented.');
   }
-
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean | undefined): void {
+    throw new Error('Method not implemented.');
   }
-
   findAll(): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
   findOneById(id: string): DepositEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
 }
