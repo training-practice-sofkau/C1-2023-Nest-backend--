@@ -45,7 +45,7 @@ export class AccountRepository
 
   upate(id: string, entity: AccountEntity): AccountEntity {
     const currentAccount = this.findOneById(id);
-    if (currentAccount === entity) {
+    if (JSON.stringify(currentAccount) === JSON.stringify(entity)) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
     const index = this.database.findIndex((i) => i.id === id);

@@ -62,7 +62,7 @@ export class TransferRepository
 
   upate(id: string, entity: TransferEntity): TransferEntity {
     const currentTransfer = this.findOneById(id);
-    if (currentTransfer === entity) {
+    if (JSON.stringify(currentTransfer) === JSON.stringify(entity)) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
     const index = this.database.findIndex((t) => t.id === id);

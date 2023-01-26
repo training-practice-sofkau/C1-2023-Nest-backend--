@@ -39,7 +39,7 @@ export class DocumentTypeRepository
 
   upate(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
     const currentDocumentType = this.findOneById(id);
-    if (currentDocumentType === entity) {
+    if (JSON.stringify(currentDocumentType) === JSON.stringify(entity)) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
     const index = this.database.findIndex((d) => d.id === id);

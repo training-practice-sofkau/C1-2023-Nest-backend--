@@ -43,7 +43,7 @@ export class DepositRepository
 
   upate(id: string, entity: DepositEntity): DepositEntity {
     const currentDeposit = this.findOneById(id);
-    if (currentDeposit === entity) {
+    if (JSON.stringify(currentDeposit) === JSON.stringify(entity)) {
       throw new ConflictException('Los datos a actualizar ya existen');
     }
     const index = this.database.findIndex((d) => d.id === id);
