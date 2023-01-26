@@ -10,10 +10,7 @@ export class AccountTypeRepository
   implements AccountTypeRepositoryInterface {
   register(entity: AccountTypeEntity): AccountTypeEntity {
     this.database.push(entity);
-    const accountTypeIndex = this.database.findIndex(
-      (accountType) => accountType.id === entity.id,
-    );
-    return this.database[accountTypeIndex];
+    return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
     const accountTypeIndex = this.database.findIndex(
