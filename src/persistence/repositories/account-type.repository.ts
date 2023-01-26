@@ -41,7 +41,14 @@ export class AccountTypeRepository
   findAll(): AccountTypeEntity[] {
     throw new Error('Method not implemented.');
   }
-  fonfOneById(): AccountTypeEntity {
+  findOneById(): AccountTypeEntity {
     throw new Error('Method not implemented.');
+  }
+  findByState(/*state: boolean*/): AccountTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByName(/*name: string*/): AccountTypeEntity[] {
+    throw new Error('This method is not implemented');
   }
 }

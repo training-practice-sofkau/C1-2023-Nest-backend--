@@ -7,12 +7,6 @@ export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerInterface
 {
-  findDocumentById(): CustomerEntity {
-    throw new Error('Method not implemented.');
-  }
-  fonfOneById(id: string): CustomerEntity {
-    throw new Error('Method not implemented.');
-  }
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -69,11 +63,14 @@ export class CustomerRepository
     return index >= 0 ? true : false;
   }
 
-  findOneByDocumentTypeAndDocument(): /*
+  findOneByDocumentTypeAndDocument(
     documentTypeId: string,
-    document: string,*/
-  CustomerEntity {
-    throw new Error('This method is not implemented');
+    document: string,
+  ): CustomerEntity {
+    const index = this.database.findIndex(
+      (item) => item.documentType === documentTypeId && item.document === document,
+    );
+    return index >= 0 ? true : false;
   }
 
   findOneByEmail(/*email: string*/): CustomerEntity {
@@ -90,5 +87,9 @@ export class CustomerRepository
 
   findByFullName(/*fullName: string*/): CustomerEntity[] {
     throw new Error('This method is not implemented');
+  }
+
+  findDocumentById(/*documentId: string*/): CustomerEntity {
+    throw new Error('Method not implemented.');
   }
 }

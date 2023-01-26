@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from 'src/persistence/entities/account.entity';
 
 @Injectable()
@@ -13,8 +13,20 @@ export class AccountRepository {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
-  update(): AccountEntity {
-    throw new Error('This method is not implemented');
+  update(id: string, entity: AccountEntity): AccountEntity {
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.delateAt ?? true) === true,
+    );
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      } as AccountEntity;
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
 
   delete(): void {
