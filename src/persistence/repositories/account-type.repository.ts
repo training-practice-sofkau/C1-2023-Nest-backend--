@@ -4,20 +4,29 @@ import { AccountTypeEntity } from '../entities/account-type.entity';
 import { BaseRepository } from './base/base.repository';
 
 @Injectable()
-export class TypeAccountRepository
+export class AccountTypeRepository
   extends BaseRepository<AccountTypeEntity>
   implements BaseRepositoryInterface<AccountTypeEntity>
 {
+  index: number;
   register(entity: AccountTypeEntity): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity); //enviamos informacon a la base
+    return this.database.at(-1) ?? entity; //retornamos la ultima posicion del areglo
   }
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex((item) => item.id === id);
+    const data = this.database[index];
+    this.database[index] = {
+      ...data,
+      ...entity,
+      id: id,
+    };
+    return this.database[index];
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    this.index = this.database.findIndex((item) => item.id === id);
   }
 
   findAll(): AccountTypeEntity[] {
