@@ -34,4 +34,11 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
     throw new Error('Method not implemented.');
   }
   
+  findByState(state: boolean): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByName(name: string): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
 }

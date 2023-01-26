@@ -21,3 +21,5 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
   findOneById(id: string): AccountEntity {
     throw new Error('Method not implemented.');
   }
+  
+  }
