@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferEntity } from '../entities/transfer.entity';
 import { BaseRepository } from './base';
 import { TransferRepositoryInterface } from './interfaces';
@@ -9,27 +9,49 @@ export class TransferRepository
   implements TransferRepositoryInterface
 {
   register(entity: TransferEntity): TransferEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: TransferEntity): TransferEntity {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      } as TransferEntity;
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    const transfer = this.findOneById(id);
+    if (soft || soft === undefined) {
+      transfer.deletedAt = Date.now();
+      this.update(id, transfer);
+    } else {
+      const index = this.database.findIndex(
+        (item) => item.id === id && (item.deletedAt ?? true) === true,
+      );
+      this.database.splice(index, 1);
+    }
   }
 
   findAll(): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
 
   findOneById(id: string): TransferEntity {
-    throw new Error('This method is not implemented');
-  }
-
-  fun(accountId: string): void {
-    throw new Error('Method not implemented.');
+    const customer = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (customer) return customer;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
   findOutcomeByDataRange(
@@ -48,10 +70,11 @@ export class TransferRepository
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
+    this.update(this.database[index].id, this.database[index]);
   }
 }
