@@ -54,7 +54,13 @@ export class DepositRepository
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
-  fun(accountId: string): void {
+  findByAccountId(accountId: string): DepositEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findByDataRange(
+    dateInit: number | Date,
+    dateEnd: number | Date,
+  ): DepositEntity[] {
     throw new Error('Method not implemented.');
   }
 }

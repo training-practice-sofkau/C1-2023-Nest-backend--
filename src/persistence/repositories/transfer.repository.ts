@@ -31,4 +31,27 @@ export class TransferRepository
   fun(accountId: string): void {
     throw new Error('Method not implemented.');
   }
+
+  findOutcomeByDataRange(
+    accountId: string,
+    dateInit: number | Date,
+    dateEnd: number | Date,
+  ): TransferEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findIncomeByDataRange(
+    accountId: string,
+    dateInit: number | Date,
+    dateEnd: number | Date,
+  ): TransferEntity[] {
+    throw new Error('Method not implemented.');
+  }
+
+  private hardDelete(index: number): void {
+    throw new Error('This method is not implemented');
+  }
+
+  private softDelete(index: number): void {
+    throw new Error('This method is not implemented');
+  }
 }

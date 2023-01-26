@@ -54,7 +54,25 @@ export class CustomerRepository
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
-  fun(accountId: string): void {
+  findOneByEmailAndPassword(email: string, password: string): boolean {
+    throw new Error('Method not implemented.');
+  }
+  findOneByDocumentTypeAndDocument(
+    documentTypeId: string,
+    document: string,
+  ): CustomerEntity {
+    throw new Error('Method not implemented.');
+  }
+  findOneByEmail(email: string): CustomerEntity {
+    throw new Error('Method not implemented.');
+  }
+  findOneByPhone(phone: string): CustomerEntity {
+    throw new Error('Method not implemented.');
+  }
+  findByState(state: boolean): CustomerEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findByFullName(fullName: string): CustomerEntity[] {
     throw new Error('Method not implemented.');
   }
 }

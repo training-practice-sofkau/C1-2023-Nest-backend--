@@ -55,8 +55,21 @@ export class AccountRepository
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
-  fun(accountId: string): void {
+  findByState(state: boolean): AccountEntity[] {
     throw new Error('Method not implemented.');
+  }
+  findByCustomer(customerId: string): AccountEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findByAccountType(accountTypeId: string): AccountEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  private hardDelete(index: number): void {
+    throw new Error('This method is not implemented');
+  }
+
+  private softDelete(index: number): void {
+    throw new Error('This method is not implemented');
   }
 }
 
