@@ -71,8 +71,8 @@ export class CustomerRepository
   ): TransferEntity[] {
     return this.database.filter(
       (item) =>
-        item.dateTime <= dateInit &&
-        item.dateTime >= dateEnd &&
+        item.dateTime => dateInit &&
+        item.dateTime <= dateEnd &&
         item.outCome.id === accountId,
     );
   }
@@ -84,8 +84,8 @@ export class CustomerRepository
   ): TransferEntity[] {
     return this.database.filter(
       (item) =>
-        item.dateTime <= dateInit &&
-        item.dateTime >= dateEnd &&
+        item.dateTime => dateInit &&
+        item.dateTime <= dateEnd &&
         item.inCome.id === accountId,
     );
   }

@@ -75,7 +75,7 @@ export class CustomerRepository
     dateEnd: Date | number,
   ): DepositEntity[] {
     return this.database.filter(
-      (item) => item.dateTime <= dateInit && item.dateTime >= dateEnd,
+      (item) => item.dateTime >= dateInit && item.dateTime <= dateEnd,
     );
   }
 }
