@@ -65,25 +65,41 @@ export class CustomerRepository
   }
 
   findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
+    documentType: string,
     document: string,
-  ): CustomerEntity {
-    throw new Error('This method is not implemented');
+  ): boolean {
+    const index = this.database.findIndex(
+      (item) =>
+        item.documentType.id === documentType &&
+        item.document === document &&
+        typeof item.deletedAt === 'undefined',
+    );
+    return index >= 0 ? true : false;
   }
 
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex((item) => item.email == email);
+    return this.database[index];
   }
 
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex((item) => item.phone == phone);
+    return this.database[index];
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const stadof = this.database.filter(
+      //filtra segun una condicion y devuelve un array
+      (item) => item.state == state && typeof item.deletedAt === 'undefined',
+    );
+    return stadof;
   }
-
   findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const nombrec = this.database.filter(
+      //filtra segun una condicion y devuelve un array
+      (item) =>
+        item.fullName == fullName && typeof item.deletedAt === 'undefined',
+    );
+    return nombrec;
   }
 }
