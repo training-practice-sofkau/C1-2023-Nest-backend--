@@ -2,6 +2,7 @@ import { CustomerEntity } from '../entities/customer.entity';
 import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from './base/base.repository';
+import { threadId } from 'worker_threads';
 
 @Injectable()
 export class CustomerRepository
@@ -69,15 +70,24 @@ export class CustomerRepository
     throw new Error('This method is not implemented');
   }
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const customerIndex = this.database.findIndex(
+      (customer) => customer.email === email,
+    );
+    return this.database[customerIndex];
   }
 
-  findOneByPhone(phone: string): CustomerEntity {
+  findOneByPhone(phone: string): CustomerEntity[] {
     throw new Error('This method is not implemented');
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const arrayState: CustomerEntity[] = [];
+    this.database.map((customer) => {
+      if (customer.state === state) {
+        arrayState.push(customer);
+      }
+    });
+    return arrayState;
   }
 
   findByFullName(fullName: string): CustomerEntity[] {

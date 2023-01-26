@@ -27,8 +27,12 @@ export class DocumentTypeRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean | undefined): void {
+    const index = this.database.findIndex((item) => item.id === id);
+    if (index == -1) {
+      throw new Error('This method is not implemented');
+    }
+    this.database.splice(index, 1);
   }
 
   findAll(): DocumentTypeEntity[] {

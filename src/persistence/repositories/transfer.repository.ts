@@ -30,7 +30,16 @@ export class TransferRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    const transfer = this.findOneById(id);
+    if (soft || soft === undefined) {
+      transfer.deletedAt = Date.now();
+      this.update(id, transfer);
+    } else {
+      const index = this.database.findIndex(
+        (item) => item.id === id && (item.deletedAt ?? true) === true,
+      );
+      this.database.splice(index, 1);
+    }
   }
 
   private hardDelete(index: number): void {
@@ -42,11 +51,15 @@ export class TransferRepository
   }
 
   findAll(): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
 
   findOneById(id: string): TransferEntity {
-    throw new Error('This method is not implemented');
+    const transfer = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (transfer) return transfer;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
   findOutcomeByDataRange(
