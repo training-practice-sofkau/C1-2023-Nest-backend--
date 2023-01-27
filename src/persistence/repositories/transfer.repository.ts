@@ -42,11 +42,14 @@ export class TransferRepository
     }
   }
 
-  private hardDelete(index: number): void {
+  hardDelete(index: number): void {
     throw new Error('This method is not implemented');
   }
 
-  private softDelete(index: number): void {
+  softDelete(id: string): void {
+    const Transfer = this.findOneById(id);
+    Transfer.deletedAt = Date.now();
+    this.update(id, Transfer);
     throw new Error('This method is not implemented');
   }
 

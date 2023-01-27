@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
 import { AccountTypeEntity } from '../entities/account-type.entity';
 import { BaseRepository } from './base/base.repository';
@@ -34,17 +34,22 @@ export class AccountTypeRepository
   }
 
   findAll(): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    const account = this.database.find((item) => item.id === id);
+    if (account) return account;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
+
   findByState(state: boolean): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const status = this.database.filter((item) => item.state == state);
+    return status;
   }
 
   findByName(name: string): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const firsname = this.database.filter((item) => item.name == name);
+    return firsname;
   }
 }

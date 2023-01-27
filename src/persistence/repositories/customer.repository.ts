@@ -64,10 +64,16 @@ export class CustomerRepository
     return index >= 0 ? true : false;
   }
   findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
+    documentType: string,
     document: string,
-  ): CustomerEntity {
-    throw new Error('This method is not implemented');
+  ): boolean {
+    const index = this.database.findIndex(
+      (item) =>
+        item.documentType.id === documentType &&
+        item.document === document &&
+        typeof item.deletedAt === 'undefined',
+    );
+    return index >= 0 ? true : false;
   }
   findOneByEmail(email: string): CustomerEntity {
     const customerIndex = this.database.findIndex(
@@ -75,9 +81,9 @@ export class CustomerRepository
     );
     return this.database[customerIndex];
   }
-
-  findOneByPhone(phone: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+  findOneByPhone(phone: string): CustomerEntity {
+    const index = this.database.findIndex((item) => item.phone == phone);
+    return this.database[index];
   }
 
   findByState(state: boolean): CustomerEntity[] {
@@ -91,6 +97,10 @@ export class CustomerRepository
   }
 
   findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const nombre = this.database.filter(
+      (item) =>
+        item.fullName == fullName && typeof item.deletedAt === 'undefined',
+    );
+    return nombre;
   }
 }
