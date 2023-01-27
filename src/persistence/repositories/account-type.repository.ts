@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountTypeEntity } from '../entities';
 import { BodyRepositoryAbstract } from './base/base.repository';
 import { AccountTypeRepositoryInterface } from './interface/account-type/account-type-repository.interface';
-import { AccountRepository } from './account.repository';
 
 @Injectable()
 export class AccountTypeRepository
@@ -19,31 +18,19 @@ export class AccountTypeRepository
     const accountTypeIndex = this.database.findIndex(
       (accountType) => accountType.id === id,
     );
-    if (accountTypeIndex >= 0) {
-      const data = this.database[accountTypeIndex];
-      this.database[accountTypeIndex] = {
-        ...data,
-        ...entity,
-        id: id,
-      };
-      return this.database[accountTypeIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    const data = this.database[accountTypeIndex];
+    this.database[accountTypeIndex] = {
+      ...data,
+      ...entity,
+      id: id,
+    };
+    return this.database[accountTypeIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    const account = new AccountRepository()
-    const result = account.findByAccountTypeId(id);
-    if (result) {
-      throw new NotFoundException("No se puede eliminar, depende de otra entidad")
-    }
-    else {
-      const accountTypeIndex = this.database.findIndex(
-        (accountType) => accountType.id === id,
-      );
-      this.database.splice(accountTypeIndex, 1);
-    }
+    const accountTypeIndex = this.database.findIndex(
+      (accountType) => accountType.id === id,
+    );
+    this.database.splice(accountTypeIndex, 1);
   }
   findAll(): AccountTypeEntity[] {
     return this.database;
@@ -52,12 +39,7 @@ export class AccountTypeRepository
     const accountTypeIndex = this.database.findIndex(
       (accountType) => accountType.id === id,
     );
-    if (accountTypeIndex >= 0) {
-      return this.database[accountTypeIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountTypeIndex];
   }
   findByState(state: boolean): AccountTypeEntity[] {
     let arrayState: AccountTypeEntity[] = [];
@@ -66,12 +48,7 @@ export class AccountTypeRepository
         arrayState.push(documentType);
       }
     });
-    if (arrayState.length > 0) {
-      return arrayState
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return arrayState;
   }
   findByName(name: string): AccountTypeEntity[] {
     let arrayName: AccountTypeEntity[] = [];
