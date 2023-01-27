@@ -30,7 +30,7 @@ export class DepositeRepository extends BaseRepository<DepositEntity> implements
     );
     if (index >= 0) {
       if (soft) {
-        this.database[index].deletedAt = new Date();
+        this.database[index].deletedAt =  Date.now();
       } else {
         this.database.splice(index, 1);
       }
