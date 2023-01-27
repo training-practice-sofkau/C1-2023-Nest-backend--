@@ -1,15 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferEntity } from '../entities/transfer.entity';
+import { BaseRepository } from './base/base.repository';
+import { Transferinterface } from './interfaces/transfer-repository.interface';
 
 @Injectable()
-export class TransferRepository {
-  private readonly database: Array<TransferEntity>;
-  i: number;
- 
+export class TransferRepository 
+extends BaseRepository<TransferEntity>
+implements Transferinterface 
+{
 
-  constructor() {
-    this.database = new Array<TransferEntity>();
-  }
 
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
@@ -35,12 +34,12 @@ export class TransferRepository {
   delete(id: string , soft?: boolean): void {
     
     if (soft || soft === undefined){
-        this.i = this.database.findIndex((item) => item.id ===id);
-      this.softDelete(this.i);}
+        const i = this.database.findIndex((item) => item.id ===id);
+      this.softDelete(i);}
       else {
-        this.i = this.database.findIndex((item) => item.id ===id);
-        this.hardDelete(this.i);
-        this.database.splice(this.i , 1);
+        const i = this.database.findIndex((item) => item.id ===id);
+        this.hardDelete(i);
+        this.database.splice(i , 1);
       }
 
     }

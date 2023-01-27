@@ -1,14 +1,14 @@
 
 import { DepositEntity } from 'src/persistence/entities/deposit.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { BaseRepository } from './base/base.repository';
+import { DepositInterface } from './interfaces/deposit-repository.interface';
 
 @Injectable()
-export class DepositRepository {
-  private readonly database: Array<DepositEntity>;
-
-  constructor() {
-    this.database = new Array<DepositEntity>();
-  }
+export class DepositRepository 
+  extends BaseRepository<DepositEntity>
+  implements DepositInterface
+{
 
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);
