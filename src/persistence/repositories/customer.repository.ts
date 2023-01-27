@@ -14,7 +14,7 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const index = this.database.findIndex(
-      (item) => item.id === id && (item.deletedAt ?? true) === true,
+      (item) => item.id === id && (item.deleteAt ?? true) === true,
     );
     if (index >= 0) {
       this.database[index] = {
@@ -31,49 +31,69 @@ export class CustomerRepository
   delete(id: string, soft?: boolean): void {
     const customer = this.findOneById(id);
     if (soft || soft === undefined) {
-      customer.deletedAt = Date.now();
+      customer.deleteAt = Date.now();
       this.update(id, customer);
     } else {
       const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
+        (item) => item.id === id && (item.deleteAt ?? true) === true,
       );
       this.database.splice(index, 1);
     }
   }
 
   findAll(): CustomerEntity[] {
-    return this.database.filter((item) => item.deletedAt === undefined);
+    return this.database.filter((item) => item.deleteAt === undefined);
   }
 
   findOneById(id: string): CustomerEntity {
     const customer = this.database.find(
-      (item) => item.id === id && (item.deletedAt ?? true) === true,
+      (item) => item.id === id && (item.deleteAt ?? true) === true,
     );
     if (customer) return customer;
     else 
       throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
-  findOneByEmailAndPassword(): boolean {
-    throw new Error('This method is not implemented');
+  findOneByEmailAndPassword(email: string , password: string): boolean {
+    const index = this.database.findIndex(
+      (item) =>
+        item.email === email &&
+        item.password === password &&
+        typeof item.deleteAt === 'undefined',
+    );
+    return index >= 0 ? true : false;
   }
-  findOneByDocumentTypeAndDocument(): CustomerEntity {
-    throw new Error('This method is not implemented');
+  findOneByDocumentTypeAndDocument(documentType: string , document: string ): boolean {
+    const index = this.database.findIndex(
+      (item) =>
+        item.documentType.id === documentType &&
+        item.document === document &&
+        typeof item.deleteAt === 'undefined',
+    );
+    return index >= 0 ? true : false;
   }
-  findOneByEmail(/*email: string*/): CustomerEntity {
-    throw new Error('This method is not implemented');
+  findOneByEmail(email: string): CustomerEntity {
+    const index = this.database.findIndex((item) => item.email == email);
+    return this.database[index];
   }
-  findOneByPhone(/*phone: string*/): CustomerEntity {
-    throw new Error('This method is not implemented');
+  findOneByPhone(phone: string): CustomerEntity {
+    const index = this.database.findIndex((item) => item.phone == phone);
+    return this.database[index];
   }
-  findByState(/*state: boolean*/): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+  findByState(state: boolean): CustomerEntity[] {
+    const stState = this.database.filter(
+      (item) => item.state == state && typeof item.deleteAt === 'undefined',
+    );
+    return stState;
   }
-  findByFullName(/*fullName: string*/): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+  findByFullName(fullName: string): CustomerEntity[] {
+    const fname= this.database.filter(
+      (item) =>
+        item.fullName == fullName && typeof item.deleteAt === 'undefined',
+    );
+    return fname;
   }
-  findDocumentById(/*documentId: string*/): CustomerEntity {
-    throw new Error('Method not implemented.');
-  }
+   
 }
+
  
 
