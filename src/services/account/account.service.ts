@@ -1,11 +1,20 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { AccountModel } from 'src/models';
 import { AccountEntity } from 'src/persistence/entities';
-import { AccountRepository } from 'src/persistence/repositories';
+import {
+  AccountRepository,
+  AccountTypeRepository,
+} from 'src/persistence/repositories';
+import { DepositService, TransferService } from 'src/services';
 
 @Injectable()
 export class AccountService {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly transferService: TransferService,
+    private readonly depositService: DepositService,
+  ) {}
 
   //Creacion de cuentas
   createAccount(account: AccountModel): AccountEntity {
@@ -58,5 +67,36 @@ export class AccountService {
   getState(accountId: string): boolean {
     const currentAccount = this.accountRepository.findOneById(accountId);
     return currentAccount.state;
+  }
+
+  //Actualiza o cambia el estado de una cuenta
+  changeState(accountId: string, newState: boolean): void {
+    const currentAccount = this.accountRepository.findOneById(accountId);
+    if (this.getBalance(accountId) != 0 && this.getState(accountId)) {
+      throw new ConflictException('No se puede inactivar una cuenta con saldo');
+    }
+    currentAccount.state = newState;
+    this.accountRepository.upate(accountId, currentAccount);
+  }
+
+  //Obtiene el tipo de cuenta de la cuenta informada
+  getAccountType(accountId: string): AccountEntity {
+    return this.accountRepository.findOneById(accountId);
+  }
+
+  //Cambiar el tipo de cuenta
+  changeAccountType(accountId: string, accountTypeId: string): AccountEntity {
+    const currentAccount = this.accountRepository.findOneById(accountId);
+    const currentAccountType =
+      this.accountTypeRepository.findOneById(accountTypeId);
+    currentAccount.acountType = currentAccountType;
+    return this.accountRepository.upate(accountId, currentAccount);
+  }
+
+  //Eliminar una cuenta
+  deleteAccount(accountId: string): void {
+    const currentAccount = this.accountRepository.findOneById(accountId);
+    this.changeState(accountId, false);
+    //Usar servicios de transferencias y de depositos para eliminar
   }
 }

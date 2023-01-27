@@ -7,6 +7,6 @@ export class AccountEntity implements AccountModel {
   customer: CustomerEntity;
   acountType: AccountTypeEntity;
   balance: number;
-  state: true;
+  state = true;
   deletedAt?: Date | number;
 }
