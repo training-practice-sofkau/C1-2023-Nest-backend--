@@ -17,7 +17,7 @@ export class AccountService {
   ) {}
 
   //Creacion de cuentas
-  createAccount(account: AccountModel): AccountEntity {
+  async createAccount(account: AccountModel): Promise<AccountEntity> {
     const newAccount = new AccountEntity();
     newAccount.acountType = account.acountType;
     newAccount.balance = 0;
@@ -27,7 +27,7 @@ export class AccountService {
   }
 
   //Consultar solo cuentas activas
-  getOneActiveState(accountId: string): AccountEntity {
+  async getOneActiveState(accountId: string): Promise<AccountEntity> {
     if (!this.getState(accountId)) {
       throw new ConflictException('Cuenta inactiva');
     }
@@ -36,43 +36,49 @@ export class AccountService {
   }
 
   //Obtención del balance por cuenta
-  getBalance(accountId: string): number {
+  async getBalance(accountId: string): Promise<number> {
     const currentAccount = this.getOneActiveState(accountId);
-    return currentAccount.balance;
+    return (await currentAccount).balance;
   }
 
   //Agrega balance a la cuenta -- actualiza el balance
-  addBalance(accountId: string, amount: number): void {
+  async addBalance(accountId: string, amount: number): Promise<void> {
     const currentAccount = this.getOneActiveState(accountId);
-    currentAccount.balance += amount;
-    this.accountRepository.upate(accountId, currentAccount);
+    (await currentAccount).balance += amount;
+    this.accountRepository.upate(accountId, await currentAccount);
   }
 
   //Remueve o elimina balance de la cuenta -- resta valor a la cuenta
-  removeBalance(accountId: string, amount: number): void {
+  async removeBalance(accountId: string, amount: number): Promise<void> {
     const currentAccount = this.getOneActiveState(accountId);
     if (!this.verifyAmountToRemoveBalance(accountId, amount)) {
       throw new ConflictException('Saldo insuficiente');
     }
-    currentAccount.balance -= amount;
-    this.accountRepository.upate(accountId, currentAccount);
+    (await currentAccount).balance -= amount;
+    this.accountRepository.upate(accountId, await currentAccount);
   }
 
   //Validar la disponibilidad del monto a retirar o a reducir
-  verifyAmountToRemoveBalance(accountId: string, amount: number): boolean {
-    return this.getBalance(accountId) < amount;
+  async verifyAmountToRemoveBalance(
+    accountId: string,
+    amount: number,
+  ): Promise<boolean> {
+    return (await this.getBalance(accountId)) < amount;
   }
 
   //Obtener el estado de una cuenta
-  getState(accountId: string): boolean {
+  async getState(accountId: string): Promise<boolean> {
     const currentAccount = this.accountRepository.findOneById(accountId);
     return currentAccount.state;
   }
 
   //Actualiza o cambia el estado de una cuenta
-  changeState(accountId: string, newState: boolean): void {
+  async changeState(accountId: string, newState: boolean): Promise<void> {
     const currentAccount = this.accountRepository.findOneById(accountId);
-    if (this.getBalance(accountId) != 0 && this.getState(accountId)) {
+    if (
+      (await this.getBalance(accountId)) != 0 &&
+      (await this.getState(accountId))
+    ) {
       throw new ConflictException('No se puede inactivar una cuenta con saldo');
     }
     currentAccount.state = newState;
@@ -80,12 +86,15 @@ export class AccountService {
   }
 
   //Obtiene el tipo de cuenta de la cuenta informada
-  getAccountType(accountId: string): AccountEntity {
+  async getAccountType(accountId: string): Promise<AccountEntity> {
     return this.accountRepository.findOneById(accountId);
   }
 
   //Cambiar el tipo de cuenta
-  changeAccountType(accountId: string, accountTypeId: string): AccountEntity {
+  async changeAccountType(
+    accountId: string,
+    accountTypeId: string,
+  ): Promise<AccountEntity> {
     const currentAccount = this.accountRepository.findOneById(accountId);
     const currentAccountType =
       this.accountTypeRepository.findOneById(accountTypeId);
@@ -94,7 +103,7 @@ export class AccountService {
   }
 
   //Eliminar una cuenta
-  deleteAccount(accountId: string): void {
+  async deleteAccount(accountId: string): Promise<void> {
     const currentAccount = this.accountRepository.findOneById(accountId);
     this.changeState(accountId, false);
     //Usar servicios de transferencias y de depositos para eliminar
