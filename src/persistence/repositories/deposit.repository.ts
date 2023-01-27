@@ -45,7 +45,7 @@ export class DepositRepository {
   }
 
   findAll(): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter((item) => item.deleteAt === undefined)
   }
 
   findOneById(id: string): DepositEntity {

@@ -4,6 +4,8 @@ import { TransferEntity } from '../entities/transfer.entity';
 @Injectable()
 export class TransferRepository {
   private readonly database: Array<TransferEntity>;
+  i: number;
+ 
 
   constructor() {
     this.database = new Array<TransferEntity>();
@@ -30,28 +32,70 @@ export class TransferRepository {
     return this.database[index];
   }
 
-  delete(): void {
-    throw new Error('This method is not implemented');
+  delete(id: string , soft?: boolean): void {
+    
+    if (soft || soft === undefined){
+        this.i = this.database.findIndex((item) => item.id ===id);
+      this.softDelete(this.i);}
+      else {
+        this.i = this.database.findIndex((item) => item.id ===id);
+        this.hardDelete(this.i);
+        this.database.splice(this.i , 1);
+      }
+
+    }
+    private hardDelete(index: number): void {
+        this.database.splice(index, 1) 
+    }
+  
+    private softDelete(index: number): void {
+      this.database[index].deleteAt = Date.now();
+    }
+  
+    findAll(): TransferEntity[] {
+      return this.database.filter((item) => item.deleteAt === undefined);
+    }
+  
+    findOneById(id: string): TransferEntity {
+      const trfData = this.database.find(
+        (item) => item.id === id && (item.deleteAt ?? true) === true,
+      );
+      if (trfData) return trfData;
+      else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+  
+    findOutcomeByDataRange(
+      accountId: string,
+      dateInit: Date | number,
+      dateEnd: Date | number,
+    ): TransferEntity[] {
+      const range = this.database.filter(
+        (item) =>
+          item.outcome.id === accountId &&
+          typeof item.deleteAt === 'undefined' &&
+          item.date_time >= dateInit &&
+          item.date_time <= dateEnd,
+      );
+      if (range === undefined) throw new NotFoundException();
+      return range;
+    }
+  
+    findIncomeByDataRange(
+      accountId: string,
+      dateInit: Date | number,
+      dateEnd: Date | number,
+    ): TransferEntity[] {
+      const inputR = this.database.filter(
+        (item) =>
+          item.outcome.id === accountId &&
+          typeof item.deleteAt === 'undefined' &&
+          item.date_time >= dateInit &&
+          item.date_time <= dateEnd,
+      );
+      if (inputR === undefined) throw new NotFoundException();
+      return inputR;
+    }
   }
 
-  findAll(): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
 
-  findOneById(): TransferEntity {
-    throw new Error('This method is not implemented');
-  }
-  findOutcomeByDataRange(): /*accountId: string,
-    dateInit: Date | number,
-    dateEnd: Date | number,*/
-  TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
 
-  findIncomeByDataRange(): /*accountId: string,
-    dateInit: Date | number,
-    dateEnd: Date | number,*/
-  TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
-}
