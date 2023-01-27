@@ -30,19 +30,24 @@ export class AccountRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    if (soft || soft === undefined) {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.hardDelete(index);
+    }
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
-
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): AccountEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): AccountEntity {
@@ -61,21 +66,22 @@ export class AccountRepository
     return estado;
   }
 
-  findByCustomer(customerId: string): AccountEntity[] {
+  findByCustomer(customer: string): AccountEntity[] {
     const client = this.database.filter(
       //filtra segun una condicion y devuelve un array
       (item) =>
-        item.customerId == customerId && typeof item.deletedAt === 'undefined',
+        item.customer.id == customer && typeof item.deletedAt === 'undefined',
     );
     return client;
   }
 
-  findByAccountType(accountTypeId: string): AccountEntity[] {
-    const accountType = this.database.filter(
+  findByAccountType(accountType: string): AccountEntity[] {
+    const accountTy = this.database.filter(
       //filtra segun una condicion y devuelve un array
       (item) =>
-        item.accountTypeId == accountTypeId && typeof item.deletedAt === 'undefined',
+        item.accountType.id == accountType &&
+        typeof item.deletedAt === 'undefined',
     );
-    return accountType;
+    return accountTy;
   }
 }

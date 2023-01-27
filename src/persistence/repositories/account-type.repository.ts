@@ -29,22 +29,32 @@ export class AccountTypeRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    this.index = this.database.findIndex((item) => item.id === id);
+    const customer = this.findOneById(id);
+    if (soft || soft === undefined) {
+      this.update(id, customer);
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.database.splice(index, 1);
+    }
   }
 
   findAll(): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    const account = this.database.find((item) => item.id === id);
+    if (account) return account;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
   findByState(state: boolean): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const status = this.database.filter((item) => item.state == state);
+    return status;
   }
 
   findByName(name: string): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const nombre = this.database.filter((item) => item.name == name);
+    return nombre;
   }
 }
