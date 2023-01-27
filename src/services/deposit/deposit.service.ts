@@ -23,7 +23,6 @@ export class DepositService {
         else {
             throw new NotFoundException("La cuenta no se encuentra activa")
         }
-
     }
 
     /**
@@ -33,7 +32,13 @@ export class DepositService {
      * @memberof DepositService
      */
     deleteDeposit(depositId: string): void {
-        throw new Error('This method is not implemented');
+        const deposit = this.depositRepository.findOneById(depositId)
+        if (deposit.deletedAt === undefined) {
+            this.depositRepository.delete(depositId, true)
+        }
+        else {
+            this.depositRepository.delete(depositId, false)
+        }
     }
 
     /**
