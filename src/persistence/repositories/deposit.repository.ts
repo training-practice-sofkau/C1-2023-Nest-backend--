@@ -15,13 +15,18 @@ export class DepositRepository
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.id === id,
     );
-    const data = this.database[depositIndex];
-    this.database[depositIndex] = {
-      ...data,
-      ...entity,
-      id: id,
-    };
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      const data = this.database[depositIndex];
+      this.database[depositIndex] = {
+        ...data,
+        ...entity,
+        id: id,
+      };
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   delete(id: string, soft?: boolean | undefined): void {
     const deposit = this.findOneById(id)
@@ -33,44 +38,74 @@ export class DepositRepository
     }
   }
   findAll(): DepositEntity[] {
-    return this.database;
+    return this.database.filter(deposit => deposit.deletedAt === undefined);
   }
   findOneById(id: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.id === id,
     );
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findByAccountId(accountId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.accountId.id === accountId,
     );
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findByAccountTypeId(accountTypeId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.accountId.accountType.id === accountTypeId,
     );
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findByCustomerId(customerId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.accountId.customerId.id === customerId,
     );
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findByEmail(email: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.accountId.customerId.email === email,
     );
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findByDocumentTypeId(documentTypeId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) =>
         deposit.accountId.customerId.documentType.id === documentTypeId,
     );
-    return this.database[depositIndex];
+    if (depositIndex >= 0) {
+      return this.database[depositIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findAmountGreaterThan(amount: number): DepositEntity[] {
     let arrayAmount: DepositEntity[] = [];
@@ -79,7 +114,12 @@ export class DepositRepository
         arrayAmount.push(deposit);
       }
     });
-    return arrayAmount;
+    if (arrayAmount.length > 0) {
+      return arrayAmount
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   findAmountLessThan(amount: number): DepositEntity[] {
     let arrayAmount: DepositEntity[] = [];
@@ -88,7 +128,12 @@ export class DepositRepository
         arrayAmount.push(deposit);
       }
     });
-    return arrayAmount;
+    if (arrayAmount.length > 0) {
+      return arrayAmount
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
   hardDelete(id: string): void {
     const depositIndex = this.database.findIndex(
