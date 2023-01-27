@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
 import { BaseRepository } from './base/base.repository';
 import { CustomerInterface } from './interfaces/customer-repository.Interface';
+import { Injectable, NotFoundException } from '@nestjs/common';
 @Injectable()
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
@@ -50,38 +50,30 @@ export class CustomerRepository
       (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
     if (customer) return customer;
-    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    else 
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
-
-  findOneByEmailAndPassword(email: string, password: string): boolean {
-    const index = this.database.findIndex(
-      (item) =>
-        item.email === email &&
-        item.password === password &&
-        typeof item.deletedAt === 'undefined',
-    );
-    return index >= 0 ? true : false;
+  findOneByEmailAndPassword(): boolean {
+    throw new Error('This method is not implemented');
   }
-
-  findOneByDocumentTypeAndDocument(): CustomerEntity {}
-
+  findOneByDocumentTypeAndDocument(): CustomerEntity {
+    throw new Error('This method is not implemented');
+  }
   findOneByEmail(/*email: string*/): CustomerEntity {
     throw new Error('This method is not implemented');
   }
-
   findOneByPhone(/*phone: string*/): CustomerEntity {
     throw new Error('This method is not implemented');
   }
-
   findByState(/*state: boolean*/): CustomerEntity[] {
     throw new Error('This method is not implemented');
   }
-
   findByFullName(/*fullName: string*/): CustomerEntity[] {
     throw new Error('This method is not implemented');
   }
-
   findDocumentById(/*documentId: string*/): CustomerEntity {
     throw new Error('Method not implemented.');
   }
 }
+ 
+

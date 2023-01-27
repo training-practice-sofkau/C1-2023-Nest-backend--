@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { DepositEntity } from 'src/persistence/entities/deposit.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class DepositRepository {
@@ -54,13 +55,22 @@ export class DepositRepository {
     if (customer) return customer;
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
-  findByAccountId(/*accountId: string*/): DepositEntity[] {
-    throw new Error('This method is not implemented');
+  findByAccountId(accountId: string): DepositEntity[] {
+    const money = this.database .filter(
+      (data) => data.account.id == accountId&& typeof data.deleteAt === undefined
+    )
+    return money;
   }
 
-  findByDataRange(): //dateInit: Date | number,
-  //dateEnd: Date | number,
-  DepositEntity[] {
-    throw new Error('This method is not implemented');
+  findByDataRange(dateInit: Date | number,
+  dateEnd: Date | number,
+  ) : DepositEntity[] {
+    const dateData = this.database.filter(
+      (item) => typeof item.deleteAt === undefined && 
+      item.dateTime >= dateInit &&
+      item.dateTime <= dateEnd,
+    );
+    if (dateData === undefined) throw new NotFoundException(" No se encuentra informacion de usuario");
+    return dateData;
   }
 }

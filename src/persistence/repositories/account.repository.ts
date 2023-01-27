@@ -15,7 +15,7 @@ export class AccountRepository {
   }
   update(id: string, entity: AccountEntity): AccountEntity {
     const index = this.database.findIndex(
-      (item) => item.id === id && (item.delateAt ?? true) === true,
+      (item) => item.id === id && (item.deleteAt ?? true) === true,
     );
     if (index >= 0) {
       this.database[index] = {
@@ -29,15 +29,41 @@ export class AccountRepository {
     return this.database[index];
   }
 
-  delete(): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean): void {
+
+  
+  }
+  private hardDelete(index: number): void {
+  this.database.splice(index , 1);
+
+  }
+
+  private softDelete(index: number): void {
+    this.database[index].deleteAt = Date.now();
   }
 
   findAll(): AccountEntity[] {
+   return this.database.filter((item) => item.deleteAt === undefined);
+  }
+  
+  findOneById(id: string): AccountEntity {
+     const accountData  = this.database.find(
+      (item) => item.id === id  && (item.deleteAt ?? true) === true,);
+       if (accountData) return accountData;
+       else throw new NotFoundException(`El usuario con el id ${id} no se encuentra`);
+  }
+
+
+  findByState(state: boolean): AccountEntity[] {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(): AccountEntity {
+  findByCustomer(customerId: string): AccountEntity[] {
     throw new Error('This method is not implemented');
   }
+
+  findByAccountType(accountTypeId: string): AccountEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
 }
