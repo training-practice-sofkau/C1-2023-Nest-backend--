@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { NotFoundError } from 'rxjs';
 import { TransferEntity } from '../entities';
 import { BodyRepositoryAbstract } from './base/base.repository';
 import { TransferRepositoryInterface } from './interface/transfer/transfer-repository.interface';
@@ -10,34 +9,33 @@ export class TransferRespository
   implements TransferRepositoryInterface {
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
-    const transferIndex = this.database.findIndex(
-      (transfer) => transfer.id === entity.id,
-    );
-    return this.database[transferIndex];
+    return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: TransferEntity): TransferEntity {
     const transferIndex = this.database.findIndex(
       (transfer) => transfer.id === id,
     );
-    const data = this.database[transferIndex];
-    this.database[transferIndex] = {
-      ...data,
-      ...entity,
-      id: id,
-    };
-    return this.database[transferIndex];
+    if (transferIndex >= 0) {
+      const data = this.database[transferIndex];
+      this.database[transferIndex] = {
+        ...data,
+        ...entity,
+        id: id,
+      };
+      return this.database[transferIndex];
+    }
+    else {
+      throw new NotFoundException("No se encontro transferencia")
+    }
+
   }
   delete(id: string, soft?: boolean | undefined): void {
     const transfer = this.findOneById(id)
     if (soft || soft === undefined) {
-      transfer.deletedAt = Date.now()
-      this.update(id, transfer)
+      this.softDelete(id)
     }
     else {
-      const transferIndex = this.database.findIndex(
-        (account) => account.id === id
-      );
-      this.database.splice(transferIndex, 1);
+      this.hardDelete(id)
     }
   }
   findAll(): TransferEntity[] {
@@ -131,7 +129,7 @@ export class TransferRespository
   }
   hardDelete(id: string): void {
     const transferIndex = this.database.findIndex(
-      (account) => account.id === id
+      (transfer) => transfer.id === id
     );
     if (transferIndex >= 0) {
       this.database.splice(transferIndex, 1);

@@ -9,7 +9,7 @@ export interface TransferRepositoryInterface
   findByOutcomeCustomerId(id: string): TransferEntity;
   findByAmountGreaterThan(amount: number): TransferEntity[];
   findByAmountLessThan(amount: number): TransferEntity[];
-  hardDelete(id: string): void;
-  softDelete(id: string): void;
+  private hardDelete(id: string): void;
+  private softDelete(id: string): void;
   sortByDate(date: number | Date): TransferEntity[]
 }
