@@ -4,7 +4,7 @@ import { DepositModuls } from '../../models/deposit.module';
 
 export class DepositEntity implements DepositModuls {
   id = uuid();
-  accountId: AccountModel;
+  account: AccountModel;
   amount: number;
   dateTime: number | Date;
   deletedAt?: number | Date;

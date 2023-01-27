@@ -60,7 +60,6 @@ export class AccountRepository
 
   findByState(state: boolean): AccountEntity[] {
     const estado = this.database.filter(
-      //filtra segun una condicion y devuelve un array
       (item) => item.state == state && typeof item.deletedAt === 'undefined',
     );
     return estado;
@@ -68,7 +67,6 @@ export class AccountRepository
 
   findByCustomer(customer: string): AccountEntity[] {
     const client = this.database.filter(
-      //filtra segun una condicion y devuelve un array
       (item) =>
         item.customer.id == customer && typeof item.deletedAt === 'undefined',
     );
@@ -77,7 +75,6 @@ export class AccountRepository
 
   findByAccountType(accountType: string): AccountEntity[] {
     const accountTy = this.database.filter(
-      //filtra segun una condicion y devuelve un array
       (item) =>
         item.accountType.id == accountType &&
         typeof item.deletedAt === 'undefined',

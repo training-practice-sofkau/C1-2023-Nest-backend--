@@ -29,24 +29,20 @@ export class depositRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const deposit = this.findOneById(id);
     if (soft || soft === undefined) {
-      deposit.deletedAt = Date.now();
-      this.update(id, deposit);
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
     } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
-      );
-      this.database.splice(index, 1);
+      const index = this.database.findIndex((item) => item.id === id);
+      this.hardDelete(index);
     }
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
-
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): DepositEntity[] {
@@ -61,14 +57,25 @@ export class depositRepository
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
-  findByAccountId(accountId: string): DepositEntity[] {
-    throw new Error('This method is not implemented');
+  findByAccountId(account: string): DepositEntity[] {
+    const bill = this.database.filter(
+      (item) =>
+        item.account.id == account && typeof item.deletedAt === 'undefined',
+    );
+    return bill;
   }
 
   findByDataRange(
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    const findBDR = this.database.filter(
+      (item) =>
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
+    );
+    if (findBDR === undefined) throw new NotFoundException();
+    return findBDR;
   }
 }
