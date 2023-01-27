@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { TransferEntity } from '../entities/transfer.entity';
 import { BaseRepository } from './base';
 import { TransferRepositoryInterface } from './interfaces';
@@ -9,72 +9,26 @@ export class TransferRepository
   implements TransferRepositoryInterface
 {
   register(entity: TransferEntity): TransferEntity {
-    this.database.push(entity);
-    return this.database.at(-1) ?? entity;
+    throw new Error('This method is not implemented');
   }
 
   update(id: string, entity: TransferEntity): TransferEntity {
-    const index = this.database.findIndex(
-      (item) => item.id === id && (item.deletedAt ?? true) === true,
-    );
-    if (index >= 0) {
-      this.database[index] = {
-        ...this.database[index],
-        ...entity,
-        id,
-      } as TransferEntity;
-    } else {
-      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
-    }
-    return this.database[index];
+    throw new Error('This method is not implemented');
   }
 
   delete(id: string, soft?: boolean): void {
-    const transfer = this.findOneById(id);
-    if (soft || soft === undefined) {
-      transfer.deletedAt = Date.now();
-      this.update(id, transfer);
-    } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
-      );
-      this.database.splice(index, 1);
-    }
+    throw new Error('This method is not implemented');
   }
 
   findAll(): TransferEntity[] {
-    return this.database.filter((item) => item.deletedAt === undefined);
+    throw new Error('This method is not implemented');
   }
 
   findOneById(id: string): TransferEntity {
-    const customer = this.database.find(
-      (item) => item.id === id && (item.deletedAt ?? true) === true,
-    );
-    if (customer) return customer;
-    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    throw new Error('This method is not implemented');
   }
 
-  findOutcomeByDataRange(
-    accountId: string,
-    dateInit: number | Date,
-    dateEnd: number | Date,
-  ): TransferEntity[] {
+  fun(accountId: string): void {
     throw new Error('Method not implemented.');
-  }
-  findIncomeByDataRange(
-    accountId: string,
-    dateInit: number | Date,
-    dateEnd: number | Date,
-  ): TransferEntity[] {
-    throw new Error('Method not implemented.');
-  }
-
-  private hardDelete(index: number): void {
-    this.database.splice(index, 1);
-  }
-
-  private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
-    this.update(this.database[index].id, this.database[index]);
   }
 }

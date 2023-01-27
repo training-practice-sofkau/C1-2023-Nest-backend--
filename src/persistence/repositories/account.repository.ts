@@ -55,31 +55,8 @@ export class AccountRepository
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
-  findByState(state: boolean): AccountEntity[] {
-    const accounts = this.database.filter((item) => item.state === state);
-    return accounts;
-  }
-
-  findByCustomer(customerId: string): AccountEntity[] {
-    const accounts = this.database.filter(
-      (item) => item.customer.id === customerId,
-    );
-    return accounts;
-  }
-
-  findByAccountType(accountTypeId: string): AccountEntity[] {
-    const accounts = this.database.filter(
-      (item) => item.accountType.id === accountTypeId,
-    );
-    return accounts;
-  }
-  private hardDelete(index: number): void {
-    this.database.splice(index, 1);
-  }
-
-  private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
-    this.update(this.database[index].id, this.database[index]);
+  fun(accountId: string): void {
+    throw new Error('Method not implemented.');
   }
 }
 

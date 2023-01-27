@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
 import { BaseRepository } from './base';
 import { DocumentTypeRepositoryInterface } from './interfaces';
@@ -9,46 +9,26 @@ export class DocumentTypeRepository
   implements DocumentTypeRepositoryInterface
 {
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    this.database.push(entity);
-    return this.database.at(-1) ?? entity;
+    throw new Error('This method is not implemented');
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    const index = this.database.findIndex((item) => item.id === id);
-    if (index >= 0) {
-      this.database[index] = {
-        ...this.database[index],
-        ...entity,
-        id,
-      } as DocumentTypeEntity;
-    } else {
-      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
-    }
-    return this.database[index];
+    throw new Error('This method is not implemented');
   }
 
   delete(id: string, soft?: boolean): void {
-    const index = this.database.findIndex((item) => item.id === id);
-    this.database.splice(index, 1);
+    throw new Error('This method is not implemented');
   }
 
   findAll(): DocumentTypeEntity[] {
-    return this.database;
+    throw new Error('This method is not implemented');
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    const deposit = this.database.find((item) => item.id === id);
-    if (deposit) return deposit;
-    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    throw new Error('This method is not implemented');
   }
 
-  findByState(state: boolean): DocumentTypeEntity[] {
-    const documentTypes = this.database.filter((item) => item.state === state);
-    return documentTypes;
-  }
-
-  findByName(name: string): DocumentTypeEntity[] {
-    const documentTypes = this.database.filter((item) => item.name === name);
-    return documentTypes;
+  fun(accountId: string): void {
+    throw new Error('Method not implemented.');
   }
 }
