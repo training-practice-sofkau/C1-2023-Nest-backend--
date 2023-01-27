@@ -7,4 +7,5 @@ export class AccountTypeEntity implements AccountTypeModel {
     id = uuid ();
     name: string;
     state: true;
+  deletedAt: undefined;
 }

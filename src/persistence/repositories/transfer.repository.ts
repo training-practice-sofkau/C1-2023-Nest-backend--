@@ -1,33 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { TransferEntity } from '../entities/transfer.entity';
+import { BaseRepository } from './base/base.repository';
+import { TransferRepositoryInterface } from './interfaces/transfer.repository.interface';
+
 
 @Injectable()
-export class TransferRepository {
+export class TransferReoisitory extends BaseRepository<TransferEntity> implements TransferRepositoryInterface{
   register(entity: TransferEntity): TransferEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
-
   update(id: string, entity: TransferEntity): TransferEntity {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      }
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
-
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean | undefined): void {
+    if (!soft) {
+      const index = this.database.findIndex((item) => item.id === id);
+      if (index >= 0) {
+        this.database.splice(index, 1);
+      } else {
+        throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+      }
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      if (index >= 0) {
+        this.database[index].deletedAt = Date.now();
+      } else {
+        throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+      }
+    }
   }
-
-  private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
-  }
-
-  private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
-  }
-
   findAll(): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
   findOneById(id: string): TransferEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
+  }
   }
 
   findOutcomeByDataRange(
