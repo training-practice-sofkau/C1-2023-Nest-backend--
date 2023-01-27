@@ -55,7 +55,7 @@ export class TransferRespository
   }
   findByIncomeCustomerId(id: string): TransferEntity {
     const transferIndex = this.database.findIndex(
-      (transfer) => transfer.income.customerId.id === id,
+      (transfer) => transfer.income.customer.id === id,
     );
     if (transferIndex >= 0) {
       return this.database[transferIndex];
@@ -89,7 +89,7 @@ export class TransferRespository
   }
   findByOutcomeCustomerId(id: string): TransferEntity {
     const transferIndex = this.database.findIndex(
-      (transfer) => transfer.outcome.customerId.id === id,
+      (transfer) => transfer.outcome.customer.id === id,
     );
     if (transferIndex >= 0) {
       return this.database[transferIndex];

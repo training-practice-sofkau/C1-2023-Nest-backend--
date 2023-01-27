@@ -53,7 +53,7 @@ export class DepositRepository
   }
   findByAccountId(accountId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
-      (deposit) => deposit.accountId.id === accountId,
+      (deposit) => deposit.account.id === accountId,
     );
     if (depositIndex >= 0) {
       return this.database[depositIndex];
@@ -64,7 +64,7 @@ export class DepositRepository
   }
   findByAccountTypeId(accountTypeId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
-      (deposit) => deposit.accountId.accountType.id === accountTypeId,
+      (deposit) => deposit.account.accountType.id === accountTypeId,
     );
     if (depositIndex >= 0) {
       return this.database[depositIndex];
@@ -75,7 +75,7 @@ export class DepositRepository
   }
   findByCustomerId(customerId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
-      (deposit) => deposit.accountId.customerId.id === customerId,
+      (deposit) => deposit.account.customer.id === customerId,
     );
     if (depositIndex >= 0) {
       return this.database[depositIndex];
@@ -86,7 +86,7 @@ export class DepositRepository
   }
   findByEmail(email: string): DepositEntity {
     const depositIndex = this.database.findIndex(
-      (deposit) => deposit.accountId.customerId.email === email,
+      (deposit) => deposit.account.customer.email === email,
     );
     if (depositIndex >= 0) {
       return this.database[depositIndex];
@@ -98,7 +98,7 @@ export class DepositRepository
   findByDocumentTypeId(documentTypeId: string): DepositEntity {
     const depositIndex = this.database.findIndex(
       (deposit) =>
-        deposit.accountId.customerId.documentType.id === documentTypeId,
+        deposit.account.customer.documentType.id === documentTypeId,
     );
     if (depositIndex >= 0) {
       return this.database[depositIndex];
