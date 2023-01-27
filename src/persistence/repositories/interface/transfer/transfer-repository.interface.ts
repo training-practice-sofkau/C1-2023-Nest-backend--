@@ -12,4 +12,5 @@ export interface TransferRepositoryInterface
   private hardDelete(id: string): void;
   private softDelete(id: string): void;
   sortByDate(date: number | Date): TransferEntity[]
+  findByDateRange(id: string, DateMin: Date | number, DateMax: Date | Number): TransferEntity[]
 }

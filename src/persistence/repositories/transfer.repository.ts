@@ -148,4 +148,8 @@ export class TransferRespository
     arrayDate = this.database.sort()
     return arrayDate
   }
+  findByDateRange(id: string, DateMin: number | Date, DateMax: Number | Date): TransferEntity[] {
+    const arrayTransfers = this.findAll()
+    return arrayTransfers.filter(transfer => (transfer.id === id && transfer.dateTime >= DateMin && transfer.dateTime <= DateMax))
+  }
 }
