@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class TransferRepository {
-  register(entity: TransferEntity): TransferEntity {
+export class DepositRepository {
+  register(entity: DepositEntity): DepositEntity {
     throw new Error('This method is not implemented');
   }
 
-  update(id: string, entity: TransferEntity): TransferEntity {
+  update(id: string, entity: DepositEntity): DepositEntity {
     throw new Error('This method is not implemented');
   }
 
@@ -22,27 +22,22 @@ export class TransferRepository {
     throw new Error('This method is not implemented');
   }
 
-  findAll(): TransferEntity[] {
+  findAll(): DepositEntity[] {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): TransferEntity {
+  findOneById(id: string): DepositEntity {
     throw new Error('This method is not implemented');
   }
 
-  findOutcomeByDataRange(
-    accountId: string,
+  findByAccountId(accountId: string): DepositEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByDataRange(
     dateInit: Date | number,
     dateEnd: Date | number,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
-
-  findIncomeByDataRange(
-    accountId: string,
-    dateInit: Date | number,
-    dateEnd: Date | number,
-  ): TransferEntity[] {
+  ): DepositEntity[] {
     throw new Error('This method is not implemented');
   }
 }

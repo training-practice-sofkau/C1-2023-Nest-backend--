@@ -1,14 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AccountEntity } from 'src/services/account.entity';
 
 @Injectable()
-export class CustomerRepository {
-  private readonly database: Array<AccountEntity>;
-
-  constructor() {
-    this.database = new Array<AccountEntity>();
-  }
-
+export class AccountRepository {
   register(entity: AccountEntity): AccountEntity {
     throw new Error('This method is not implemented');
   }
@@ -21,11 +14,31 @@ export class CustomerRepository {
     throw new Error('This method is not implemented');
   }
 
+  private hardDelete(index: number): void {
+    throw new Error('This method is not implemented');
+  }
+
+  private softDelete(index: number): void {
+    throw new Error('This method is not implemented');
+  }
+
   findAll(): AccountEntity[] {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): AcountEntity {
+  findOneById(id: string): AccountEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  findByState(state: boolean): AccountEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByCustomer(customerId: string): AccountEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByAccountType(accountTypeId: string): AccountEntity[] {
     throw new Error('This method is not implemented');
   }
 }

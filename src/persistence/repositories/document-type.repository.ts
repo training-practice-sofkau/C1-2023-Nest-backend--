@@ -28,4 +28,12 @@ export class DocumentTypeRepository {
   findOneById(id: string): DocumentTypeEntity {
     throw new Error('This method is not implemented');
   }
+
+  findByState(state: boolean): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByName(name: string): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
 }
