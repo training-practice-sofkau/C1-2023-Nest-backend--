@@ -1,13 +1,12 @@
 import { CustomerEntity } from '../entities/customer.entity';
-import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from './base/base.repository';
-import { threadId } from 'worker_threads';
+import { CustomerRepositoryInterface } from './interfaces/customer-repository.interface';
 
 @Injectable()
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
-  implements BaseRepositoryInterface<CustomerEntity>
+  implements CustomerRepositoryInterface
 {
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
