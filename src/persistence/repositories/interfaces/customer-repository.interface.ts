@@ -5,3 +5,5 @@ export type CustomerRepositoryInterface =
   BaseRepositoryInterface<CustomerEntity>;
 {
 }
+
+//[Workshop Week 1 - Day 3] - Manipulación de colecciones
