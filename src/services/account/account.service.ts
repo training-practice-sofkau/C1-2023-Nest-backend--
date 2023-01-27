@@ -102,7 +102,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).accountType
   }
 
   /**
