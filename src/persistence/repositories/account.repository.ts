@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AccountEntity } from '../entities';
 import { BodyRepositoryAbstract } from './base/base.repository';
 import { AccountRepositoryInterface } from './interface/account/account-repository.interface';
@@ -6,7 +6,8 @@ import { AccountRepositoryInterface } from './interface/account/account-reposito
 @Injectable()
 export class AccountRepository
   extends BodyRepositoryAbstract<AccountEntity>
-  implements AccountRepositoryInterface {
+  implements AccountRepositoryInterface
+{
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     const accountIndex = this.database.findIndex(
@@ -27,16 +28,13 @@ export class AccountRepository
     return this.database[accountIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    const account = this.findOneById(id)
-    if (soft || soft === undefined) {
-      this.softDelete(id)
-    }
-    else {
-      this.hardDelete(id)
-    }
+    const accountIndex = this.database.findIndex(
+      (account) => account.id === id,
+    );
+    this.database.splice(accountIndex, 1);
   }
   findAll(): AccountEntity[] {
-    return this.database.filter(account => account.deletedAt === undefined);
+    return this.database;
   }
   findOneById(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
@@ -88,21 +86,5 @@ export class AccountRepository
       (account) => account.customerId.documentType.id === id,
     );
     return this.database[accountIndex];
-  }
-  hardDelete(id: string): void {
-    const accountIndex = this.database.findIndex(
-      (account) => account.id === id
-    );
-    if (accountIndex >= 0) {
-      this.database.splice(accountIndex, 1);
-    }
-    else {
-      throw new NotFoundException("No se encontro ningun elemento")
-    }
-  }
-  softDelete(id: string): void {
-    const account = this.findOneById(id)
-    account.deletedAt = Date.now()
-    this.update(id, account)
   }
 }
