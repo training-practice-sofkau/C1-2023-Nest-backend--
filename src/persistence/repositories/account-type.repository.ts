@@ -25,12 +25,14 @@ export class AccountTypeRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
-    const index = this.database.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean): void {
+    const account = this.findOneById(id);
+    if (soft || soft === undefined) {
+      this.update(id, account);
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.database.splice(index, 1);
     }
-    this.database.splice(index, 1);
   }
 
   findAll(): AccountTypeEntity[] {
