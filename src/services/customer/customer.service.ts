@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { AccountRepository } from '../../persistence/repositories';
+import { ForbiddenException } from '@nestjs/common/exceptions';
+
+import { AccountModel } from 'src/models';
+import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import {
+  AccountRepository,
+  AccountTypeRepository,
+} from '../../persistence/repositories';
 
 @Injectable()
-  [x: string]: any;
-
 export class AccountService {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly accountTypeRepository: AccountTypeRepository,
+  ) {}
 
   /**
    * Crear una cuenta
@@ -29,7 +37,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).balance;
   }
 
   /**
@@ -40,7 +48,7 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.findOneById(accountId).balance += amount;
   }
 
   /**
