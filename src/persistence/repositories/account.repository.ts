@@ -8,7 +8,7 @@ export class AccountRepository
   extends BaseRepository<AccountEntity>
   implements AccountRepositoryinterface
 {
-
+  
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
