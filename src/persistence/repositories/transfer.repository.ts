@@ -30,15 +30,20 @@ export class TransferRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    if (soft || soft === undefined) {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.hardDelete(index);
+    }
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
-
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): TransferEntity[] {
@@ -58,7 +63,15 @@ export class TransferRepository
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    const outcomeR = this.database.filter(
+      (item) =>
+        item.outcome.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
+    );
+    if (outcomeR === undefined) throw new NotFoundException();
+    return outcomeR;
   }
 
   findIncomeByDataRange(
@@ -66,6 +79,14 @@ export class TransferRepository
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    const incomeR = this.database.filter(
+      (item) =>
+        item.income.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
+    );
+    if (incomeR === undefined) throw new NotFoundException();
+    return incomeR;
   }
 }

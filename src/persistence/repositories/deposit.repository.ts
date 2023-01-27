@@ -69,13 +69,13 @@ export class depositRepository
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[] {
-    const findBDR = this.database.filter(
+    const dataR = this.database.filter(
       (item) =>
         typeof item.deletedAt === 'undefined' &&
         item.dateTime >= dateInit &&
         item.dateTime <= dateEnd,
     );
-    if (findBDR === undefined) throw new NotFoundException();
-    return findBDR;
+    if (dataR === undefined) throw new NotFoundException();
+    return dataR;
   }
 }
