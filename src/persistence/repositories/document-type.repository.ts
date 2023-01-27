@@ -28,10 +28,7 @@ export class DocumentTypeRepository
     throw new Error('This method is not implemented');
   }
 
-  findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('Method not implemented.');
-  }
-  findByName(name: string): DocumentTypeEntity[] {
+  fun(accountId: string): void {
     throw new Error('Method not implemented.');
   }
 }

@@ -54,62 +54,7 @@ export class CustomerRepository
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
-  findOneByEmailAndPassword(email: string, password: string): boolean {
-    const index = this.database.findIndex(
-      (item) =>
-        item.email === email &&
-        item.password === password &&
-        typeof item.deletedAt === 'undefined',
-    );
-    return index >= 0 ? true : false;
-  }
-
-  findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
-    document: string,
-  ): CustomerEntity {
-    const customer = this.database.find(
-      (item: CustomerEntity) =>
-        item.documentType.id === documentTypeId &&
-        item.document === document &&
-        typeof item.deletedAt === 'undefined',
-    );
-    if (customer) return customer;
-    else
-      throw new NotFoundException(
-        `El ID ${documentTypeId} y DOCUMENTE ${document} no existe en base de datos`,
-      );
-  }
-
-  findOneByEmail(email: string): CustomerEntity {
-    const customer = this.database.find(
-      (item: CustomerEntity) =>
-        item.email === email && typeof item.deletedAt === 'undefined',
-    );
-    if (customer) return customer;
-    else
-      throw new NotFoundException(`El ID ${email} no existe en base de datos`);
-  }
-
-  findOneByPhone(phone: string): CustomerEntity {
-    const customer = this.database.find(
-      (item: CustomerEntity) =>
-        item.phone === phone && typeof item.deletedAt === 'undefined',
-    );
-    if (customer) return customer;
-    else
-      throw new NotFoundException(`El ID ${phone} no existe en base de datos`);
-  }
-
-  findByState(state: boolean): CustomerEntity[] {
-    const customers = this.database.filter((item) => item.state === state);
-    return customers;
-  }
-
-  findByFullName(fullName: string): CustomerEntity[] {
-    const customers = this.database.filter(
-      (item) => item.fullName === fullName,
-    );
-    return customers;
+  fun(accountId: string): void {
+    throw new Error('Method not implemented.');
   }
 }
