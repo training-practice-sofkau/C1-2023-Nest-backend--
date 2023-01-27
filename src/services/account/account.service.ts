@@ -75,9 +75,11 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    throw new Error('This method is not implemented');
+    if (this.accountRepository.findOneById(accountId).balance >= amount) {
+      return true;
+    }
+    return false;
   }
-
   /**
    * Obtener el estado de una cuenta
    *
@@ -86,9 +88,8 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).state;
   }
-
   /**
    * Cambiar el estado de una cuenta
    *
@@ -97,7 +98,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.findOneById(accountId).state = state;
   }
 
   /**
@@ -133,6 +134,6 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.delete(accountId);
   }
 }
