@@ -11,4 +11,6 @@ export interface AccountRepositoryInterface
   findByAccountTypeId(id: string): AccountEntity;
   private hardDelete(id: string): void
   private softDelete(id: string): void
+  findByStateId(id: string): boolean
+  changeStateId(id: string, state: boolean): void
 }
