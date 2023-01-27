@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { DepositModel } from 'src/models';
 import { DepositEntity } from 'src/persistence/entities';
 import { DepositRepository } from 'src/persistence/repositories';
+import { AccountService } from '../account';
 
 @Injectable()
 export class DepositService {
-  constructor(private readonly depositRepository: DepositRepository) { }
+  constructor(
+    private readonly depositRepository: DepositRepository,
+    private readonly accountService: AccountService,
+  ) {}
 
   //Creacion de un deposito
   async createDeposit(deposit: DepositModel): Promise<DepositEntity> {
@@ -14,6 +18,7 @@ export class DepositService {
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = Date.now();
     this.depositRepository.register(newDeposit);
+    this.accountService.addBalance(newDeposit.account.id, newDeposit.amount);
     return newDeposit;
   }
 

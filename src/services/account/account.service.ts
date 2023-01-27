@@ -5,15 +5,12 @@ import {
   AccountRepository,
   AccountTypeRepository,
 } from 'src/persistence/repositories';
-import { DepositService, TransferService } from 'src/services';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
-    private readonly transferService: TransferService,
-    private readonly depositService: DepositService,
   ) {}
 
   //Creacion de cuentas
@@ -28,7 +25,7 @@ export class AccountService {
 
   //Consultar solo cuentas activas
   async getOneActiveState(accountId: string): Promise<AccountEntity> {
-    if (!this.getState(accountId)) {
+    if (await this.getState(accountId)) {
       throw new ConflictException('Cuenta inactiva');
     }
     const currentAccount = this.accountRepository.findOneById(accountId);
