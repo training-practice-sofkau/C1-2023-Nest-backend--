@@ -89,6 +89,13 @@ export class TransferService {
      * @memberof TransferService
      */
     deleteTransfer(transferId: string): void {
-        throw new Error('This method is not implemented');
+        const transfer = this.transferRepository.findOneById(transferId)
+        if (transfer.deletedAt === undefined) {
+            this.transferRepository.delete(transferId, true)
+        }
+        else {
+            this.transferRepository.delete(transferId, false)
+        }
+
     }
 }
