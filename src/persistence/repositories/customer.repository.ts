@@ -19,18 +19,13 @@ export class CustomerRepository
     const customerIndex = this.database.findIndex(
       (customer) => customer.id === id
     );
-    if (customerIndex >= 0) {
-      const data = this.database[customerIndex];
-      this.database[customerIndex] = {
-        ...data,
-        ...entity,
-        id: id,
-      };
-      return this.database[customerIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    const data = this.database[customerIndex];
+    this.database[customerIndex] = {
+      ...data,
+      ...entity,
+      id: id,
+    };
+    return this.database[customerIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
     const customer = this.findOneById(id)
@@ -129,19 +124,5 @@ export class CustomerRepository
     const customer = this.findOneById(id)
     customer.deletedAt = Date.now()
     this.update(id, customer)
-  }
-  findByPhone(phone: string): CustomerEntity[] {
-    let arrayPhone: CustomerEntity[] = [];
-    this.database.map(customer => {
-      if (customer.phone.includes(phone)) {
-        arrayPhone.push(customer)
-      }
-    })
-    if (arrayPhone.length > 0) {
-      return arrayPhone
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
   }
 }
