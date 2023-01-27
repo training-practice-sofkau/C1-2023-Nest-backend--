@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { AccountModel } from 'src/models';
+import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
 
 @Injectable()
-  [x: string]: any;
-
 export class AccountService {
   constructor(private readonly accountRepository: AccountRepository) {}
 
@@ -29,7 +29,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).balance;
   }
 
   /**
@@ -40,7 +40,7 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.findOneById(accountId).balance += amount;
   }
 
   /**
@@ -51,7 +51,13 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    if (this.verifyAmountIntoBalance(accountId, amount)) {
+      this.accountRepository.findOneById(accountId).balance -= amount;
+    } else {
+      throw new ForbiddenException(
+        'The amount to remove cannot be greater than the balance',
+      );
+    }
   }
 
   /**
@@ -63,7 +69,10 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    throw new Error('This method is not implemented');
+    if (this.accountRepository.findOneById(accountId).balance >= amount) {
+      return true;
+    }
+    return false;
   }
 
   /**
