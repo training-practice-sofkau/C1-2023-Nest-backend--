@@ -46,7 +46,7 @@ export class TransferService {
         pagination: PaginationModel,
         dataRange?: DataRangeModel,
     ): TransferEntity[] {
-        const arrayTransfer = this.transferRepository.findByDateRange(accountId, 0, Date.now())
+        const arrayTransfer = this.transferRepository.findByOutcomeId(accountId)
         const arrayTransferReturn: TransferEntity[] = []
         let range = 0
         pagination.size = arrayTransfer.length;
@@ -58,7 +58,7 @@ export class TransferService {
         }
         pagination.numberPages = Math.round(pagination.size / range)
         for (let x = 1 + range * (pagination.actualPage - 1); x < range + (range * (pagination.actualPage - 1)); x++) {
-            arrayTransferReturn.push(arrayTransfer[x-1])
+            arrayTransferReturn.push(arrayTransfer[x - 1])
         }
         return arrayTransferReturn
     }
@@ -77,7 +77,7 @@ export class TransferService {
         pagination: PaginationModel,
         dataRange?: DataRangeModel,
     ): TransferEntity[] {
-        const arrayTransfer = this.transferRepository.findByDateRange(accountId, 0, Date.now())
+        const arrayTransfer = this.transferRepository.findByIncomeId(accountId)
         const arrayTransferReturn: TransferEntity[] = []
         let range = 0
         pagination.size = arrayTransfer.length;
@@ -89,7 +89,7 @@ export class TransferService {
         }
         pagination.numberPages = Math.round(pagination.size / range)
         for (let x = 1 + range * (pagination.actualPage - 1); x < range + (range * (pagination.actualPage - 1)); x++) {
-            arrayTransferReturn.push(arrayTransfer[x-1])
+            arrayTransferReturn.push(arrayTransfer[x - 1])
         }
         return arrayTransferReturn
     }
@@ -120,7 +120,7 @@ export class TransferService {
         }
         pagination.numberPages = Math.round(pagination.size / range)
         for (let x = 1 + range * (pagination.actualPage - 1); x < range + (range * (pagination.actualPage - 1)); x++) {
-            arrayTransferReturn.push(arrayTransfer[x-1])
+            arrayTransferReturn.push(arrayTransfer[x - 1])
         }
         return arrayTransferReturn
     }

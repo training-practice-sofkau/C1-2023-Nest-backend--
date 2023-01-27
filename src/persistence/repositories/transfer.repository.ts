@@ -65,23 +65,23 @@ export class TransferRespository
     }
 
   }
-  findByIncomeId(id: string): TransferEntity {
-    const transferIndex = this.database.findIndex(
+  findByIncomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
       (transfer) => transfer.income.id === id,
     );
-    if (transferIndex >= 0) {
-      return this.database[transferIndex];
+    if (transferArray.length > 0) {
+      return transferArray;
     }
     else {
       throw new NotFoundException("No se encontro transferencia")
     }
   }
-  findByOutcomeId(id: string): TransferEntity {
-    const transferIndex = this.database.findIndex(
+  findByOutcomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
       (transfer) => transfer.outcome.id === id,
     );
-    if (transferIndex >= 0) {
-      return this.database[transferIndex];
+    if (transferArray.length > 0) {
+      return transferArray;
     }
     else {
       throw new NotFoundException("No se encontro transferencia")
