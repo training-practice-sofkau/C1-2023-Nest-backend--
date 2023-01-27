@@ -17,7 +17,7 @@ export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
-  ) { }
+  ) {}
 
   async signIn(user: CustomerModel): Promise<string> {
     const answer = this.customerRepository.findOneByEmailAndPassword(
