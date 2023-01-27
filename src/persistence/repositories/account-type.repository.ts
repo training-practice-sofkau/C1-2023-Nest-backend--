@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AccountTypeEntity } from '../entities';
 import { BodyRepositoryAbstract } from './base/base.repository';
 import { AccountTypeRepositoryInterface } from './interface/account-type/account-type-repository.interface';
@@ -6,7 +6,8 @@ import { AccountTypeRepositoryInterface } from './interface/account-type/account
 @Injectable()
 export class AccountTypeRepository
   extends BodyRepositoryAbstract<AccountTypeEntity>
-  implements AccountTypeRepositoryInterface {
+  implements AccountTypeRepositoryInterface
+{
   register(entity: AccountTypeEntity): AccountTypeEntity {
     this.database.push(entity);
     const accountTypeIndex = this.database.findIndex(
@@ -50,19 +51,4 @@ export class AccountTypeRepository
     });
     return arrayState;
   }
-  findByName(name: string): AccountTypeEntity[] {
-    let arrayName: AccountTypeEntity[] = [];
-    this.database.map(accountType => {
-      if (accountType.name.includes(name)) {
-        arrayName.push(accountType)
-      }
-    })
-    if (arrayName.length > 0) {
-      return arrayName
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
-  }
-
 }
