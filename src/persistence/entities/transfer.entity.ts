@@ -1,12 +1,13 @@
 import { v4 as uuid } from 'uuid';
+import { AccountEntity } from '.';
 import { TransferModel } from '../../models';
 
 export class TransferEntity implements TransferModel {
   id = uuid();
 
-  outcome: string;
+  outcome: AccountEntity;
 
-  income: string;
+  income: AccountEntity;
 
   amount: number;
 
