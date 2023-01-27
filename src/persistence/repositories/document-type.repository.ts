@@ -1,34 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
-import { BaseRepository } from './base.repository';
+import { BaseRepository } from './base/';
+import { BaseRepositoryInterface } from './interfaces/';
 
 @Injectable()
 export class DocumentTypeRepository
-  implements BaseRepository<DocumentTypeEntity>
+  extends BaseRepository<DocumentTypeEntity>
+  implements BaseRepositoryInterface<DocumentTypeEntity>
 {
-  private readonly database: Array<DocumentTypeEntity>;
-
-  constructor() {
-    this.database = new Array<DocumentTypeEntity>();
-  }
-
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex((item) => item.id === id);
+    const data = this.database[index];
+    if (index >= 0) {
+      this.database[index] = {
+        ...data,
+        ...entity,
+        id,
+      } as DocumentTypeEntity;
+    } else {
+      throw new NotFoundException(`El Id: ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    const index = this.database.findIndex((item) => item.id === id);
+    this.database.splice(index, 1);
   }
 
   findAll(): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.findByState(true);
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const documentType = this.database.find((item) => item.id === id);
+    if (documentType) return documentType;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+  }
+
+  findByState(state: boolean): DocumentTypeEntity[] {
+    return this.database.filter((item) => item.state === state);
+  }
+
+  findByName(name: string): DocumentTypeEntity[] {
+    return this.database.filter((item) => item.name === name);
   }
 }
