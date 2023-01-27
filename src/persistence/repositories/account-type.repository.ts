@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base/base.repository';
-import { BaseRepositoryInterface } from './interfaces/base/base-repository.interface';
+import { AccountTypeRepositoryInterface } from './interfaces/account-type-repository.interface';
 
 @Injectable()
 export class AccountTypeRepository
   extends BaseRepository<AccountTypeEntity>
-  implements BaseRepositoryInterface<AccountTypeEntity>
+  implements AccountTypeRepositoryInterface
 {
   index: number;
   register(entity: AccountTypeEntity): AccountTypeEntity {
