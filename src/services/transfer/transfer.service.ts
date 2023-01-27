@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { TransferModel } from "src/models";
+import { DataRangeModel, TransferModel } from "src/models";
+import { PaginationModel } from "src/models/pagination.model";
 import { TransferEntity } from "src/persistence/entities";
 import { TransferRespository } from "src/persistence/repositories/transfer.repository";
 import { AccountService } from "../account";
