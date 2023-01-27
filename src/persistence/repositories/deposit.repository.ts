@@ -65,10 +65,6 @@ export class DepositRepository
     dateInit: number | Date,
     dateEnd: number | Date,
   ): DepositEntity[] {
-    const deposits = this.database.filter(
-      (item: DepositEntity) =>
-        dateInit >= item.dateTime && dateEnd <= item.dateTime,
-    );
-    return deposits;
+    throw new Error('Method not implemented.');
   }
 }
