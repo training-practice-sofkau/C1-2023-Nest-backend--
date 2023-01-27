@@ -1,4 +1,49 @@
 import { Injectable } from '@nestjs/common';
+import { CustomerModel } from '../../models';
+import { CustomerEntity } from '../../persistence/entities';
+import { CustomerRepository } from '../../persistence/repositories';
 
 @Injectable()
-export class CustomerService {}
+export class CustomerService {
+  constructor(private readonly customerRepository: CustomerRepository) {}
+
+  /**
+   * Obtener información de un cliente
+   *
+   * @param {string} customerId
+   * @return {*}  {CustomerEntity}
+   * @memberof CustomerService
+   */
+  getCustomerInfo(customerId: string): CustomerEntity {
+    const newCustomer = this.customerRepository.findOneById(customerId);
+    return newCustomer;
+  }
+
+  /**
+   * Actualizar información de un cliente
+   *
+   * @param {string} id
+   * @param {CustomerModel} customer
+   * @return {*}  {CustomerEntity}
+   * @memberof CustomerService
+   */
+  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
+    const newCustomer = this.customerRepository.update(id, customer);
+    return newCustomer;
+  }
+
+  /**
+   * Dar de baja a un cliente en el sistema
+   *
+   * @param {string} id
+   * @return {*}  {boolean}
+   * @memberof CustomerService
+   */
+  unsubscribe(id: string): boolean {
+    if (this.customerRepository.findOneById(id).deletedAt === undefined) {
+      this.customerRepository.delete(id, true);
+      return true;
+    }
+    return false;
+  }
+}
