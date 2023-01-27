@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerModel } from 'src/models';
 import { CustomerEntity } from 'src/persistence/entities';
-import { CustomerRepository } from 'src/persistence/repositories';
+import {
+  AccountRepository,
+  CustomerRepository,
+} from 'src/persistence/repositories';
 import { AccountService } from '../account';
 
 @Injectable()
 export class CustomerService {
   constructor(
     private readonly customerRepository: CustomerRepository,
+    private readonly accountRepository: AccountRepository,
     private readonly accountService: AccountService,
   ) {}
 
@@ -20,7 +24,10 @@ export class CustomerService {
     return this.customerRepository.upate(customerId, customer);
   }
 
-  unsubscribe(id: string): boolean {
-    throw new Error('Method not implemented.');
+  unsubscribe(customerId: string): boolean {
+    const currentAccounts = this.accountRepository.findByCustomer(customerId);
+    currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));
+    const ok = this.customerRepository.findOneById(customerId);
+    return ok ? true : false;
   }
 }

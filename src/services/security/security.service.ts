@@ -19,6 +19,7 @@ export class SecurityService {
     private readonly accountService: AccountService,
   ) {}
 
+  //Logueo en el sistema
   async signIn(user: CustomerModel): Promise<string> {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
@@ -38,7 +39,6 @@ export class SecurityService {
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
     const customer = this.customerRepository.register(newCustomer);
-
     if (customer) {
       const accountType = new AccountTypeEntity();
       accountType.id = '40ef7565-ea87-4560-b9a3-e2b70540355e';
@@ -51,6 +51,7 @@ export class SecurityService {
     } else throw new InternalServerErrorException('Error al registrar cliente');
   }
 
+  //Cierre de sesión
   signOut(JWToken: string): void {
     if (JWToken)
       throw new InternalServerErrorException('Error al registrar cliente');

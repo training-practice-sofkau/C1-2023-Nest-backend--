@@ -4,13 +4,21 @@ import { AccountEntity } from 'src/persistence/entities';
 import {
   AccountRepository,
   AccountTypeRepository,
+  DepositRepository,
+  TransferRepository,
 } from 'src/persistence/repositories';
+import { DepositService } from '../deposit';
+import { TransferService } from '../transfer';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly transferRepository: TransferRepository,
+    private readonly depositRepository: DepositRepository,
+    private readonly transferService: TransferService,
+    private readonly depositService: DepositService,
   ) {}
 
   //Creacion de cuentas
@@ -101,8 +109,18 @@ export class AccountService {
 
   //Eliminar una cuenta
   async deleteAccount(accountId: string): Promise<void> {
-    const currentAccount = this.accountRepository.findOneById(accountId);
-    this.changeState(accountId, false);
-    //Usar servicios de transferencias y de depositos para eliminar
+    const currentDeposits = this.depositRepository.findByAccountId(accountId);
+    currentDeposits.forEach((d) => this.depositService.deleteDeposit(d.id));
+    const currentTransfersIncome =
+      this.transferRepository.findByIncomeAccount(accountId);
+    const currentTransfersOutcome =
+      this.transferRepository.findByOutcomeAccount(accountId);
+    currentTransfersIncome.forEach((i) =>
+      this.transferService.deleteTransfer(i.id),
+    );
+    currentTransfersOutcome.forEach((i) =>
+      this.transferService.deleteTransfer(i.id),
+    );
+    this.accountRepository.delete(accountId, true);
   }
 }

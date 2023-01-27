@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { TransferModel } from 'src/models';
 import { TransferEntity } from 'src/persistence/entities';
-import { AccountRepository, AccountTypeRepository, TransferRepository } from 'src/persistence/repositories';
+import { TransferRepository } from 'src/persistence/repositories';
 import { AccountService } from '../account';
 
 @Injectable()
 export class TransferService {
   constructor(
-    private readonly accountRepository: AccountRepository,
-    private readonly accountTypeRepository: AccountTypeRepository,
     private readonly transferRepository: TransferRepository,
     private readonly accountService: AccountService,
-  ) { }
+  ) {}
 
   createTransfer(transfer: TransferModel): TransferEntity {
     const newTransfer = new TransferEntity();
@@ -30,19 +28,19 @@ export class TransferService {
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): TransferEntity[] { }
+  ): TransferEntity[] {}
 
   async getHistoryOut(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): TransferEntity[] { }
+  ): TransferEntity[] {}
 
   getHistory(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): TransferEntity[] { }
+  ): TransferEntity[] {}
 
   deleteTransfer(transferId: string): void {
     this.transferRepository.delete(transferId, true);
