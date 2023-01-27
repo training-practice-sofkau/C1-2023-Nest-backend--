@@ -9,24 +9,22 @@ export class AccountRepository
   implements AccountRepositoryInterface {
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
-    return this.database.at(-1) ?? entity;
+    const accountIndex = this.database.findIndex(
+      (account) => account.id === entity.id,
+    );
+    return this.database[accountIndex];
   }
   update(id: string, entity: AccountEntity): AccountEntity {
     const accountIndex = this.database.findIndex(
       (account) => account.id === id,
     );
-    if (accountIndex >= 0) {
-      const data = this.database[accountIndex];
-      this.database[accountIndex] = {
-        ...data,
-        ...entity,
-        id: id,
-      };
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    const data = this.database[accountIndex];
+    this.database[accountIndex] = {
+      ...data,
+      ...entity,
+      id: id,
+    };
+    return this.database[accountIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
     const account = this.findOneById(id)
@@ -44,12 +42,7 @@ export class AccountRepository
     const accountIndex = this.database.findIndex(
       (account) => account.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   findByState(state: boolean): AccountEntity[] {
     let arrayState: AccountEntity[] = [];
@@ -58,73 +51,43 @@ export class AccountRepository
         arrayState.push(documentType);
       }
     });
-    if (arrayState.length > 0) {
-      return arrayState
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return arrayState;
   }
   findBalanceGreaterThan(balance: number): AccountEntity[] {
-    let arrayBalanceGreater: AccountEntity[] = [];
+    let arrayState: AccountEntity[] = [];
     this.database.map((documentType) => {
       if (documentType.balance > balance) {
-        arrayBalanceGreater.push(documentType);
+        arrayState.push(documentType);
       }
     });
-    if (arrayBalanceGreater.length > 0) {
-      return arrayBalanceGreater
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return arrayState;
   }
   findBalanceLessThan(balance: number): AccountEntity[] {
-    let arrayBalanceLess: AccountEntity[] = [];
+    let arrayState: AccountEntity[] = [];
     this.database.map((documentType) => {
       if (documentType.balance < balance) {
-        arrayBalanceLess.push(documentType);
+        arrayState.push(documentType);
       }
     });
-    if (arrayBalanceLess.length > 0) {
-      return arrayBalanceLess
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return arrayState;
   }
   findByCustomerId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
       (account) => account.customerId.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   findByAccountTypeId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
       (account) => account.accountType.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   findByDocumentTypeId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
       (account) => account.customerId.documentType.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   hardDelete(id: string): void {
     const accountIndex = this.database.findIndex(

@@ -10,6 +10,6 @@ export interface DepositRepositoryInterface
   findByEmail(email: string): DepositEntity;
   findAmountGreaterThan(amount: number): DepositEntity[];
   findAmountLessThan(amount: number): DepositEntity[];
-  private hardDelete(id: string): void;
-  private softDelete(id: string): void
+  hardDelete(id: string): void;
+  softDelete(id: string): void
 }
