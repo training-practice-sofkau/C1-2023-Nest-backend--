@@ -151,4 +151,8 @@ export class DepositRepository
     deposit.deletedAt = Date.now()
     this.update(id, deposit)
   }
+  findByDateRange(id: string, DateMin: number | Date, DateMax: Number | Date): DepositEntity[] {
+    const arrayDeposites = this.findAll()
+    return arrayDeposites.filter(deposit => (deposit.id === id && deposit.dateTime >= DateMin && deposit.dateTime <= DateMax))
+  }
 }

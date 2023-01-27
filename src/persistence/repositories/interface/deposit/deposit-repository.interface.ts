@@ -12,4 +12,5 @@ export interface DepositRepositoryInterface
   findAmountLessThan(amount: number): DepositEntity[];
   private hardDelete(id: string): void;
   private softDelete(id: string): void
+  findByDateRange(id: string, DateMin: Date | number, DateMax: Date | Number): DepositEntity[]
 }

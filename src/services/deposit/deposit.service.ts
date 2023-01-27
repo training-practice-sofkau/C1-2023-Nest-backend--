@@ -55,6 +55,20 @@ export class DepositService {
         pagination: PaginationModel,
         dataRange?: DataRangeModel,
     ): DepositEntity[] {
-        throw new Error('This method is not implemented');
+        const arrayTransfer = this.depositRepository.findByDateRange(accountId, 0, Date.now())
+        const arrayTransferReturn: DepositEntity[] = []
+        let range = 0
+        pagination.size = arrayTransfer.length;
+        if (dataRange?.range === undefined) {
+            range = 10
+        }
+        else {
+            range = dataRange.range
+        }
+        pagination.numberPages = Math.round(pagination.size / range)
+        for (let x = 1 + range * (pagination.actualPage - 1); x < range + (range * (pagination.actualPage - 1)); x++) {
+            arrayTransferReturn.push(arrayTransfer[x-1])
+        }
+        return arrayTransferReturn
     }
 }
