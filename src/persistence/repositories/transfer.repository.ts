@@ -30,27 +30,21 @@ export class TransferRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const transfer = this.findOneById(id);
     if (soft || soft === undefined) {
-      transfer.deletedAt = Date.now();
-      this.update(id, transfer);
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
     } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
-      );
+      const index = this.database.findIndex((item) => item.id === id);
+      this.hardDelete(index);
       this.database.splice(index, 1);
     }
   }
-
-  hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+  private hardDelete(index: number): void {
+    this.database.splice(index, 1);
   }
 
-  softDelete(id: string): void {
-    const Transfer = this.findOneById(id);
-    Transfer.deletedAt = Date.now();
-    this.update(id, Transfer);
-    throw new Error('This method is not implemented');
+  private softDelete(index: number): void {
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): TransferEntity[] {
@@ -70,7 +64,15 @@ export class TransferRepository
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    const outRange = this.database.filter(
+      (item) =>
+        item.outCome.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
+    );
+    if (outRange === undefined) throw new NotFoundException();
+    return outRange;
   }
 
   findIncomeByDataRange(
@@ -78,6 +80,14 @@ export class TransferRepository
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    const inputRange = this.database.filter(
+      (item) =>
+        item.outCome.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
+    );
+    if (inputRange === undefined) throw new NotFoundException();
+    return inputRange;
   }
 }
