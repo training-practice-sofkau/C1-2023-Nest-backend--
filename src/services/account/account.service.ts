@@ -162,7 +162,8 @@ export class AccountService {
         accountTypeId: string,
     ): AccountTypeEntity {
         const account = this.accountRepository.findOneById(accountId)
-        const accountType = this.accountTypeRepository.findOneById(accountTypeId)
+        account.accountType.id = accountTypeId
+        return this.accountTypeRepository.findOneById(accountTypeId)
     }
 
     /**
@@ -172,6 +173,18 @@ export class AccountService {
      * @memberof AccountService
      */
     deleteAccount(accountId: string): void {
-        throw new Error('This method is not implemented');
+        const balance=this.getBalance(accountId);
+        if(balance>0){
+            throw new NotFoundException("No se puede eliminar")
+        }
+        else{
+            const state = this.getState(accountId)
+            if(state){
+                throw new NotFoundException("No se puede eliminar")
+            }
+            else{
+                this.accountRepository.delete(accountId)
+            }
+        }
     }
 }
