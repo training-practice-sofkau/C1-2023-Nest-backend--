@@ -6,10 +6,14 @@ import { DepositRepositoryInterface } from './interface/deposit/deposit-reposito
 @Injectable()
 export class DepositRepository
   extends BodyRepositoryAbstract<DepositEntity>
-  implements DepositRepositoryInterface {
+  implements DepositRepositoryInterface
+{
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);
-    return this.database.at(-1) ?? entity;
+    const depositIndex = this.database.findIndex(
+      (deposit) => deposit.id === entity.id,
+    );
+    return this.database[depositIndex];
   }
   update(id: string, entity: DepositEntity): DepositEntity {
     const depositIndex = this.database.findIndex(

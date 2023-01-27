@@ -28,13 +28,10 @@ export class CustomerRepository
     return this.database[customerIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    const customer = this.findOneById(id)
-    if (soft || soft === undefined) {
-      this.softDelete(id)
-    }
-    else {
-      this.hardDelete(id)
-    }
+    const customerIndex = this.database.findIndex(
+      (customer) => customer.id === id
+    );
+    this.database.splice(customerIndex, 1);
   }
   findAll(): CustomerEntity[] {
     return this.database;
@@ -108,21 +105,5 @@ export class CustomerRepository
     else {
       throw new NotFoundException("No se encontro la informacion")
     }
-  }
-  hardDelete(id: string): void {
-    const customerIndex = this.database.findIndex(
-      (account) => account.id === id
-    );
-    if (customerIndex >= 0) {
-      this.database.splice(customerIndex, 1);
-    }
-    else {
-      throw new NotFoundException("No se encontro ningun elemento")
-    }
-  }
-  softDelete(id: string): void {
-    const customer = this.findOneById(id)
-    customer.deletedAt = Date.now()
-    this.update(id, customer)
   }
 }
