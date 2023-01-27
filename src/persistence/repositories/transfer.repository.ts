@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferEntity } from '../entities';
 import { BaseRepository } from './base/';
-import { BaseRepositoryInterface } from './interfaces/';
+import { TransferRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class CustomerRepository
+export class TransferRepository
   extends BaseRepository<TransferEntity>
-  implements BaseRepositoryInterface<TransferEntity>
+  implements TransferRepositoryInterface
 {
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
@@ -71,7 +71,7 @@ export class CustomerRepository
   ): TransferEntity[] {
     return this.database.filter(
       (item) =>
-        item.dateTime => dateInit &&
+        item.dateTime >= dateInit &&
         item.dateTime <= dateEnd &&
         item.outCome.id === accountId,
     );
@@ -84,7 +84,7 @@ export class CustomerRepository
   ): TransferEntity[] {
     return this.database.filter(
       (item) =>
-        item.dateTime => dateInit &&
+        item.dateTime >= dateInit &&
         item.dateTime <= dateEnd &&
         item.inCome.id === accountId,
     );
