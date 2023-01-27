@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DepositEntity } from '../entities';
 import { BodyRepositoryAbstract } from './base/base.repository';
 import { DepositRepositoryInterface } from './interface/deposit/deposit-repository.interface';
@@ -24,13 +24,10 @@ export class DepositRepository
     return this.database[depositIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    const deposit = this.findOneById(id)
-    if (soft || soft === undefined) {
-      this.softDelete(id)
-    }
-    else {
-      this.hardDelete(id)
-    }
+    const depositIndex = this.database.findIndex(
+      (deposit) => deposit.id === id,
+    );
+    this.database.splice(depositIndex, 1);
   }
   findAll(): DepositEntity[] {
     return this.database;
@@ -89,21 +86,5 @@ export class DepositRepository
       }
     });
     return arrayAmount;
-  }
-  hardDelete(id: string): void {
-    const depositIndex = this.database.findIndex(
-      (account) => account.id === id
-    );
-    if (depositIndex >= 0) {
-      this.database.splice(depositIndex, 1);
-    }
-    else {
-      throw new NotFoundException("No se encontro ningun elemento")
-    }
-  }
-  softDelete(id: string): void {
-    const deposit = this.findOneById(id)
-    deposit.deletedAt = Date.now()
-    this.update(id, deposit)
   }
 }
