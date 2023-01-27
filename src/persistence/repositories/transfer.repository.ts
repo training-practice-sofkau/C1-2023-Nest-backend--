@@ -74,7 +74,7 @@ export class TransferRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
+  delete(id: string, soft?: boolean): void {
     const currentTransfer = this.findOneById(id);
     const index = this.database.findIndex((t) => t.id === id);
     if (soft && currentTransfer) {
