@@ -91,7 +91,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+   this.accountRepository.findOneById(accountId).state = state;
   }
 
   /**
@@ -127,7 +127,7 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+   this.accountRepository.delete(accountId , true);
   }
  }
 
