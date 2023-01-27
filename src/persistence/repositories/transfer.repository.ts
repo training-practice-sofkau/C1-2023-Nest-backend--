@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferEntity } from '../entities/transfer.entity';
 import { BaseRepository } from './base/base.repository';
 import { TransferRepositoryInterface } from './interfaces/transfer.repository.interface';
@@ -11,10 +11,36 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
     return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: TransferEntity): TransferEntity {
-    throw new Error('Method not implemented.');
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (index >= 0) {
+      this.database[index] = {
+        ...this.database[index],
+        ...entity,
+        id,
+      }
+    } else {
+      throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+    }
+    return this.database[index];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    if (!soft) {
+      const index = this.database.findIndex((item) => item.id === id);
+      if (index >= 0) {
+        this.database.splice(index, 1);
+      } else {
+        throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+      }
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      if (index >= 0) {
+        this.database[index].deletedAt = Date.now();
+      } else {
+        throw new NotFoundException(`El ID ${id} no existe en base de datos`);
+      }
+    }
   }
   findAll(): TransferEntity[] {
     throw new Error('Method not implemented.');
@@ -22,5 +48,6 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
   findOneById(id: string): TransferEntity {
     throw new Error('Method not implemented.');
   }
+  }
   
-}
+  

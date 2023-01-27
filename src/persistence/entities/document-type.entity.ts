@@ -7,4 +7,5 @@ export class DocumentTypeEntity implements DocumentTypeModel {
   name: string;
 
   state = true;
+  deletedAt: undefined;
 }

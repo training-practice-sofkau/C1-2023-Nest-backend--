@@ -25,20 +25,30 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
     return this.database[index];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    const documentT = this.findOneById(id);
+    if (soft || soft === undefined) {
+      this.update(id, documentT);
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.database.splice(index, 1);
+    }
   }
   findAll(): DocumentTypeEntity[] {
-    throw new Error('Method not implemented.');
+    return this.database;
   }
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('Method not implemented.');
+    const documentFind = this.database.find((item) => item.id === id);
+    if (documentFind) return documentFind;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
   
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const statuFind = this.database.filter((item) => item.state == state);
+    return statuFind;
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const nameFind = this.database.filter((item) => item.name == name);
+    return nameFind;
   }
 }

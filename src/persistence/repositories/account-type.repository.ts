@@ -6,6 +6,7 @@ import { AccountTypeRepositoryInterface } from './interfaces/account-repository.
 
 @Injectable()
 export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> implements AccountTypeRepositoryInterface {
+ 
   register(entity: AccountEntity): AccountEntity {
     throw new Error('Method not implemented.');
   }
@@ -21,5 +22,13 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
   findOneById(id: string): AccountEntity {
     throw new Error('Method not implemented.');
   }
-  
+  findByState(state: boolean): AccountEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findByCustomer(customerId: string): AccountEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findByAccountType(accountTypeId: string): AccountEntity[] {
+    throw new Error('Method not implemented.');
+  }
   }

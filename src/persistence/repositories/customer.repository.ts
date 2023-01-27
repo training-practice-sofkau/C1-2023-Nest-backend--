@@ -18,7 +18,7 @@ export class CustomerRepository extends BaseRepository<CustomerEntity> implement
         ...this.database[index],
         ...entity,
         id,
-      } as CustomerEntity;
+      }
     } else {
       throw new NotFoundException(`El ID ${id} no existe en base de datos`);
     }
