@@ -29,9 +29,9 @@ export class AccountTypeRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const customer = this.findOneById(id);
+    const AccountT = this.findOneById(id);
     if (soft || soft === undefined) {
-      this.update(id, customer);
+      this.update(id, AccountT);
     } else {
       const index = this.database.findIndex((item) => item.id === id);
       this.database.splice(index, 1);
@@ -49,12 +49,12 @@ export class AccountTypeRepository
   }
 
   findByState(state: boolean): AccountTypeEntity[] {
-    const status = this.database.filter((item) => item.state == state);
-    return status;
+    const statuA = this.database.filter((item) => item.state == state);
+    return statuA;
   }
 
   findByName(name: string): AccountTypeEntity[] {
-    const nombre = this.database.filter((item) => item.name == name);
-    return nombre;
+    const nameA = this.database.filter((item) => item.name == name);
+    return nameA;
   }
 }

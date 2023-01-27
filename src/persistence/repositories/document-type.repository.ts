@@ -28,22 +28,32 @@ export class DocumentTypeRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    const documentT = this.findOneById(id);
+    if (soft || soft === undefined) {
+      this.update(id, documentT);
+    } else {
+      const index = this.database.findIndex((item) => item.id === id);
+      this.database.splice(index, 1);
+    }
   }
 
   findAll(): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const documentT = this.database.find((item) => item.id === id);
+    if (documentT) return documentT;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const statuD = this.database.filter((item) => item.state == state);
+    return statuD;
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const nameD = this.database.filter((item) => item.name == name);
+    return nameD;
   }
 }
