@@ -13,5 +13,7 @@ export class CustomerEntity implements CustomerModel {
     avatarUrl?: string;
     state: true;
     deletedAt?: number | Date;
+  balance: number;
+  balance: number;
     
 }

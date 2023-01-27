@@ -5,6 +5,9 @@ import { CustomerRepositoryInterface as AccountRepositoryInterface } from './int
 
 @Injectable()
 export class AccountRepository extends BaseRepository<AccountEntity> implements AccountRepositoryInterface {
+  findById(accountId: string) {
+    throw new Error('Method not implemented.');
+  }
  
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);

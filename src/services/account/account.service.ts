@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { AccountEntity } from 'src/persistence/entities/account.entity';
 import { AccountRepository } from '../../persistence/repositories';
-
+import { AccountModel } from 'src/models';
 @Injectable()
 export class AccountService {
   constructor(private readonly accountRepository: AccountRepository) {}
@@ -15,7 +16,8 @@ export class AccountService {
   createAccount(account: AccountModel): AccountEntity {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+    const accountType = newAccount.accountType;
+    accountType = account.accountType;
     return this.accountRepository.register(newAccount);
   }
 
@@ -27,7 +29,17 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    throw new Error('This method is not implemented');
+    const account = this.accountRepository.findById(accountId);
+    if (!account) {
+      throw new Error('La cuenta no existe');
+    }
+    if(account.deletedAt){
+       throw new Error('La cuenta se ha eliminado');
+    }
+    if(account.state !== 'active'){
+       throw new Error('La cuenta no esta activa');
+    }
+    return account.balance;
   }
 
   /**
@@ -38,8 +50,20 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    const account = this.accountRepository.find(accountId);
+    if(!account) {
+      throw new Error('La cuenta no existe');
+    }
+    if(account.deleteAt) {
+      throw new Error('La cuenta ha sido eliminada');
+    }
+    if(account.balance < amount) {
+      throw new Error('Saldo insuficiente');
+    }
+    account.balance -= amount;
+    this.accountRepository.update(account);
   }
+  
 
   /**
    * Remover balance de una cuenta
@@ -49,7 +73,25 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    // Obtener la cuenta correspondiente a la id especificada
+    const account = this.accountRepository.findOneById(accountId);
+
+    // Verificar si la cuenta existe y no ha sido eliminada
+    if (!account || account.deletedAt) {
+      throw new Error('La cuenta no existe o ha sido eliminada');
+    }
+
+    // Verificar si el saldo de la cuenta es suficiente para realizar la transacción
+    if (account.balance < amount) {
+      throw new Error('Saldo insuficiente');
+    }
+
+    // Actualizar el saldo de la cuenta
+    account.balance -= amount;
+
+    // Guardar los cambios en el repositorio
+    this.accountRepository.delete(account);
+  }
   }
 
   /**

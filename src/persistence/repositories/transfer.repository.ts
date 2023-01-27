@@ -48,8 +48,6 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
   findOneById(id: string): TransferEntity {
     throw new Error('Method not implemented.');
   }
-  }
-
   findOutcomeByDataRange(
     accountId: string,
     dateInit: Date | number,
@@ -65,4 +63,7 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
   }
-}
+  }
+
+
+
