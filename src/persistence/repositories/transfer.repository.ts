@@ -63,7 +63,7 @@ export class TransferRepository
       (item: TransferEntity) =>
         dateInit >= item.dateTime &&
         dateEnd <= item.dateTime &&
-        item.income === accountId,
+        item.income.id === accountId,
     );
     return transfers;
   }
@@ -77,7 +77,7 @@ export class TransferRepository
       (item: TransferEntity) =>
         dateInit >= item.dateTime &&
         dateEnd <= item.dateTime &&
-        item.income === accountId,
+        item.income.id === accountId,
     );
     return transfers;
   }
