@@ -7,4 +7,4 @@ import { CustomerService } from "src/services/customer/customer.service";
     providers:[CustomerService]
 })
 
-export class UserModule{}
+export class CustomerModule{}

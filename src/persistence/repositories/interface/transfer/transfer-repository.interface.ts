@@ -9,8 +9,8 @@ export interface TransferRepositoryInterface
   findByOutcomeCustomerId(id: string): TransferEntity;
   findByAmountGreaterThan(amount: number): TransferEntity[];
   findByAmountLessThan(amount: number): TransferEntity[];
-  private hardDelete(id: string): void;
-  private softDelete(id: string): void;
+  hardDelete(id: string): void;
+  softDelete(id: string): void;
   sortByDate(date: number | Date): TransferEntity[]
   findByDateRange(id: string, DateMin: Date | number, DateMax: Date | Number): TransferEntity[]
 }

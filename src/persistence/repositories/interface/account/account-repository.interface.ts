@@ -9,8 +9,8 @@ export interface AccountRepositoryInterface
   findByCustomerId(id: string): AccountEntity;
   findByDocumentTypeId(id: string): AccountEntity;
   findByAccountTypeId(id: string): AccountEntity;
-  private hardDelete(id: string): void
-  private softDelete(id: string): void
+  hardDelete(id: string): void
+  softDelete(id: string): void
   findByStateId(id: string): boolean
   changeStateId(id: string, state: boolean): void
 }

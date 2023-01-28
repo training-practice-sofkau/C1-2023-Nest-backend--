@@ -3,10 +3,10 @@ import { SecurityController } from 'src/controllers';
 import { AccountModule } from '../account/account.module';
 import { DepositModule } from '../deposit/deposit.module';
 import { TransferModule } from '../transfer/transfer.module';
-import { UserModule } from '../user/user.module';
+import { CustomerModule } from '../customer/customer.module';
 
 @Module({
-  imports: [UserModule, AccountModule, TransferModule, DepositModule],
+  imports: [CustomerModule, AccountModule, TransferModule, DepositModule],
   controllers: [SecurityController],
   providers: [],
 })
