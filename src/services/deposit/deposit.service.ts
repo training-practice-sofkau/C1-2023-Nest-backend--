@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DepositModel } from '../../models';
+import { DepositModel, PaginationModel, DataRangeModel } from '../../models';
 import { DepositEntity } from '../../persistence/entities';
 import { DepositRepository } from '../../persistence/repositories';
 
@@ -27,7 +27,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    this.accountRepository.delete(accountId);
+    this.depositRepository.delete(depositId);
   }
 
   /**
@@ -44,6 +44,21 @@ export class DepositService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange) {
+      const newArray = this.depositRepository.findByDataRange(
+        dataRange.start,
+        dataRange.end,
+      );
+      const array = newArray.filter((item) => item.account.id === accountId);
+      const arrayReturn = [];
+      for (let i = 0; i < newArray.length; i += 10) {
+        arrayReturn.push(array.slice(i, i + 10));
+      }
+      return arrayReturn[pagination.page];
+    }
+    const array = this.depositRepository
+      .findAll()
+      .filter((item) => item.account.id === accountId);
+    return array;
   }
 }
