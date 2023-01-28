@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TransferModel } from 'src/models';
+import { DataRangeModel, PaginationModel, TransferModel } from 'src/models';
 import { TransferEntity } from 'src/persistence/entities';
 import { TransferRepository } from '../../persistence/repositories';
 @Injectable()
@@ -36,7 +36,22 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange) {
+      const array = this.transferRepository.findOutcomeByDataRange(
+        accountId,
+        dataRange.start,
+        dataRange.end,
+      );
+      const arrayReturn = [];
+      for (let i = 0; i < array.length; i += 10) {
+        arrayReturn.push(array.slice(i, i + 10));
+      }
+      return arrayReturn[pagination.page];
+    }
+    const array = this.transferRepository
+      .findAll()
+      .filter((item) => item.outCome.id === accountId);
+    return array;
   }
 
   /**
@@ -53,7 +68,22 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange) {
+      const array = this.transferRepository.findIncomeByDataRange(
+        accountId,
+        dataRange.start,
+        dataRange.end,
+      );
+      const arrayReturn = [];
+      for (let i = 0; i < array.length; i += 10) {
+        arrayReturn.push(array.slice(i, i + 10));
+      }
+      return arrayReturn[pagination.page];
+    }
+    const array = this.transferRepository
+      .findAll()
+      .filter((item) => item.outCome.id === accountId);
+    return array;
   }
 
   /**
@@ -70,7 +100,18 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange) {
+      const array = this.transferRepository.findAll();
+      const arrayReturn = [];
+      for (let i = 0; i < array.length; i += 10) {
+        arrayReturn.push(array.slice(i, i + 10));
+      }
+      return arrayReturn[pagination.page];
+    }
+    const array = this.transferRepository
+      .findAll()
+      .filter((item) => item.outCome.id === accountId);
+    return array;
   }
 
   /**
