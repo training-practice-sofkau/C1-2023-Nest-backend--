@@ -4,6 +4,8 @@ import { CustomerModel } from 'src/models';
 import { AccountTypeModel } from '../../models/account-type.model';
 
 export class AccountEntity implements AccountModel {
+  [x: string]: AccountEntity;
+  [x: string]: AccountEntity;
   id = uuid();
   customer: CustomerModel;
   accountType: AccountTypeModel;

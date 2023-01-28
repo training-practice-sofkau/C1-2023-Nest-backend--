@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
@@ -54,7 +54,7 @@ export class AccountService {
     if (this.verifyAmountIntoBalance(accountId, amount)) {
       this.accountRepository.findOneById(accountId).balance -= amount;
     } else {
-      throw new ForbiddenException(
+      throw new Error(
         'The amount to remove cannot be greater than the balance',
       );
     }
@@ -83,7 +83,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).state;
   }
 
   /**
@@ -94,7 +94,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.findOneById(accountId).state = state;
   }
 
   /**
@@ -105,7 +105,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).accountType;
   }
 
   /**
@@ -120,7 +120,14 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    if (!this.getState(accountId)) {
+      throw new ConflictException(`Cuenta desactivada`);
+    }
+    let newAccount = new AccountEntity();
+    newAccount = this.accountRepository.findOneById(accountId);
+    const accountType = this.accountTypeRepository.findOneById(accountTypeId);
+    newAccount.accountType = accountType;
+    return accountType;
   }
 
   /**
@@ -130,6 +137,6 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.delete(accountId);
   }
 }
