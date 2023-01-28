@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TransferModel } from 'src/models';
+import { DataRangeModel } from 'src/models/dataRange.model';
+import { PaginationModel } from 'src/models/pagination.model';
 import { TransferEntity } from 'src/persistence/entities';
 import { TransferRepository } from 'src/persistence/repositories/transfer.repository';
 
@@ -65,8 +67,8 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    //pagination: PaginationModel,
-    //dataRange?: DataRangeModel,
+    pagination: PaginationModel,
+    dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
   }
