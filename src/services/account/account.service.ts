@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ForbiddenException } from '@nestjs/common/exceptions';
-
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountTypeRepository } from 'src/persistence/repositories/account-type.repository';
@@ -109,7 +107,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    this.accountRepository.findOneById(accountId).accountType;
   }
 
   /**
@@ -124,7 +122,8 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    return (this.accountRepository.findOneById(accountId).accountType =
+      this.accountTypeRepository.findOneById(accountTypeId));
   }
 
   /**
