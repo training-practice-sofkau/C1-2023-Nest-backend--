@@ -47,7 +47,7 @@ export class AccountTypeRepository
   }
 
   findAll(): AccountTypeEntity[] {
-    return this.findByState(true);
+    return this.database
   }
 
   findOneById(id: string): AccountTypeEntity {
