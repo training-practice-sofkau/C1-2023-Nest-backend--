@@ -1,6 +1,6 @@
-import { AccountModel, TranfersModel } from 'src/models';
+import { AccountModel, TransferModel } from 'src/models';
 import { v4 as uuid } from 'uuid';
-export class TransferEntity implements TranfersModel {
+export class TransferEntity implements TransferModel {
   id = uuid();
   outcome: AccountModel;
   income: AccountModel;
