@@ -51,12 +51,4 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
     const nameFind = this.database.filter((item) => item.name == name);
     return nameFind;
   }
-
-  findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
-  }
-
-  findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
-  }
 }

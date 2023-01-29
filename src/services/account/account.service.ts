@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { AccountEntity } from 'src/persistence/entities/account.entity';
 import { AccountRepository } from '../../persistence/repositories';
 import { AccountModel } from 'src/models';
+import { AccountTypeEntity } from 'src/persistence/entities/account-type.entity';
+
+
 @Injectable()
 export class AccountService {
   constructor(private readonly accountRepository: AccountRepository) {}
@@ -16,8 +19,7 @@ export class AccountService {
   createAccount(account: AccountModel): AccountEntity {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
-    const accountType = newAccount.accountType;
-    accountType = account.accountType;
+    newAccount.accountType = account.accountType;
     return this.accountRepository.register(newAccount);
   }
 
@@ -29,18 +31,16 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    const account = this.accountRepository.findById(accountId);
+    const account = this.accountRepository.findOneById(accountId);
     if (!account) {
       throw new Error('La cuenta no existe');
     }
     if(account.deletedAt){
        throw new Error('La cuenta se ha eliminado');
     }
-    if(account.state !== 'active'){
-       throw new Error('La cuenta no esta activa');
-    }
     return account.balance;
   }
+
 
   /**
    * Agregar balance a una cuenta
@@ -50,20 +50,16 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    const account = this.accountRepository.find(accountId);
+    const account = this.accountRepository.findOneById(accountId);
     if(!account) {
       throw new Error('La cuenta no existe');
-    }
-    if(account.deleteAt) {
-      throw new Error('La cuenta ha sido eliminada');
     }
     if(account.balance < amount) {
       throw new Error('Saldo insuficiente');
     }
-    account.balance -= amount;
-    this.accountRepository.update(account);
+    account.balance += amount;
+    this.accountRepository.update(accountId, account);
   }
-  
 
   /**
    * Remover balance de una cuenta
@@ -73,25 +69,14 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    // Obtener la cuenta correspondiente a la id especificada
     const account = this.accountRepository.findOneById(accountId);
-
-    // Verificar si la cuenta existe y no ha sido eliminada
-    if (!account || account.deletedAt) {
-      throw new Error('La cuenta no existe o ha sido eliminada');
-    }
-
-    // Verificar si el saldo de la cuenta es suficiente para realizar la transacción
     if (account.balance < amount) {
       throw new Error('Saldo insuficiente');
     }
 
-    // Actualizar el saldo de la cuenta
     account.balance -= amount;
 
-    // Guardar los cambios en el repositorio
-    this.accountRepository.delete(account);
-  }
+    this.accountRepository.delete(accountId);
   }
 
   /**
@@ -103,9 +88,13 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    throw new Error('This method is not implemented');
-  }
-
+    const account = this.accountRepository.findOneById(accountId);
+    if (account.balance < amount) {
+        return false;
+    }
+    return true
+}
+    
   /**
    * Obtener el estado de una cuenta
    *
@@ -114,7 +103,11 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    const state1 = this.accountRepository.findOneById(accountId);
+    if (state1.state === true){
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -125,9 +118,10 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
-  }
-
+    const newstate = this.accountRepository.findOneById(accountId);
+    newstate.state = state
+    this.accountRepository.update(accountId, newstate)
+    }
   /**
    * Obtener el tipo de cuenta de una cuenta
    *
@@ -136,7 +130,8 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    const account = this.accountRepository.findOneById(accountId);
+    return account.accountType
   }
 
   /**
@@ -147,10 +142,7 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(
-    accountId: string,
-    accountTypeId: string,
-  ): AccountTypeEntity {
+  changeAccountType( accountId: string, accountTypeId: string, ): AccountTypeEntity {
     throw new Error('This method is not implemented');
   }
 
@@ -161,6 +153,6 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+    const account = this.accountRepository.findOneById(accountId)
   }
 }
