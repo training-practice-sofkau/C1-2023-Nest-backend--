@@ -5,9 +5,10 @@ import { DepositModule } from '../deposit/deposit.module';
 import { TransferModule } from '../transfer/transfer.module';
 import { CustomerModule } from '../customer/customer.module';
 
+
 @Module({
-  imports: [CustomerModule, AccountModule, TransferModule, DepositModule],
+  imports: [CustomerModule],
   controllers: [SecurityController],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

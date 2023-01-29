@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CustomerModel } from 'src/models';
 import { CustomerEntity } from 'src/persistence/entities';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
