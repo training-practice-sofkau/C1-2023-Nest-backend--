@@ -4,7 +4,7 @@ import { BaseRepository } from './base/base.repository';
 import { DepositRepositoryInterface } from './interfaces/deposit-repository.interface';
 
 @Injectable()
-export class depositRepository
+export class DepositRepository
   extends BaseRepository<DepositEntity>
   implements DepositRepositoryInterface
 {

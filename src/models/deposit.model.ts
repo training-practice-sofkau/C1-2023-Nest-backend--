@@ -1,5 +1,5 @@
 import { AccountModel } from './account.model';
-export interface DepositModuls {
+export interface DepositModel {
   id: string;
   account: AccountModel;
   amount: number;

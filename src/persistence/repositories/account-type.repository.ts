@@ -8,7 +8,6 @@ export class AccountTypeRepository
   extends BaseRepository<AccountTypeEntity>
   implements AccountTypeRepositoryInterface
 {
-  index: number;
   register(entity: AccountTypeEntity): AccountTypeEntity {
     this.database.push(entity); //push enviamos informacion
     return this.database.at(-1) ?? entity; //retornamos la ultima posicion y de ser algo contrario retormos la ultima entity

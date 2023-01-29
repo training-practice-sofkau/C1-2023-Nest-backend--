@@ -1,17 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { PaginationModel } from 'src/models/pagination.model';
-import { DepositEntity } from 'src/persistence';
-
-import { DepositModel } from '../../models/';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { DepositModel } from 'src/models/deposit.model';
+import { DepositEntity } from 'src/persistence/entities';
 import { DepositRepository } from '../../persistence/repositories/deposit.repository';
-
 @Injectable()
 export class DepositService {
-  [x: string]: any;
-  constructor(
-    private readonly DepositRepository: DepositRepository,
-  ) {}
-  /
+  constructor(private readonly depositRepository: DepositRepository) {}
+  /**
    * Crear un deposito
    *
    * @param {DepositModel} deposit
@@ -19,40 +13,41 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-   return this.DepositRepository.createDeposit(deposit);
-
+    const depositNew = new DepositEntity();
+    depositNew.account = deposit.account;
+    depositNew.amount = deposit.amount;
+    depositNew.dateTime = Date.now();
+    return this.depositRepository.register(depositNew);
   }
 
-  /
+  /**
    * Borrar un deposito
    *
    * @param {string} depositId
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-   this.DepositRepository.delete(depositId)
+    const deposit = this.depositRepository.findOneById(depositId);
+    if (deposit.deletedAt === undefined) {
+      this.depositRepository.delete(depositId, true);
+    } else {
+      this.depositRepository.delete(depositId, false);
+    }
   }
-
   /**
-   * Obtener el historial de los depósitos en una cuenta
+   * Gets the historical data of an account, can be filter by dates
    *
-   * @param {string} depositId
+   * @param {string} accountId
    * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
+   * @param {DataRangeModel} [dateRange]
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
   getHistory(
-    depositId: string,
-    pagination?: PaginationModel,
+    accountId: string,
+    pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-     let deposit =  this.DepositRepository.searchDeposit("id", depositId)
-
-     if(pagination){
-      const {offset, limit } = pagination
-      deposit = deposit.slice(offset, offset + limit );
-     }
-     return deposit
+    throw new Error('This method is not implemented');
   }
 }
