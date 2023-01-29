@@ -4,21 +4,10 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-
-// Models
-import { CustomerModel } from '../../models';
-
-// Repositories
-import { CustomerRepository } from '../../persistence/repositories';
-
-// Services
-import { AccountService } from '../account';
-
-// Entities
-import {
-  AccountTypeEntity,
-  CustomerEntity,
-} from '../../persistence/entities';
+import { CustomerModel } from 'src/models';
+import { CustomerEntity, AccountTypeEntity } from 'src/persistence/entities';
+import { CustomerRepository } from 'src/persistence/repositories';
+import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class SecurityService {
@@ -67,6 +56,9 @@ export class SecurityService {
       const newAccount = {
         customer,
         accountType,
+        id: '',
+        balance: 0,
+        state: true,
       };
 
       const account = this.accountService.createAccount(newAccount);

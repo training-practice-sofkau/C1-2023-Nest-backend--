@@ -35,7 +35,7 @@ export class DepositService {
     }
   }
   /**
-   * Gets the historical data of an account, can be filter by dates
+   * Obtener el historial de los depósitos en una cuenta
    *
    * @param {string} accountId
    * @param {PaginationModel} pagination
