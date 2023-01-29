@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
@@ -19,9 +23,16 @@ export class AccountService {
    */
   createAccount(account: AccountModel): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
-    return this.accountRepository.register(newAccount);
+    const findAccount = this.accountRepository.findByCustomerId(
+      account.customer.id,
+    );
+    if (findAccount) {
+      throw new BadRequestException();
+    } else {
+      newAccount.customer = account.customer;
+      newAccount.accountType = account.accountType;
+      return this.accountRepository.register(newAccount);
+    }
   }
 
   /**
@@ -163,14 +174,16 @@ export class AccountService {
     accountTypeId: string,
   ): AccountTypeEntity {
     const account = this.accountRepository.findOneById(accountId);
-    const accountType = this.accountRepository.findByAccountTypeId(accountTypeId)
-    if(accountType){
-        throw new BadRequestException("El ID del tipo de cuenta ya tiene una cuenta asociada.")
-    }
-    else{
-        account.accountType.id = accountTypeId;
-        this.accountRepository.update(accountId,account);
-        return this.accountTypeRepository.update(accountTypeId,accountType)
+    const accountType =
+      this.accountRepository.findByAccountTypeId(accountTypeId);
+    if (accountType) {
+      throw new BadRequestException(
+        'El ID del tipo de cuenta ya tiene una cuenta asociada.',
+      );
+    } else {
+      account.accountType.id = accountTypeId;
+      this.accountRepository.update(accountId, account);
+      return this.accountTypeRepository.update(accountTypeId, accountType);
     }
   }
 
