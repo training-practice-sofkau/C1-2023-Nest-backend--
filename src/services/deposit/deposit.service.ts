@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DepositModel } from 'src/models';
+import { DataRangeModel, DepositModel, PaginationModel } from 'src/models';
 import { DepositEntity } from 'src/persistence/entities';
 import { DepositRepository } from 'src/persistence/repositories';
 import { AccountService } from '../account';
@@ -31,9 +31,25 @@ export class DepositService {
   async getHistory(
     accountId: string,
     pagination: PaginationModel,
-    dataRange?: number,
+    dataRange?: DataRangeModel,
   ): Promise<DepositEntity[]> {
     const currentDeposits = this.depositRepository.findByAccountId(accountId);
-    return currentDeposits;
+    pagination.size = currentDeposits.length;
+    const deposits: DepositEntity[] = [];
+    let range = 0;
+    if (dataRange && dataRange.range > 0) {
+      range = dataRange.range;
+    } else {
+      range = 10;
+    }
+    pagination.pages = Math.round(pagination.size / range);
+    for (
+      let i = pagination.currentPage * range;
+      i < pagination.currentPage * range + range;
+      i++
+    ) {
+      deposits.push(currentDeposits[i + 1]);
+    }
+    return deposits;
   }
 }

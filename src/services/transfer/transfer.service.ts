@@ -9,7 +9,7 @@ export class TransferService {
   constructor(
     private readonly transferRepository: TransferRepository,
     private readonly accountService: AccountService,
-  ) { }
+  ) {}
 
   createTransfer(transfer: TransferModel): TransferEntity {
     const newTransfer = new TransferEntity();
