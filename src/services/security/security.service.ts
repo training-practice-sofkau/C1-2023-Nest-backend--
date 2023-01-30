@@ -5,23 +5,24 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-// Models
-import { CustomerModel } from '../../models';
-
 // Repositories
-import { CustomerRepository } from '../../persistence/repositories';
+import {
+  CustomerRepository,
+  DocumentTypeRepository,
+} from '../../persistence/repositories';
 
 // Services
 import { AccountService } from '../account';
 
 // Entities
 import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
-import { AccountEntity } from 'src/persistence/entities';
+import { AccountDTO, CustomerDTO } from 'src/dtos';
 
 @Injectable()
 export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
+    private readonly documentTypeRepository: DocumentTypeRepository,
     private readonly accountService: AccountService,
   ) {}
 
@@ -50,7 +51,9 @@ export class SecurityService {
    */
   signUp(user: CustomerDTO): string {
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = this.customerRepository.findOneById(user.documentTypeId)
+    newCustomer.documentType = this.documentTypeRepository.findOneById(
+      user.documentTypeId,
+    );
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
@@ -61,10 +64,10 @@ export class SecurityService {
 
     if (customer) {
       const accountType = new AccountTypeEntity();
-      const newAccount = new AccountEntity();
+      const newAccount = new AccountDTO();
       accountType.id = 'ab27c9ac-a01c-4c22-a6d6-ce5ab3b79185';
-      newAccount.customer = customer;
-      newAccount.accountType = accountType;
+      newAccount.customerId = customer.id;
+      newAccount.accountTypeId = customer.documentType.id;
 
       const account = this.accountService.createAccount(newAccount);
 

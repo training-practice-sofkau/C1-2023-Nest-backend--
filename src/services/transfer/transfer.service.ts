@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { TransferDTO } from 'src/dtos';
 import { DataRangeModel, PaginationModel, TransferModel } from 'src/models';
 import { TransferEntity } from 'src/persistence/entities';
-import { TransferRepository } from '../../persistence/repositories';
+import {
+  AccountRepository,
+  TransferRepository,
+} from '../../persistence/repositories';
 @Injectable()
 export class TransferService {
-  constructor(private readonly transferRepository: TransferRepository,private readonly accountRepository: AccountRepository) {}
+  constructor(
+    private readonly transferRepository: TransferRepository,
+    private readonly accountRepository: AccountRepository,
+  ) {}
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -15,8 +22,10 @@ export class TransferService {
   createTransfer(transfer: TransferDTO): TransferModel {
     const newTransfer = new TransferEntity();
     newTransfer.inCome = this.accountRepository.findOneById(transfer.inComeId);
-    newTransfer.outCome = this.accountRepository.findOneById(transfer.outComeId);
-    newTransfer.amount = transfer.amount;
+    newTransfer.outCome = this.accountRepository.findOneById(
+      transfer.outComeId,
+    );
+    newTransfer.amount = Number(transfer.amount);
     newTransfer.reason = transfer.reason;
 
     return this.transferRepository.register(newTransfer);
