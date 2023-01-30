@@ -6,10 +6,11 @@ import { AccountRepository, CustomerRepository } from './persistence/repositorie
 import { CustomerService } from './services/customer';
 import { AccountController } from './controllers/account/account.controller';
 import { TransferController } from './controllers/transfer/transfer.controller';
+import { DepositController } from './controllers/deposit/deposit.controller';
 
 @Module({
   imports: [],
-  controllers: [ UserController, AccountController, TransferController],
+  controllers: [ UserController, AccountController, TransferController, DepositController],
   providers: [AccountService, AccountRepository, CustomerService,CustomerRepository],
 })
 export class AppModule {}
