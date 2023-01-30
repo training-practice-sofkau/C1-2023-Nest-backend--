@@ -6,7 +6,8 @@ export class NewAccountDTO{
     @IsUUID()
     accountType: string;   
     @IsNumberString()
-    document: string;;
+    document: string;
+    @IsEmail()
     email: string;
     @IsNumberString()
     @MaxLength(30)
