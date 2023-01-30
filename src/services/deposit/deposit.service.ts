@@ -7,8 +7,8 @@ import { AccountService } from '../account';
 @Injectable()
 export class DepositService {
   constructor(
-    private readonly depositRepository: DepositRepository,
     private readonly accountService: AccountService,
+    private readonly depositRepository: DepositRepository,
   ) {}
 
   //Creacion de un deposito y actualiza el balance de la cuenta afectada

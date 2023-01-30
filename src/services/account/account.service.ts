@@ -1,14 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { AccountModel } from 'src/models';
-import { AccountEntity } from 'src/persistence/entities';
+import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import {
   AccountRepository,
   AccountTypeRepository,
   DepositRepository,
   TransferRepository,
 } from 'src/persistence/repositories';
-import { DepositService } from '../deposit';
-import { TransferService } from '../transfer';
 
 @Injectable()
 export class AccountService {
@@ -17,14 +15,12 @@ export class AccountService {
     private readonly accountTypeRepository: AccountTypeRepository,
     private readonly transferRepository: TransferRepository,
     private readonly depositRepository: DepositRepository,
-    private readonly transferService: TransferService,
-    private readonly depositService: DepositService,
   ) {}
 
   //Creacion de cuentas
   async createAccount(account: AccountModel): Promise<AccountEntity> {
     const newAccount = new AccountEntity();
-    newAccount.acountType = account.acountType;
+    newAccount.accountType = account.accountType;
     newAccount.balance = 0;
     newAccount.customer = account.customer;
     this.accountRepository.register(newAccount);
@@ -32,7 +28,7 @@ export class AccountService {
   }
 
   //Consultar solo cuentas activas
-  async getOneActiveState(accountId: string): Promise<AccountEntity> {
+  private async getOneActiveState(accountId: string): Promise<AccountEntity> {
     if (await this.getState(accountId)) {
       throw new ConflictException('Cuenta inactiva');
     }
@@ -91,8 +87,8 @@ export class AccountService {
   }
 
   //Obtiene el tipo de cuenta de la cuenta informada
-  async getAccountType(accountId: string): Promise<AccountEntity> {
-    return this.accountRepository.findOneById(accountId);
+  async getAccountType(accountTypeId: string): Promise<AccountTypeEntity> {
+    return this.accountTypeRepository.findOneById(accountTypeId);
   }
 
   //Cambiar el tipo de cuenta
@@ -103,24 +99,34 @@ export class AccountService {
     const currentAccount = this.accountRepository.findOneById(accountId);
     const currentAccountType =
       this.accountTypeRepository.findOneById(accountTypeId);
-    currentAccount.acountType = currentAccountType;
+    currentAccount.accountType = currentAccountType;
     return this.accountRepository.upate(accountId, currentAccount);
   }
 
   //Eliminar una cuenta
   async deleteAccount(accountId: string): Promise<void> {
     const currentDeposits = this.depositRepository.findByAccountId(accountId);
-    currentDeposits.forEach((d) => this.depositService.deleteDeposit(d.id));
+    currentDeposits.forEach((d) => this.depositRepository.delete(d.id, true));
     const currentTransfersIncome =
       this.transferRepository.findByIncomeAccount(accountId);
     const currentTransfersOutcome =
       this.transferRepository.findByOutcomeAccount(accountId);
     currentTransfersIncome.forEach((i) =>
-      this.transferService.deleteTransfer(i.id),
+      this.transferRepository.delete(i.id, true),
     );
     currentTransfersOutcome.forEach((i) =>
-      this.transferService.deleteTransfer(i.id),
+      this.transferRepository.delete(i.id, true),
     );
     this.accountRepository.delete(accountId, true);
+  }
+
+  //Trae todas las cuentas relacionadas al cliente
+  async getAccountsByCustomer(customerId: string): Promise<AccountEntity[]> {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+
+  //Retorna el liestado de todas las cuentas, este metodo solo se usaria para administradores pero por ahora todos
+  async getAllAccounts(): Promise<AccountEntity[]> {
+    return this.accountRepository.findAll();
   }
 }

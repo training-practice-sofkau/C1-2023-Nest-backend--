@@ -26,7 +26,7 @@ export class AccountRepository
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
     const currentAccounts = this.findAll().filter(
-      (c) => c.acountType.id === accountTypeId,
+      (c) => c.accountType.id === accountTypeId,
     );
     return currentAccounts;
   }

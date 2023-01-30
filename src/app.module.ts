@@ -8,7 +8,13 @@ import { DepositController } from './controllers/deposit/deposit.controller';
 import { DepositService } from './services/deposit/deposit.service';
 import { TransferService } from './services/transfer/transfer.service';
 import { CustomerService } from './services/customer/customer.service';
-import { AppService } from './services/app/app.service';
+import {
+  AccountRepository,
+  AccountTypeRepository,
+  CustomerRepository,
+  DepositRepository,
+  TransferRepository,
+} from './persistence/repositories';
 
 @Module({
   controllers: [
@@ -20,17 +26,25 @@ import { AppService } from './services/app/app.service';
   ],
   providers: [
     AccountService,
+    CustomerService,
     DepositService,
     TransferService,
-    CustomerService,
-    AppService,
+    AccountRepository,
+    AccountTypeRepository,
+    TransferRepository,
+    DepositRepository,
+    CustomerRepository,
   ],
   exports: [
     AccountService,
+    CustomerService,
     DepositService,
     TransferService,
-    CustomerService,
-    AppService,
+    AccountRepository,
+    AccountTypeRepository,
+    TransferRepository,
+    DepositRepository,
+    CustomerRepository,
   ],
 })
 export class AppModule {}

@@ -43,7 +43,7 @@ export class SecurityService {
       const accountType = new AccountTypeEntity();
       accountType.id = '40ef7565-ea87-4560-b9a3-e2b70540355e';
       const newAccount = new AccountEntity();
-      newAccount.acountType = accountType;
+      newAccount.accountType = accountType;
       newAccount.balance = 0;
       newAccount.customer = newCustomer;
       this.accountService.createAccount(newAccount);
