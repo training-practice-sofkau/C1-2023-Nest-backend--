@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AccountModel } from 'src/models';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import { NewAccountDTO } from 'src/dtos/new-account.dto';
+import {
+  AccountEntity,
+  AccountTypeEntity,
+  CustomerEntity,
+  DocumentTypeEntity,
+} from 'src/persistence';
 import { AccountTypeRepository } from 'src/persistence/repositories/account-type.repository';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
 
@@ -11,6 +16,10 @@ export class AccountService {
     private readonly accountTypeRepository: AccountTypeRepository,
   ) {}
 
+  findAll(): AccountEntity[] {
+    return this.accountRepository.findAll();
+  }
+
   /**
    * Crear una cuenta
    *
@@ -18,11 +27,29 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: NewAccountDTO): AccountEntity {
+    const customer = new CustomerEntity();
+    customer.id = account.customer;
+
+    const documentType = new DocumentTypeEntity();
+    documentType.id = account.accountType;
+
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+    newAccount.balance = account.balance;
     return this.accountRepository.register(newAccount);
+  }
+
+  updatedAccount(id: string, account: NewAccountDTO): AccountEntity {
+    const customer = new CustomerEntity();
+    customer.id = account.customer;
+
+    const documentType = new DocumentTypeEntity();
+    documentType.id = account.accountType;
+
+    const newAccount = new AccountEntity();
+    newAccount.balance = account.balance;
+    const update = this.accountRepository.update(id, newAccount);
+    return update;
   }
 
   /**
@@ -62,7 +89,8 @@ export class AccountService {
     if (!account.state) {
       throw new NotFoundException(`La cuenta ${account} esta desactivada`);
     }
-    account.balance += amount;
+    account.balance += Number(amount);
+    console.log('service ', account.balance);
   }
 
   /**
@@ -82,7 +110,7 @@ export class AccountService {
     if (!account.state) {
       throw new NotFoundException(`La cuenta ${account} esta desactivada`);
     }
-    account.balance -= amount;
+    account.balance -= Number(amount);
   }
 
   /**

@@ -73,11 +73,11 @@ export class SecurityService {
         state: true, //no estaba
       };
 
-      const account = this.accountService.createAccount(newAccount);
-
-      if (account) return 'Falta retornar un JWT';
-      else throw new InternalServerErrorException();
-    } else throw new InternalServerErrorException();
+      //const account = this.accountService.createAccount(newAccount);
+      //if (account) return 'Falta retornar un JWT';
+      //else throw new InternalServerErrorException();
+    } //else throw new InternalServerErrorException();
+    return 'bien';
   }
 
   /**

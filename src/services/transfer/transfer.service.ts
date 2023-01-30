@@ -17,8 +17,8 @@ export class TransferService {
    */
   createTransfer(transfer: TransferModel): TransferEntity {
     const newTransfer = new TransferEntity();
-    newTransfer.income = transfer.income;
-    newTransfer.outcome = transfer.outcome;
+    //newTransfer.income = transfer.income;
+    //newTransfer.outcome = transfer.outcome;
     return this.transferRepository.register(newTransfer);
   }
 

@@ -1,4 +1,4 @@
 export * from './base';
-export * from './customer.repository';
+export * from './customer.respository';
 export * from './document-type.repository';
 export * from './interfaces';
