@@ -1,4 +1,4 @@
-export class createAccount {
+export class NewAccountDTO {
     customer: number;
     accountType: number;
     balance: number;
