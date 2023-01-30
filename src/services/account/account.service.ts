@@ -4,6 +4,7 @@ import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import {
   AccountRepository,
   AccountTypeRepository,
+  CustomerRepository,
   DepositRepository,
   TransferRepository,
 } from 'src/persistence/repositories';
@@ -15,15 +16,23 @@ export class AccountService {
     private readonly accountTypeRepository: AccountTypeRepository,
     private readonly transferRepository: TransferRepository,
     private readonly depositRepository: DepositRepository,
+    private readonly customerRepository: CustomerRepository,
   ) {}
 
   //Creacion de cuentas
   async createAccount(account: AccountModel): Promise<AccountEntity> {
+    const currentAccountType = this.accountTypeRepository.findOneById(
+      account.accountType.id,
+    );
+    const currentCustomer = this.customerRepository.findOneById(
+      account.customer.id,
+    );
     const newAccount = new AccountEntity();
-    newAccount.accountType = account.accountType;
+    newAccount.accountType = currentAccountType;
     newAccount.balance = 0;
-    newAccount.customer = account.customer;
+    newAccount.customer = currentCustomer;
     this.accountRepository.register(newAccount);
+    console.log(newAccount);
     return newAccount;
   }
 

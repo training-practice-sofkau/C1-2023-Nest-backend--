@@ -1,16 +1,22 @@
-import { Body, Param } from '@nestjs/common';
-import { Post } from '@nestjs/common';
-import { ParseUUIDPipe } from '@nestjs/common';
-import { Controller, Get } from '@nestjs/common';
-import { CreateAccountDto } from 'src/dtos/account/create-account.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
+import { CreateAccountDto } from 'src/dtos';
 import { AccountEntity } from 'src/persistence/entities';
 import { AccountService } from 'src/services';
+import { v4 as uuid } from 'uuid';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
   @Get()
   getAllAccounts(): string {
+    console.log(this.accountService.getAllAccounts);
     return JSON.stringify(this.accountService.getAllAccounts);
   }
 
@@ -25,11 +31,18 @@ export class AccountController {
 
   @Post()
   createAccount(@Body() accountDto: CreateAccountDto): string {
-    const newAccount = new AccountEntity();
-    const accountType = this.accountService.getAccountType(
-      accountDto.accountTypeId,
-    );
-
+    let newAccount = new AccountEntity();
+    newAccount = {
+      ...accountDto,
+      id: uuid(),
+    };
+    newAccount.accountType = {
+      ...accountDto.accountType,
+    };
+    newAccount.customer = {
+      ...accountDto.customer,
+    };
+    //return JSON.stringify(newAccount);
     return JSON.stringify(this.accountService.createAccount(newAccount));
   }
 }

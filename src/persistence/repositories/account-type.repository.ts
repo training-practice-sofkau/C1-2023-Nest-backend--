@@ -67,7 +67,19 @@ export class AccountTypeRepository
   }
 
   findOneById(id: string): AccountTypeEntity {
-    const currentAccountType = this.database.find((a) => a.id === id);
+    const hardAccountTypeDataBase = [
+      {
+        id: '4edf3a27-98ef-43ac-b1b9-21976ae00183',
+        name: 'Cuenta de ahorros',
+        state: true,
+      },
+      {
+        id: 'e51651e8-a085-4ed3-9cf1-49a444fe667b',
+        name: 'Cuenta corriente',
+        state: true,
+      },
+    ];
+    const currentAccountType = hardAccountTypeDataBase.find((a) => a.id === id);
     if (currentAccountType) {
       return currentAccountType;
     } else {

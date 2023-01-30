@@ -67,7 +67,21 @@ export class DocumentTypeRepository
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    const currentDocumentType = this.database.find((d) => d.id === id);
+    const hardDocumentTypeDataBase = [
+      {
+        id: 'e07aeb4c-3765-46cd-b8e2-944a928dd497',
+        name: 'Cédula de ciudadanía',
+        state: true,
+      },
+      {
+        id: 'ab850306-6de3-44ce-ab88-844b2e301c52',
+        name: 'Cédula de extrangería',
+        state: true,
+      },
+    ];
+    const currentDocumentType = hardDocumentTypeDataBase.find(
+      (d) => d.id === id,
+    );
     if (currentDocumentType) {
       return currentDocumentType;
     } else {
