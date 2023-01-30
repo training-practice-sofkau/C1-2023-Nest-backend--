@@ -13,6 +13,7 @@ import {
 } from '../../persistence/entities';
 import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
 import { NewAccountDTO } from 'src/dtos/account/new-account.dto';
+import { NewSecurityDTO } from 'src/dtos/security/new-security.dto';
 
 @Injectable()
 export class SecurityService {
@@ -28,7 +29,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: CustomerModel): string {
+  signIn(user: NewSecurityDTO): string {
     const answer = this.customerRepository.findEmailAndPassword(
       user.email,
       user.password,
