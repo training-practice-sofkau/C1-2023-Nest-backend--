@@ -3,7 +3,6 @@ import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
 
-
 @Injectable()
 export class AccountService {
   constructor(private readonly accountRepository: AccountRepository) {}
@@ -124,11 +123,11 @@ export class AccountService {
   changeAccountType(
     accountId: string,
     accountTypeId: string,
-): AccountTypeEntity {
-    let accType = this.accountRepository.findOneById(accountId)
-    accType.accountType.id = accountTypeId
-    return this.accountRepository.update(accountId, accType).accountType
-}
+  ): AccountTypeEntity {
+    const accType = this.accountRepository.findOneById(accountId);
+    accType.accountType.id = accountTypeId;
+    return this.accountRepository.update(accountId, accType).accountType;
+  }
 
   /**
    * Borrar una cuenta

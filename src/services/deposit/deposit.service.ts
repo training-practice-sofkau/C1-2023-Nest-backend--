@@ -1,9 +1,12 @@
+import { DepositRepository } from './../../persistence/repositories/deposit.repository';
 import { Injectable } from '@nestjs/common';
 import { DepositModel } from 'src/models';
 import { DepositEntity } from 'src/persistence/entities';
 
 @Injectable()
 export class DepositService {
+  constructor(private readonly depositRepository: DepositRepository) {}
+
   /**
    * Crear un deposito
    *
@@ -12,7 +15,11 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+    const newDeposit = new DepositEntity();
+    newDeposit.account = deposit.account;
+    newDeposit.amount = deposit.amount;
+    newDeposit.dateTime = new Date();
+    return this.depositRepository.register(newDeposit);
   }
 
   /**
@@ -22,7 +29,12 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    const deposited = this.depositRepository.findOneById(depositId);
+    if (deposited.deletedAt === undefined) {
+      this.depositRepository.delete(depositId, true);
+    } else {
+      this.depositRepository.delete(depositId, false);
+    }
   }
 
   /**
