@@ -29,6 +29,6 @@ export class AccountController {
 
     @Delete(":id")
     deleteAccount(@Param("id", new ParseUUIDPipe()) id: string): void {
-        
+        return this.accountServices.deleteAccount(id)
     }
 }

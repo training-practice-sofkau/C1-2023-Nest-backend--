@@ -9,7 +9,6 @@ export class DepositController {
     }
 
     @Post()
-    createDeposit(@Body() deposit: DepositDTO): string {
-        return "Se crea un deposito con ID " + deposit.dep_id + " en la cuenta " + deposit.account_id
+    createDeposit(@Body() deposit: DepositDTO): void {
     }
 }
