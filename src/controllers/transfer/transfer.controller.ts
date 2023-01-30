@@ -1,15 +1,19 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { TransferDTO } from "src/dtos/transfer/transfer.dto";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { NewTransferDTO } from "src/dtos/transfer/new-transfer.dto";
+import { PaginationModel } from "src/models";
+import { TransferEntity } from "src/persistence/entities";
+import { TransferService } from "src/services";
 
 @Controller("transfer")
 export class TransferController {
-    @Get()
-    getTransfers(): string {
-        return "Devuelve todas las transferencias"
+    constructor(private readonly transferService: TransferService) { }
+    @Get(":id")
+    getTransfers(@Param("id", new ParseUUIDPipe()) id: string, @Body() pagination: PaginationModel): TransferEntity[] {
+        return this.transferService.getHistory(id, pagination)
     }
 
     @Post()
-    createTransfer(@Body() transfer: TransferDTO): string {
-        return "Se crea un transferencia de: " + transfer.trf_outcome + "a :" + transfer.trf_income + "";
+    createTransfer(@Body() transfer: NewTransferDTO): TransferEntity {
+        return this.transferService.createTransfer(transfer)
     }
 }
