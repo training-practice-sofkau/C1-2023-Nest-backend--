@@ -52,4 +52,9 @@ export class DepositService {
     }
     return deposits;
   }
+
+  //Retorna todos los depositos registrados a la fecha
+  async getAll(): Promise<DepositEntity[]> {
+    return this.depositRepository.findAll();
+  }
 }
