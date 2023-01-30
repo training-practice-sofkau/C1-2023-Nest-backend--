@@ -39,7 +39,6 @@ export class AccountService {
     if (findAccount) {
       throw new BadRequestException();
     } else {
-      console.log(newAccount)
       newAccount.customer = newCustomer;
       newAccount.accountType = newAccountType;
       return this.accountRepository.register(newAccount);

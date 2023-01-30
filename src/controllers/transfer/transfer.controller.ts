@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { NewTransferDTO } from "src/dtos/transfer/new-transfer.dto";
-import { PaginationModel } from "src/models";
 import { TransferEntity } from "src/persistence/entities";
 import { TransferService } from "src/services";
 
