@@ -82,6 +82,14 @@ export class DepositService {
         }
         return arrayTransferReturn
     }
+    /**
+     * 
+     * Se actualiza el deposito
+     * 
+     * @param id 
+     * @param deposit 
+     * @returns 
+     */
     updateDeposit(id: string, deposit: NewDepositDTO): DepositEntity {
         const findDeposit = this.depositRepository.findOneById(id)
         if (findDeposit) {
@@ -92,8 +100,12 @@ export class DepositService {
             newDeposit.account = newAccount
             return this.depositRepository.update(id, newDeposit)
         }
-        else{
+        else {
             throw new NotFoundException("No se encuentra con ese ID")
         }
+    }
+
+    findAll(): DepositEntity[] {
+        return this.depositRepository.findAll()
     }
 }
