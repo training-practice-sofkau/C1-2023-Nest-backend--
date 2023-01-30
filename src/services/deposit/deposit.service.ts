@@ -5,7 +5,9 @@ import { DepositRepository } from '../../persistence/repositories';
 
 @Injectable()
 export class DepositService {
-  constructor(private readonly depositRepository: DepositRepository) {}
+  constructor(private readonly depositRepository: DepositRepository,
+    private readonly accountRepository: accountRepository,
+    ) {}
 
   /**
    * Crear un deposito
@@ -14,9 +16,9 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
+  createDeposit(deposit: DepositDTO): DepositEntity {
     const depositEntity = new DepositEntity();
-    depositEntity.account = deposit.account;
+    depositEntity.account = this.accountRepository.findOneById(deposit.accountId);
     return this.depositRepository.register(depositEntity);
   }
 
