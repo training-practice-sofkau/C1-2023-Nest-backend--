@@ -4,10 +4,10 @@ import { AccountEntity } from './account.entity';
 
 export class TransferEntity implements TransferModel {
   id = uuid();
-  outCome: AccountEntity;
-  inCome: AccountEntity;
+  outcome: AccountEntity;
+  income: AccountEntity;
   amount: number;
   reason: string;
-  dateTime: string | Date;
-  deletedAt?: string | Date;
+  dateTime: number | Date;
+  deletedAt?: number | Date;
 }
