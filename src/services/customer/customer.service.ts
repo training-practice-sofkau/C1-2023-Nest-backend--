@@ -1,9 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
+import { CustomerRepository } from '../../persistence/repositories/customer.repository';
+import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
+import { NewCustomerDTO } from '../../dtos/new-customer.dto';
 
 @Injectable()
 export class CustomerService {
+  constructor(private readonly customerRepository: CustomerRepository) {}
+
+  findAll(): CustomerEntity[] {
+    return this.customerRepository.findAll();
+  }
+
+  newCustomer(customer: NewCustomerDTO): CustomerEntity {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = customer.documentTypeId;
+
+    const newCustomer = new CustomerEntity();
+    newCustomer.documentType = documentType;
+    newCustomer.document = customer.document;
+    newCustomer.fullName = customer.fullName;
+    newCustomer.email = customer.email;
+    newCustomer.phone = customer.phone;
+    newCustomer.password = customer.password;
+
+    return this.customerRepository.register(newCustomer);
+  }
+
   /**
    * Obtener información de un cliente
    *
