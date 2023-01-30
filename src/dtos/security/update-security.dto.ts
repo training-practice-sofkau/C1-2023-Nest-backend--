@@ -7,6 +7,9 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  Matches,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class UpdateSecurityDto {
@@ -28,6 +31,7 @@ export class UpdateSecurityDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @MaxLength(500)
   readonly fullName: string;
   @IsOptional()
   @IsString()
@@ -36,10 +40,12 @@ export class UpdateSecurityDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @MaxLength(30)
   readonly phone: string;
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
+  @Matches(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/))
+  @MinLength(8)
   readonly password: string;
   @IsOptional()
   @IsString()
