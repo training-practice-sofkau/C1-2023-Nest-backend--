@@ -32,7 +32,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: CustomerModel): string {
+  signIn(user: CustomerDTO): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
@@ -48,9 +48,9 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: CustomerModel): string {
+  signUp(user: CustomerDTO): string {
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = user.documentType;
+    newCustomer.documentType = this.customerRepository.findOneById(user.documentTypeId)
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
