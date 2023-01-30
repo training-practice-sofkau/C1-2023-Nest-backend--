@@ -106,9 +106,9 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  getAccountType(accountId: string): AccountTypeEntity {
-    this.accountRepository.findOneById(accountId).accountType;
-  }
+  // getAccountType(accountId: string): AccountTypeEntity {
+  //   this.accountRepository.findOneById(accountId).accountType;
+  // }
 
   /**
    * Cambiar el tipo de cuenta a una cuenta

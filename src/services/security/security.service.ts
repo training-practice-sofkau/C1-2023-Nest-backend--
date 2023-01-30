@@ -74,7 +74,7 @@ export class SecurityService {
    * @param {string} JWToken
    * @memberof SecurityService
    */
-  signOut(JWToken: string): void {
-    throw new Error('Method not implemented.');
-  }
+  // signOut(JWToken: string): void {
+  //   throw new Error('Method not implemented.');
+  // }
 }
