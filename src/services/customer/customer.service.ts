@@ -27,7 +27,7 @@ export class CustomerService {
   }
 
   //Actualiza informacion del ususario solicitado
-  updatedCustomer(customerId: string, customer: CustomerModel): CustomerEntity {
+  updateCustomer(customerId: string, customer: CustomerModel): CustomerEntity {
     return this.customerRepository.upate(customerId, customer);
   }
 
@@ -37,5 +37,17 @@ export class CustomerService {
     currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));
     const ok = this.customerRepository.findOneById(customerId);
     return ok ? true : false;
+  }
+
+  //Cambiar estado de Cliente si está inactivo lo activa o viceversa
+  changeState(customerId: string): boolean {
+    const currentCustomer = this.getCustomerInfo(customerId);
+    currentCustomer.state = !currentCustomer.state;
+    const updatedCustomer = this.customerRepository.upate(
+      customerId,
+      currentCustomer,
+    );
+    if (updatedCustomer) return true;
+    else return false;
   }
 }
