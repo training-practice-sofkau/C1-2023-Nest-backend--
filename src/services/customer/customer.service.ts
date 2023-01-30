@@ -37,6 +37,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    throw new Error('Method not implemented.');
+   let user = new CustomerEntity();
+   user = this.customerRepository.findOneById(id);
+   if(user.state == true){
+    user.state = false;
+   }
+    return user.state;
   }
 }
