@@ -32,12 +32,12 @@ export class AccountController {
 
   @Get(':id')
   amountBalance(@Param('id') id: string, @Body() amount: number): boolean {
-    return this.accountService.verifyAmountIntoBalance(id,amount);
+    return this.accountService.verifyAmountIntoBalance(id, amount);
   }
 
   @Put(':id')
-  changeState(@Param('id') id: string, @Body() state: boolean):void {
-    this.accountService.changeState(id,state);
+  changeState(@Param('id') id: string, @Body() state: boolean): void {
+    this.accountService.changeState(id, state);
   }
 
   @Delete()
