@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DepositModel } from 'src/models';
 import { DepositEntity } from 'src/persistence/entities/deposite.entity';
+import { DepositeRepository } from 'src/persistence/repositories/deposite.repository';
 
 @Injectable()
 export class DepositService {
+  constructor(private readonly depositRepository: DepositeRepository ) {}
   /**
    * Crear un deposito
    *

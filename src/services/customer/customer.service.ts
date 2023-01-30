@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CustomerModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
-
+import { AccountRepository, CustomerRepository } from 'src/persistence/repositories';
 @Injectable()
 export class CustomerService {
+  constructor(private readonly customerRepository : CustomerRepository,
+    private readonly accountRepository: AccountRepository,
+    ) {}
   /**
    * Obtener información de un cliente
    *
@@ -12,7 +15,8 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-    throw new Error('Method not implemented.');
+    return this.customerRepository.findOneById(customerId);
+  
   }
 
   /**
@@ -24,7 +28,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    throw new Error('Method not implemented.');
+    return this.updatedCustomer(id, customer);
   }
 
   /**
@@ -35,6 +39,18 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    throw new Error('Method not implemented.');
+    const account = this.accountRepository.findByCustomer(id);
+    if (account) {
+      throw new BadRequestException('El usuario tiene cuenta asociada');
+    } else {
+      const customer = this.customerRepository.findOneById(id);
+      if (customer.deletedAt === undefined) {
+        this.customerRepository.delete(id, true);
+        return false;
+      } else {
+        this.customerRepository.delete(id, false);
+        return true;
+    }
   }
+}
 }
