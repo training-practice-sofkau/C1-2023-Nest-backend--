@@ -64,6 +64,9 @@ export class SecurityService {
       const newAccount = {
         customer,
         accountType,
+        id: '',
+        balance: 0,
+        state: true,
       };
 
       const account = this.accountService.createAccount(newAccount);
