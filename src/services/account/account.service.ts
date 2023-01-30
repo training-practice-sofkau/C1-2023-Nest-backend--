@@ -4,6 +4,8 @@ import { timeStamp } from 'console';
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
+import { AccountTypeRepository } from '../../persistence/repositories/account-type.repository';
+
 
 @Injectable()
 export class AccountService {
@@ -17,9 +19,13 @@ export class AccountService {
    * @memberof AccountService
    */
   createAccount(account: AccountModel): AccountEntity {
-    const newAccount = new AccountEntity();
+    const newAccount = new AccountEntity();  
+    newAccount.id = account.id;
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
+    newAccount.balance = account.balance;
+    newAccount.state = account.state;
+    newAccount.deleteAt = account.delatedAt ;
     return this.accountRepository.register(newAccount);
   }
 
@@ -59,7 +65,6 @@ export class AccountService {
     throw new NotFoundException(Error , ' No se puede ajecutar esta petición')
    }
   }
-
   /**
    * Verificar la disponibilidad de un monto a retirar en una cuenta
    *
@@ -69,7 +74,11 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    throw new Error('This method is not implemented');
+    if (this.accountRepository.findOneById(accountId).balance >= amount){
+      return true ;
+    }else{
+      return false;
+    }
   }
 
   /**
@@ -80,7 +89,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.findOneById(accountId).state;
   }
 
   /**
@@ -117,9 +126,12 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
-  }
-
+   
+    const accountType = this.accountRepository.findOneById(accountId);
+    accountType.accountType.id = accountTypeId;
+    return this.accountRepository.update(accountId, accountType).accountType
+    }
+  
   /**
    * Borrar una cuenta
    *
@@ -127,7 +139,15 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-   this.accountRepository.delete(accountId , true);
+  this.accountRepository.delete(accountId);
   }
- }
+}
+
+
+
+
+
+
+
+
 

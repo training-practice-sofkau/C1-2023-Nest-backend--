@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { TransferModel } from 'src/models/transfer.model';
+import { TransferEntity } from 'src/persistence/entities/transfer.entity';
 
 @Injectable()
 export class TransferService {
