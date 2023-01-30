@@ -9,7 +9,7 @@ export class TransferService {
   constructor(
     private readonly transferRepository: TransferRepository,
     private readonly accountService: AccountService,
-  ) {}
+  ) { }
 
   createTransfer(transfer: TransferModel): TransferEntity {
     const newTransfer = new TransferEntity();
@@ -31,7 +31,6 @@ export class TransferService {
   ): Promise<TransferEntity[]> {
     const currentTransfers =
       this.transferRepository.findByOutcomeAccount(accountId);
-    pagination.size = currentTransfers.length;
     return this.historyPagination(currentTransfers, pagination, dataRange);
   }
 
@@ -67,6 +66,7 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
+    pagination.size = transfersList.length;
     const transfers: TransferEntity[] = [];
     let range = 0;
     if (dataRange && dataRange.range > 0) {
@@ -76,11 +76,11 @@ export class TransferService {
     }
     pagination.pages = Math.round(pagination.size / range);
     for (
-      let i = pagination.currentPage * range - range;
-      i < pagination.currentPage * range;
+      let i = pagination.currentPage * range;
+      i < pagination.currentPage * range + range;
       i++
     ) {
-      transfers.push(transfersList[i]);
+      transfers.push(transfersList[i + 1]);
     }
     return transfers;
   }
