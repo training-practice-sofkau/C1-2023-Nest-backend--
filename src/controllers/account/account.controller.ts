@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from "@nestjs/common";
 
 @Controller("account")
 export class AccountController {
@@ -8,7 +8,7 @@ export class AccountController {
     }
 
     @Get(":id")
-    getAccount(@Param("id") id: string): string {
+    getAccount(@Param("id", new ParseUUIDPipe()) id: string): string {
         return "Devuelve la cuenta con id :" + id;
     }
 

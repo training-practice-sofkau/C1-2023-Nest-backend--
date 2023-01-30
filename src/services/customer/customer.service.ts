@@ -1,6 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { newCustomerDTO } from 'src/dtos/customer/new-customer.dto';
 import { CustomerModel } from 'src/models';
-import { CustomerEntity } from 'src/persistence/entities';
+import { CustomerEntity, DocumentTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
 import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
 
@@ -9,8 +10,37 @@ export class CustomerService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountRepository: AccountRepository,
-  ) {}
+  ) { }
 
+  findAllUsers(): CustomerEntity[] {
+    return this.customerRepository.findAll()
+  }
+
+  /**
+   * Se crea usuario
+   * 
+   * @param customer 
+   * @returns 
+   */
+  createCustomer(customer: newCustomerDTO): CustomerEntity {
+    const newCustomer = new CustomerEntity();
+    const newDocumentType = new DocumentTypeEntity()
+    newDocumentType.id = customer.documentTypeId;
+    const findCustomer = this.customerRepository.findByEmail(customer.email)
+    if (findCustomer) {
+      throw new BadRequestException()
+    }
+    else {
+      newCustomer.document = customer.document;
+      newCustomer.documentType = newDocumentType;
+      newCustomer.email = customer.email;
+      newCustomer.fullName = customer.fullName;
+      newCustomer.phone = customer.phone
+      newCustomer.password = customer.password
+      return this.customerRepository.register(newCustomer);
+    }
+
+  }
   /**
    * Obtener información de un cliente
    *
@@ -30,8 +60,28 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    return this.updatedCustomer(id, customer);
+  updatedCustomer(id: string, customer: newCustomerDTO): CustomerEntity {
+    const findCustomer = this.customerRepository.findOneById(id)
+    const findByEmail = this.customerRepository.findByEmail(customer.email)
+    if (findByEmail) {
+      if (findCustomer.id === findByEmail.id) {
+        findCustomer.document = customer.document;
+        findCustomer.email = customer.email;
+        findCustomer.fullName = customer.fullName;
+        findCustomer.phone = customer.phone;
+        return this.customerRepository.update(id, findCustomer)
+      }
+      else {
+        throw new BadRequestException()
+      }
+    }
+    else {
+      findCustomer.document = customer.document;
+      findCustomer.email = customer.email;
+      findCustomer.fullName = customer.fullName;
+      findCustomer.phone = customer.phone;
+      return this.customerRepository.update(id, findCustomer)
+    }
   }
 
   /**
@@ -57,5 +107,15 @@ export class CustomerService {
         return true;
       }
     }
+  }
+  deleteCustomer(id: string, soft?: boolean): void {
+    const customer = this.getCustomerInfo(id)
+    if (customer) {
+      this.customerRepository.delete(id, soft)
+    }
+    else {
+      throw new BadRequestException()
+    }
+
   }
 }
