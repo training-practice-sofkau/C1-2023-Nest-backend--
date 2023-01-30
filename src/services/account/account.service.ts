@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { accessSync } from 'fs';
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
+
 
 @Injectable()
 export class AccountService {
@@ -124,18 +124,11 @@ export class AccountService {
   changeAccountType(
     accountId: string,
     accountTypeId: string,
-  ): AccountTypeEntity {
-    if (!this.getState(accountId)) {
-      throw new ConflictException(`Cuenta desactivada`);
-    }
-    let newAccount = new AccountEntity();
-    newAccount = this.accountRepository.findOneById(accountId);
-    const accountType = this.accountTypeRepository.findOneById(accountTypeId);
-    newAccount.accountType = accountType;
-    return accountType;
-  }
-
-  // nota
+): AccountTypeEntity {
+    let accType = this.accountRepository.findOneById(accountId)
+    accType.accountType.id = accountTypeId
+    return this.accountRepository.update(accountId, accType).accountType
+}
 
   /**
    * Borrar una cuenta
