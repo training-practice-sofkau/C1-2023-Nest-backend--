@@ -223,10 +223,14 @@ export class AccountService {
   updateAccount(id: string, account: NewAccountDTO): AccountEntity {
     const findAccount = this.accountRepository.findOneById(id)
     const newAccount = new AccountEntity()
+    const newCustomer = new CustomerEntity()
+    newCustomer.id=account.customer
+    const newAccounType = new AccountTypeEntity()
+    newAccounType.id=account.accountType
     if (findAccount) {
       newAccount.balance = account.balance
-      newAccount.accountType.id = account.accountType
-      newAccount.customer.id = account.customer
+      newAccount.accountType = newAccounType
+      newAccount.customer = newCustomer
       return this.accountRepository.update(id, newAccount)
     }
     else {
