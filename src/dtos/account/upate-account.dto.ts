@@ -16,10 +16,10 @@ export class UpdateAccountDto {
   readonly id?: string;
   @IsOptional()
   @IsObject()
-  readonly customer: CustomerDto;
+  readonly customer?: CustomerDto;
   @IsString()
   @IsOptional()
-  readonly accountTypeId?: string;
+  readonly accountType?: { id: string; name: string; state: boolean };
   @IsNumber()
   @IsOptional()
   readonly balance?: number;

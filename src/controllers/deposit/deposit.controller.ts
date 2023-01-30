@@ -1,9 +1,16 @@
-import { Param } from '@nestjs/common';
-import { ParseUUIDPipe } from '@nestjs/common';
-import { Get, Post } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
+import { CreateDepositDto } from 'src/dtos/deposit';
 import { DataRangeModel, PaginationModel } from 'src/models';
+import { AccountTypeEntity, DepositEntity } from 'src/persistence/entities';
 import { DepositService } from 'src/services';
+import { v4 as uuid } from 'uuid';
 
 @Controller('deposit')
 export class DepositController {
@@ -40,5 +47,20 @@ export class DepositController {
     return JSON.stringify(
       this.depositService.getHistory(accountId, pages, dates),
     );
+  }
+
+  @Post()
+  create(@Body() createDepositDto: CreateDepositDto) {
+    let newDeposit = new DepositEntity();
+    const accountTypeI = <AccountTypeEntity>{
+      id: createDepositDto.account.accountType?.id,
+      name: createDepositDto.account.accountType?.name,
+      state: createDepositDto.account.accountType?.state,
+    };
+    const a = newDeposit.account.id
+    newDeposit = {
+      ...createDepositDto,
+      id: uuid(), 
+    };
   }
 }

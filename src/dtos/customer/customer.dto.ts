@@ -17,11 +17,7 @@ export class CustomerDto {
   @IsUUID()
   readonly id: string;
   @IsObject()
-  readonly documentType: {
-    id: string;
-    name: string;
-    state: boolean;
-  };
+  readonly documentType: { id: string; name: string; state: boolean };
   @IsString()
   @IsNotEmpty()
   readonly document: string;
