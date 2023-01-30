@@ -10,8 +10,8 @@ export class AccountEntity implements AccountModel {
     balance: number;
     state = true;
     deletedAt?: number | Date;   
-  document: string;
-  email: string;
-  phone: string;
-  fullName: any;
+    document: string;
+    email: string;
+    phone: string;
+    fullName: any;
 }

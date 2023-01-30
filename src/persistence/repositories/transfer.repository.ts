@@ -6,6 +6,12 @@ import { TransferRepositoryInterface } from './interfaces/transfer.repository.in
 
 @Injectable()
 export class TransferReoisitory extends BaseRepository<TransferEntity> implements TransferRepositoryInterface{
+  findByDateRange(accountId: string, arg1: number, arg2: number) {
+    throw new Error("Method not implemented.");
+  }
+  findByIncomeId(accountId: string) {
+    throw new Error("Method not implemented.");
+  }
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

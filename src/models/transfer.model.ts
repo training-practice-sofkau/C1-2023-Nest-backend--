@@ -1,9 +1,9 @@
-import { AcountModel } from "./account.model";
+import { AccountModel } from "./account.model";
 
 export interface TransferModel {
     id : string;
-    outcome : AcountModel;
-    income : AcountModel;
+    outcome : AccountModel;
+    income : AccountModel;
     amount: number;
     reason: string;
     dateTime: Date | number;

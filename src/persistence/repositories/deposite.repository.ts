@@ -58,6 +58,10 @@ export class DepositeRepository extends BaseRepository<DepositEntity> implements
   ): DepositEntity[] {
     throw new Error('This method is not implemented');
   }
+  findByDateRange(id: string, DateMin: number | Date, DateMax: Number | Date): DepositEntity[] {
+    const arrayDeposites = this.findAll()
+    return arrayDeposites.filter(deposit => (deposit.id === id && deposit.dateTime >= DateMin && deposit.dateTime <= DateMax))
+  }
 
 }
 
