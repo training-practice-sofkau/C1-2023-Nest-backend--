@@ -11,6 +11,7 @@ export class TransferService {
     private readonly accountService: AccountService,
   ) {}
 
+  //Registra la transferancia en el sistema y actualiza el balance en las cuentas afectadas
   createTransfer(transfer: TransferModel): TransferEntity {
     const newTransfer = new TransferEntity();
     newTransfer.amount = transfer.amount;
@@ -24,6 +25,7 @@ export class TransferService {
     return newTransfer;
   }
 
+  //Devuelve historial de transferencias con cuenta de entrada enviada junto a paginacion y rangos
   async getHistoryOut(
     accountId: string,
     pagination: PaginationModel,
@@ -34,6 +36,7 @@ export class TransferService {
     return this.historyPagination(currentTransfers, pagination, dataRange);
   }
 
+  //Devuelve historial de transferencias con cuenta de salida enviada junto a paginacion y rangos
   async getHistoryIn(
     accountId: string,
     pagination: PaginationModel,
@@ -44,6 +47,7 @@ export class TransferService {
     return this.historyPagination(currentTransfers, pagination, dataRange);
   }
 
+  //Devuelve todas las transferencias realizadas segun paginacion y rango
   getHistory(
     accountId: string,
     pagination: PaginationModel,
@@ -57,10 +61,12 @@ export class TransferService {
     return this.historyPagination(currentTransfers, pagination, dataRange);
   }
 
+  //Borrado de la transferencia enviada
   deleteTransfer(transferId: string): void {
     this.transferRepository.delete(transferId, true);
   }
 
+  //Metodo generico para paginacion
   private historyPagination(
     transfersList: TransferEntity[],
     pagination: PaginationModel,

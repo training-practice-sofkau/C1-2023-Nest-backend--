@@ -15,15 +15,18 @@ export class CustomerService {
     private readonly accountService: AccountService,
   ) {}
 
+  //Retorna la informacion del cliente solicitado
   getCustomerInfo(customerId: string): CustomerEntity {
     const currentCustomer = this.customerRepository.findOneById(customerId);
     return currentCustomer;
   }
 
+  //Actualiza informacion del ususario solicitado
   updatedCustomer(customerId: string, customer: CustomerModel): CustomerEntity {
     return this.customerRepository.upate(customerId, customer);
   }
 
+  //Elimina el usuario solicitado de forma logica
   unsubscribe(customerId: string): boolean {
     const currentAccounts = this.accountRepository.findByCustomer(customerId);
     currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));

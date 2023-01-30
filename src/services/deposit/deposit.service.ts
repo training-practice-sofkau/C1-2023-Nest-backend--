@@ -11,7 +11,7 @@ export class DepositService {
     private readonly accountService: AccountService,
   ) {}
 
-  //Creacion de un deposito
+  //Creacion de un deposito y actualiza el balance de la cuenta afectada
   async createDeposit(deposit: DepositModel): Promise<DepositEntity> {
     const newDeposit = new DepositEntity();
     newDeposit.account = deposit.account;
