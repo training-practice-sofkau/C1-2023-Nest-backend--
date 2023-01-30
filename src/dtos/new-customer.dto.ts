@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEmail,
   IsNumberString,
   IsString,
@@ -29,4 +30,7 @@ export class NewCustomerDTO {
   @Matches(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/))
   @MinLength(8)
   password: string;
+
+  @IsBoolean()
+  state: boolean;
 }

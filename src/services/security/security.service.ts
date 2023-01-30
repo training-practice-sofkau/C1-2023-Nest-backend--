@@ -52,7 +52,7 @@ export class SecurityService {
 
     if (customer) {
       const accountType = new AccountTypeEntity();
-      accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+      accountType.id = 'Falta el ID del tipo de cuenta';
       const newAccount = {
         customer,
         accountType,
