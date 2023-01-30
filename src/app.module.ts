@@ -6,6 +6,7 @@ import { AccountRepository } from './persistence/repositories/account.repository
 import { CustomerRepository } from './persistence/repositories/customer.respository';
 import { AccountService } from './services/account/account.service';
 import { CustomerService } from './services/customer/customer.service';
+import { UserController } from './controllers/user/user.controller';
 
 @Module({
   imports: [],
