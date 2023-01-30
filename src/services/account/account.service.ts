@@ -1,4 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { accessSync } from 'fs';
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
@@ -17,6 +18,10 @@ export class AccountService {
   createAccount(account: AccountModel): AccountEntity {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
+    newAccount.balance = account.balance;
+    newAccount.state = account.state;
+    newAccount.deletedAt = account.deletedAt;
+    newAccount.id = account.id;
     newAccount.accountType = account.accountType;
     return this.accountRepository.register(newAccount);
   }
@@ -129,6 +134,8 @@ export class AccountService {
     newAccount.accountType = accountType;
     return accountType;
   }
+
+  // nota
 
   /**
    * Borrar una cuenta
