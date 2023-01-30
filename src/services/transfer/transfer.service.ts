@@ -90,4 +90,9 @@ export class TransferService {
     }
     return transfers;
   }
+
+  //Retorna todas las transferencias registradas en el sistema
+  getAll(): TransferEntity[] {
+    return this.transferRepository.findAll();
+  }
 }

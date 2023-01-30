@@ -15,7 +15,7 @@ import { v4 as uuid } from 'uuid';
 
 @Controller('deposit')
 export class DepositController {
-  constructor(private readonly depositService: DepositService) { }
+  constructor(private readonly depositService: DepositService) {}
 
   @Get()
   getAll(): string {

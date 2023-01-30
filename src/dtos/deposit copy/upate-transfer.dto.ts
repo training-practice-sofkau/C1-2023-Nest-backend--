@@ -6,22 +6,21 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { AccountDto } from '../account/account.dto';
+import { CreateAccountDto } from '../account';
 
-export class DepositDto {
+export class UpdateDepositDto {
   @IsUUID()
   @IsString()
-  readonly id: string;
+  @IsOptional()
+  readonly id?: string;
   @IsObject()
-  readonly account: AccountDto;
+  readonly account: CreateAccountDto;
   @IsNumber()
   @IsDate()
   readonly amount: number;
-  @IsDate()
-  @IsNumber()
   readonly dateTime: Date | number;
-  @IsOptional()
   @IsDate()
   @IsNumber()
-  readonly deletedAt: Date | number;
+  @IsOptional()
+  readonly deletedAt?: Date | number;
 }
