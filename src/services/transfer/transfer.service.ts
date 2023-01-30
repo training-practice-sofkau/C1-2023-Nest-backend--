@@ -30,7 +30,7 @@ export class TransferService {
         if (true && true) {
             //this.accountService.getBalance(transfer.outcome)
             //Se deja asi para que pase
-            if ( 4000 >= transfer.amount) {
+            if ( 100000 >= transfer.amount) {
                 newTransfer.amount = transfer.amount
                 newTransfer.reason = transfer.reason
                 return this.transferRepository.register(newTransfer)
