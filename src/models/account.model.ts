@@ -5,6 +5,6 @@ export interface AccountModel {
   customer: CustomerModel;
   accountType: AccountTypeModel;
   balance: number;
-  state: boolean;
+  state: string;
   deletedAt?: Date | number;
 }

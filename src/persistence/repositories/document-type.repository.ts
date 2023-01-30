@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -50,5 +51,44 @@ export class DocumentTypeRepository
   findByName(name: string): DocumentTypeEntity[] {
     const documentTypes = this.database.filter((item) => item.name === name);
     return documentTypes;
+=======
+import { Injectable } from '@nestjs/common';
+import { DocumentTypeEntity } from '../entities';
+
+@Injectable()
+export class DocumentTypeRepository {
+  private readonly database: Array<DocumentTypeEntity>;
+
+  constructor() {
+    this.database = new Array<DocumentTypeEntity>();
+  }
+
+  register(entity: DocumentTypeEntity): DocumentTypeEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  delete(id: string, soft?: boolean): void {
+    throw new Error('This method is not implemented');
+  }
+
+  findAll(): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findOneById(id: string): DocumentTypeEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  findByState(state: boolean): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByName(name: string): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+>>>>>>> 3b3ea44
   }
 }
