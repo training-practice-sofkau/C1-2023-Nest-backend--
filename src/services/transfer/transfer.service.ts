@@ -14,10 +14,10 @@ export class TransferService {
    * @memberof TransferService
    */
   createTransfer(transfer: TransferModel): TransferEntity {
-    const newTransfer = new TransferEntity();
-    newTransfer.outCome = transfer.outCome;
-    newTransfer.amount = transfer.amount;
-    return this.transferRepository.register(newTransfer);
+    const transferNew = new TransferEntity();
+    transferNew.outCome = transfer.outCome;
+    transferNew.amount = transfer.amount;
+    return this.transferRepository.register(transferNew);
   }
 
   /**
@@ -29,47 +29,47 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryOut(
-    accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
+  // getHistoryOut(
+  //   accountId: string,
+  //   pagination: PaginationModel,
+  //   dataRange?: DataRangeModel,
+  // ): TransferEntity[] {
+  //   throw new Error('This method is not implemented');
+  // }
 
-  /**
-   * Obtener historial de transacciones de entrada en una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
-   */
-  getHistoryIn(
-    accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
+  // /**
+  //  * Obtener historial de transacciones de entrada en una cuenta
+  //  *
+  //  * @param {string} accountId
+  //  * @param {PaginationModel} pagination
+  //  * @param {DataRangeModel} [dataRange]
+  //  * @return {*}  {TransferEntity[]}
+  //  * @memberof TransferService
+  //  */
+  // getHistoryIn(
+  //   accountId: string,
+  //   pagination: PaginationModel,
+  //   dataRange?: DataRangeModel,
+  // ): TransferEntity[] {
+  //   throw new Error('This method is not implemented');
+  // }
 
-  /**
-   * Obtener historial de transacciones de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
-   */
-  getHistory(
-    accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
+  // /**
+  //  * Obtener historial de transacciones de una cuenta
+  //  *
+  //  * @param {string} accountId
+  //  * @param {PaginationModel} pagination
+  //  * @param {DataRangeModel} [dataRange]
+  //  * @return {*}  {TransferEntity[]}
+  //  * @memberof TransferService
+  //  */
+  // getHistory(
+  //   accountId: string,
+  //   pagination: PaginationModel,
+  //   dataRange?: DataRangeModel,
+  // ): TransferEntity[] {
+  //   throw new Error('This method is not implemented');
+  // }
 
   /**
    * Borrar una transacción
