@@ -1,7 +1,7 @@
 // Libraries
 import { Body, Controller } from '@nestjs/common';
 import { Post } from '@nestjs/common';
-import { SecurityDto, CreateCustomerDto } from 'src/dtos';
+import { SecurityDto } from 'src/dtos';
 import { CustomerEntity, DocumentTypeEntity } from 'src/persistence/entities';
 import { CustomerService, SecurityService } from 'src/services';
 import { v4 as uuid } from 'uuid';
@@ -26,15 +26,6 @@ export class SecurityController {
       state: true,
     };
     return JSON.stringify(this.securityService.signIn(currentCustomer));
-  }
-  @Post('signUp')
-  signUp(@Body() createCustomerDto: CreateCustomerDto): string {
-    let newCustomer = new CustomerEntity();
-    newCustomer = {
-      ...createCustomerDto,
-      id: uuid(),
-    };
-    return JSON.stringify(this.securityService.signUp(newCustomer));
   }
 
   @Post('signOut')

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SecurityController } from './controllers';
 import { AccountService } from './services';
-import { CustomerController } from './controllers/customer/customer.controller';
+import { CustomerController } from './controllers/user/user.controller';
 import { AccountController } from './controllers/account/account.controller';
 import { TransferController } from './controllers/transfer/transfer.controller';
 import { DepositController } from './controllers/deposit/deposit.controller';

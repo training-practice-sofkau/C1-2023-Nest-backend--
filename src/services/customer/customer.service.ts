@@ -15,6 +15,11 @@ export class CustomerService {
     private readonly accountService: AccountService,
   ) {}
 
+  //Retorna todos los clientes
+  getAll(): CustomerEntity[] {
+    return this.customerRepository.findAll();
+  }
+
   //Retorna la informacion del cliente solicitado
   getCustomerInfo(customerId: string): CustomerEntity {
     const currentCustomer = this.customerRepository.findOneById(customerId);
