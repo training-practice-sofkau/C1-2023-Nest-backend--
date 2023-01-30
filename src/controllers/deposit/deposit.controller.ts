@@ -1,3 +1,4 @@
+import { Delete, Put } from '@nestjs/common';
 import {
   Body,
   Controller,
@@ -6,15 +7,15 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateDepositDto } from 'src/dtos/deposit';
+import { DepositDto } from 'src/dtos/deposit/deposit.dto';
 import { DataRangeModel, PaginationModel } from 'src/models';
-import { AccountTypeEntity, DepositEntity } from 'src/persistence/entities';
+import { DepositEntity } from 'src/persistence/entities';
 import { DepositService } from 'src/services';
 import { v4 as uuid } from 'uuid';
 
 @Controller('deposit')
 export class DepositController {
-  constructor(private readonly depositService: DepositService) {}
+  constructor(private readonly depositService: DepositService) { }
 
   @Get()
   getAll(): string {
@@ -50,17 +51,17 @@ export class DepositController {
   }
 
   @Post()
-  create(@Body() createDepositDto: CreateDepositDto) {
+  createDeposit(@Body() depositDto: DepositDto): string {
     let newDeposit = new DepositEntity();
-    const accountTypeI = <AccountTypeEntity>{
-      id: createDepositDto.account.accountType?.id,
-      name: createDepositDto.account.accountType?.name,
-      state: createDepositDto.account.accountType?.state,
-    };
-    const a = newDeposit.account.id
     newDeposit = {
-      ...createDepositDto,
-      id: uuid(), 
+      ...depositDto,
+      id: uuid(),
     };
+    return JSON.stringify(this.depositService.createDeposit(newDeposit));
+  }
+
+  @Delete(':id')
+  deleteDeposit(@Param('id', ParseUUIDPipe) depositId: string): void {
+    this.depositService.deleteDeposit(depositId);
   }
 }
