@@ -1,27 +1,18 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Post,
-    Put,
-  } from '@nestjs/common';
-  import { DepositDTO } from 'src/dtos';
-  import { DepositEntity } from 'src/persistence/entities';
-  import { DepositService } from 'src/services';
+import { Body, Controller, Post } from '@nestjs/common';
+import { CustomerDTO } from 'src/dtos';
+import { SecurityService } from 'src/services';
 
 @Controller('security')
 export class SecurityController {
+  constructor(private readonly securityService: SecurityService) {}
 
   @Post()
-  signUp(@Body() customer: CustomerDTO): CustomerEntity {
-    return this.accountService.signUp(customer);
-  }  
+  signUp(@Body() customer: CustomerDTO): string {
+    return this.securityService.signUp(customer);
+  }
 
   @Post()
-  signUp(@Body() customer: CustomerDTO): CustomerEntity {
-    return this.accountService.signIn(customer);
-  }  
-
+  signIn(@Body() customer: CustomerDTO): string {
+    return this.securityService.signIn(customer);
+  }
 }
