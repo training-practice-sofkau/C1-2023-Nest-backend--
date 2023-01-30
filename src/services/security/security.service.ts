@@ -12,7 +12,7 @@ import { CustomerModel } from '../../models';
 import { CustomerRepository } from '../../persistence/repositories';
 
 // Services
-import { AccountService } from '../account';
+import { AccountService } from '../account/account.service';
 
 // Entities
 import {
@@ -65,8 +65,11 @@ export class SecurityService {
       const accountType = new AccountTypeEntity();
       accountType.id = 'Falta el ID por defecto del tipo de cuenta';
       const newAccount = {
+        id: '',
         customer,
         accountType,
+        balance: 0,
+        state: true
       };
 
       const account = this.accountService.createAccount(newAccount);

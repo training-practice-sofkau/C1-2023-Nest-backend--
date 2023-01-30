@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { TransferModel } from 'src/models/transfer.model';
 import { TransferEntity } from 'src/persistence/entities/transfer.entity';
+import { TransferRepository } from '../../persistence/repositories/transfer.repository';
 
 @Injectable()
 export class TransferService {
+
+  constructor( private readonly transferRepository: TransferRepository){}
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -12,7 +15,13 @@ export class TransferService {
    * @memberof TransferService
    */
   createTransfer(transfer: TransferModel): TransferEntity {
-    throw new Error('This method is not implemented');
+    const newMovement = new TransferEntity();
+    newMovement.outcome = transfer.outcome;
+    newMovement.income  = transfer.income;
+    newMovement.amount  = transfer.amount;
+    newMovement.reason  = transfer.reason;
+    
+    return this.transferRepository.register(newMovement);
   }
 
   /**
@@ -26,8 +35,8 @@ export class TransferService {
    */
   getHistoryOut(
     accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+   // pagination: PaginationModel,
+    //dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
   }
@@ -43,8 +52,8 @@ export class TransferService {
    */
   getHistoryIn(
     accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    //pagination: PaginationModel,
+    //dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
   }
@@ -60,8 +69,8 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    //pagination: PaginationModel,
+    //dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
   }
@@ -73,6 +82,6 @@ export class TransferService {
    * @memberof TransferService
    */
   deleteTransfer(transferId: string): void {
-    throw new Error('This method is not implemented');
+    this.transferRepository.delete(transferId);
   }
 }
