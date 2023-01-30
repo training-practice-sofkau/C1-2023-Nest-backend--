@@ -14,7 +14,8 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+    const account = this.depositRepository.register(deposit);
+    return account
   }
 
   /**
@@ -24,7 +25,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    this.depositRepository.delete(depositId);
   }
 
   /**

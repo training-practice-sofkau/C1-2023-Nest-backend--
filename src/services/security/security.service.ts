@@ -12,13 +12,11 @@ import { CustomerModel } from '../../models';
 import { CustomerRepository } from '../../persistence/repositories';
 
 // Services
-import { AccountService } from '../account';
+import { AccountService } from '../account/account.service';
 
 // Entities
-import {
-  AccountTypeEntity,
-  CustomerEntity,
-} from '../../persistence/entities';
+import { AccountTypeEntity } from 'src/persistence/entities/account-type.entity';
+import { CustomerEntity } from 'src/persistence/entities';
 
 @Injectable()
 export class SecurityService {

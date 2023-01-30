@@ -54,9 +54,6 @@ export class AccountService {
     if(!account) {
       throw new Error('La cuenta no existe');
     }
-    if(account.balance < amount) {
-      throw new Error('Saldo insuficiente');
-    }
     account.balance += amount;
     this.accountRepository.update(accountId, account);
   }
@@ -92,7 +89,7 @@ export class AccountService {
     if (account.balance < amount) {
         return false;
     }
-    return true
+    return true;
 }
     
   /**

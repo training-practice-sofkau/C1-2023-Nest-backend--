@@ -43,10 +43,14 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
     }
   }
   findAll(): TransferEntity[] {
-    throw new Error('Method not implemented.');
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
   findOneById(id: string): TransferEntity {
-    throw new Error('Method not implemented.');
+    const customer = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (customer) return customer;
+    else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
   findOutcomeByDataRange(
     accountId: string,
