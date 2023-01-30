@@ -66,7 +66,7 @@ export class DepositService {
             range = dataRange.range
         }
         pagination.numberPages = Math.round(pagination.size / range)
-        for (let x = 1 + range * (pagination.actualPage - 1); x < range + (range * (pagination.actualPage - 1)); x++) {
+        for (let x = 1 + range * (pagination.actualPage - 1); x < 1 + range + (range * (pagination.actualPage - 1)); x++) {
             arrayTransferReturn.push(arrayTransfer[x-1])
         }
         return arrayTransferReturn

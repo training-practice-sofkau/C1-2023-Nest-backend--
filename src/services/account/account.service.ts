@@ -31,7 +31,7 @@ export class AccountService {
     } else {
       newAccount.customer = account.customer;
       newAccount.accountType = account.accountType;
-      return this.accountRepository.register(newAccount);
+      return this.accountRepository.register(newAccount); 
     }
   }
 
