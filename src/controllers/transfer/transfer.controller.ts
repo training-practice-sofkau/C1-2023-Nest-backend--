@@ -7,9 +7,15 @@ import { TransferService } from "src/services";
 @Controller("transfer")
 export class TransferController {
     constructor(private readonly transferService: TransferService) { }
+
+    @Get()
+    findAll(){
+        return this.transferService.findAll()
+    }
+
     @Get(":id")
-    getTransfers(@Param("id", new ParseUUIDPipe()) id: string, @Body() pagination: PaginationModel): TransferEntity[] {
-        return this.transferService.getHistory(id, pagination)
+    findOneById(@Param("id", new ParseUUIDPipe()) id:string){
+        return this.transferService.findOneById(id)
     }
 
     @Post()

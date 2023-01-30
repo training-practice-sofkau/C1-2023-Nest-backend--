@@ -10,7 +10,7 @@ export class NewTransferDTO {
     outcome: string;
     @IsUUID()
     income: string;
-    @IsNumberString()
+    @IsNumber()
     amount: number;
     @IsString()
     reason: string;

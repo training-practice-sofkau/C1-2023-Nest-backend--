@@ -45,12 +45,7 @@ export class TransferRespository
     const transferIndex = this.database.findIndex(
       (transfer) => transfer.id === id,
     );
-    if (transferIndex >= 0) {
-      return this.database[transferIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro transferencia")
-    }
+    return this.database[transferIndex];
 
   }
   findByIncomeCustomerId(id: string): TransferEntity {

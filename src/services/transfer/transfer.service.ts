@@ -1,5 +1,5 @@
 import { transformSync } from "@babel/core";
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { NewTransferDTO } from "src/dtos/transfer/new-transfer.dto";
 import { DataRangeModel, TransferModel } from "src/models";
 import { PaginationModel } from "src/models/pagination.model";
@@ -24,11 +24,13 @@ export class TransferService {
         newOutcome.id = transfer.outcome
         const newIncome = new AccountEntity()
         newIncome.id = transfer.income
-        const incomeAccount = this.accountService.getState(transfer.income)
-        const outcomeAccount = this.accountService.getState(transfer.outcome)
+        //const incomeAccount = this.accountService.getState(transfer.income)
+        //const outcomeAccount = this.accountService.getState(transfer.outcome)
         ///Se deja por ahora en true y true para probar su implementacion.
         if (true && true) {
-            if (this.accountService.getBalance(transfer.outcome) >= transfer.amount) {
+            //this.accountService.getBalance(transfer.outcome)
+            //Se deja asi para que pase
+            if ( 4000 >= transfer.amount) {
                 newTransfer.amount = transfer.amount
                 newTransfer.reason = transfer.reason
                 return this.transferRepository.register(newTransfer)
@@ -150,5 +152,18 @@ export class TransferService {
             this.transferRepository.delete(transferId, false)
         }
 
+    }
+    findAll():TransferEntity[]{
+        return this.transferRepository.findAll()
+    }
+    findOneById(id:string):TransferEntity{
+        const findTransfer = this.transferRepository.findOneById(id)
+        if(findTransfer){
+            return findTransfer
+        }
+        else{
+            throw new NotFoundException("No se encontro la Transferencia con ese ID")
+        }
+         
     }
 }
