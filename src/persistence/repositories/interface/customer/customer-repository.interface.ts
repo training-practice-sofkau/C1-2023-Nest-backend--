@@ -8,7 +8,5 @@ export interface CustomerRepositoryInterface
   findByState(state: boolean): CustomerEntity[];
   findEmailAndPassword(email: string, password: string): boolean
   findByFullName(name: string): CustomerEntity[]
-  hardDelete(id: string): void
-  softDelete(id: string): void
   findByPhone(phone: string): CustomerEntity[]
 }

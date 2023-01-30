@@ -10,7 +10,5 @@ export interface DepositRepositoryInterface
   findByEmail(email: string): DepositEntity;
   findAmountGreaterThan(amount: number): DepositEntity[];
   findAmountLessThan(amount: number): DepositEntity[];
-  hardDelete(id: string): void;
-  softDelete(id: string): void
   findByDateRange(id: string, DateMin: Date | number, DateMax: Date | Number): DepositEntity[]
 }

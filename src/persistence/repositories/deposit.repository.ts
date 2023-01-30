@@ -135,7 +135,7 @@ export class DepositRepository
       throw new NotFoundException("No se encontro la informacion")
     }
   }
-  hardDelete(id: string): void {
+  private hardDelete(id: string): void {
     const depositIndex = this.database.findIndex(
       (account) => account.id === id
     );
@@ -146,7 +146,7 @@ export class DepositRepository
       throw new NotFoundException("No se encontro ningun elemento")
     }
   }
-  softDelete(id: string): void {
+  private softDelete(id: string): void {
     const deposit = this.findOneById(id)
     deposit.deletedAt = Date.now()
     this.update(id, deposit)

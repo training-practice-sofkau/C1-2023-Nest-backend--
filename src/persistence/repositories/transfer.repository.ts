@@ -127,7 +127,7 @@ export class TransferRespository
       throw new NotFoundException("No se encontro ningun elemento")
     }
   }
-  hardDelete(id: string): void {
+  private hardDelete(id: string): void {
     const transferIndex = this.database.findIndex(
       (transfer) => transfer.id === id
     );
@@ -138,7 +138,7 @@ export class TransferRespository
       throw new NotFoundException("No se encontro ningun elemento")
     }
   }
-  softDelete(id: string): void {
+  private softDelete(id: string): void {
     const transfer = this.findOneById(id)
     transfer.deletedAt = Date.now()
     this.update(id, transfer)

@@ -111,7 +111,7 @@ export class CustomerRepository
       throw new NotFoundException('No se encontro la informacion');
     }
   }
-  hardDelete(id: string): void {
+  private hardDelete(id: string): void {
     const customerIndex = this.database.findIndex(
       (account) => account.id === id,
     );
@@ -121,7 +121,7 @@ export class CustomerRepository
       throw new NotFoundException('No se encontro ningun elemento');
     }
   }
-  softDelete(id: string): void {
+  private softDelete(id: string): void {
     const customer = this.findOneById(id);
     customer.deletedAt = Date.now();
     this.update(id, customer);
