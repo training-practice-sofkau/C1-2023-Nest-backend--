@@ -4,13 +4,9 @@ import {
     IsUUID,
     IsString
 } from 'class-validator';
-export class DepositDTO {
+export class NewDepositDTO {
     @IsUUID()
     account: string;
     @IsNumber()
     amount = 0;
-    @IsString()
-    dateTime: number | Date;
-    @IsString()
-    deletedAt?: number | Date | undefined;
 }
