@@ -4,27 +4,12 @@ import {
   IsNumber,
   IsObject,
   IsOptional,
-  IsString,
 } from 'class-validator';
+import { CustomerDto } from '../customer';
 
 export class CreateAccountDto {
   @IsObject()
-  readonly customer: {
-    id: string;
-    documentType: {
-      id: string;
-      name: string;
-      state: boolean;
-    };
-    document: string;
-    fullName: string;
-    email: string;
-    phone: string;
-    password: string;
-    avatarUrl?: string;
-    state: boolean;
-    deletedAt?: Date | number;
-  };
+  readonly customer: CustomerDto;
   @IsObject()
   readonly accountType: {
     id: string;

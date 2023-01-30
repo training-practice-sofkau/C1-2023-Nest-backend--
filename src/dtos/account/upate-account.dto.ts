@@ -2,19 +2,21 @@ import {
   IsBoolean,
   IsDate,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
+import { CustomerDto } from '../customer';
 
 export class UpdateAccountDto {
   @IsUUID()
   @IsString()
   @IsOptional()
   readonly id?: string;
-  @IsString()
   @IsOptional()
-  readonly customerId?: string;
+  @IsObject()
+  readonly customer: CustomerDto;
   @IsString()
   @IsOptional()
   readonly accountTypeId?: string;
