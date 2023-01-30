@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { NewTransferDTO } from 'src/dtos/new-transfer.dto';
 import { TransferModel } from 'src/models';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
@@ -15,7 +16,7 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: NewTransferDTO): TransferEntity {
     const newTransfer = new TransferEntity();
     //newTransfer.income = transfer.income;
     //newTransfer.outcome = transfer.outcome;
