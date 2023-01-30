@@ -132,9 +132,9 @@ $ npm run start:prod
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Code all the services of the proposed system.
-2. If you consider that a service should have an additional method, feel free to implement and code it in relation to the existing repositories and methods.
-3. If you consider that additional method is required in the existing repositories, you may also code it according to your needs.
+1. Build all the controllers with the necessary methods for the training project to work correctly.
+2. Create the necessary DTOs so that the controllers, which require it, receive and validate the information before it is used.
+3. Do not forget to bind the necessary services in the controllers that require it for its use.
 
 Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
