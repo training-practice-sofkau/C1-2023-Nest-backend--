@@ -1,7 +1,12 @@
+import {
+    IsNumber,
+    IsUUID,
+} from 'class-validator';
 export class NewAccountDTO {
-    customer: number;
-    accountType: number;
+    @IsUUID()
+    customer: string;
+    @IsUUID()
+    accountType: string;
+    @IsNumber()
     balance: number;
-    state: number;
-    deleteAt?: Date | number
 }

@@ -4,6 +4,7 @@ import { CustomerModel } from 'src/models';
 import { CustomerEntity, DocumentTypeEntity } from 'src/persistence/entities';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
 import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class CustomerService {

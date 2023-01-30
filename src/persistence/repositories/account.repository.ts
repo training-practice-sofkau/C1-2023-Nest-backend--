@@ -38,7 +38,8 @@ export class AccountRepository
     }
   }
   findAll(): AccountEntity[] {
-    return this.database.filter(account => account.deletedAt === undefined);
+    const allAccounts = this.database.filter(account => account.deletedAt === undefined)
+    return allAccounts
   }
   findOneById(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
@@ -97,12 +98,7 @@ export class AccountRepository
     const accountIndex = this.database.findIndex(
       (account) => account.customer.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   findByAccountTypeId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(

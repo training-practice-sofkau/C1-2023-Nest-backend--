@@ -9,25 +9,26 @@ export class AccountController {
     constructor(private readonly accountServices: AccountService) { }
     @Get()
     getAccounts(): AccountEntity[] {
-        return "Se devuelve todas las cuentas"
+        return this.accountServices.findAll()
     }
 
     @Get(":id")
     getAccount(@Param("id", new ParseUUIDPipe()) id: string): AccountEntity {
-        return "Devuelve la cuenta con id :" + id;
+        return this.accountServices.findOneById(id)
     }
 
-    @Post(":id")
-    createAccount(@Param("id", new ParseUUIDPipe()) id: string, @Body() account: NewAccountDTO): AccountEntity {
-        return "Se crea cuenta con user id: " + id;
+    @Post()
+    createAccount(@Body() account: NewAccountDTO): AccountEntity {
+        return this.accountServices.createAccount(account)
     }
 
     @Put(":id")
     modifyAccount(@Param("id", new ParseUUIDPipe()) id: string, @Body() account: NewAccountDTO): AccountEntity {
-        return "Se modifica la cuenta con user id: " + id;
+        return this.accountServices.updateAccount(id, account)
     }
 
     @Delete(":id")
     deleteAccount(@Param("id", new ParseUUIDPipe()) id: string): void {
+        
     }
 }

@@ -12,6 +12,7 @@ import {
   CustomerEntity,
 } from '../../persistence/entities';
 import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
+import { NewAccountDTO } from 'src/dtos/account/new-account.dto';
 
 @Injectable()
 export class SecurityService {
@@ -61,9 +62,9 @@ export class SecurityService {
       if (customer) {
         const accountType = new AccountTypeEntity();
         accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = new AccountEntity();
-        newAccount.customer = customer;
-        newAccount.accountType = accountType;
+        const newAccount = new NewAccountDTO();
+        newAccount.customer = customer.id;
+        newAccount.accountType = accountType.id;
 
         const account = this.accountService.createAccount(newAccount);
 
