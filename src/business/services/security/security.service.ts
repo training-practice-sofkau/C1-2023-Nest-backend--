@@ -4,18 +4,17 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-
 // Models
-import { CustomerModel } from '../../models';
-
+import { CustomerModel } from 'src/data/models';
+// Entities
+import {
+  AccountTypeEntity,
+  CustomerEntity,
+} from 'src/data/persistence/entities';
 // Repositories
-import { CustomerRepository } from '../../persistence/repositories';
-
+import { CustomerRepository } from 'src/data/persistence/repositories';
 // Services
 import { AccountService } from '../account';
-
-// Entities
-import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
 
 @Injectable()
 export class SecurityService {
