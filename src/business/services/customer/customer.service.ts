@@ -4,7 +4,7 @@ import {
   CustomerRepository,
   DocumentTypeEntity,
 } from 'src/data/persistence';
-import { NewCustomerDTO } from '../../presentation/dtos/new-customer.dto';
+import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
 
 @Injectable()
 export class CustomerService {
