@@ -5,11 +5,10 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put,
 } from '@nestjs/common';
-import { CustomerEntity } from '../../persistence/entities/customer.entity';
-import { CustomerService } from '../../services/customer/customer.service';
-import { NewCustomerDTO } from 'src/dtos/customer/new-customer.dto';
+import { CustomerEntity } from 'src/persistence/entities';
+import { CustomerService } from 'src/services/customer';
+import { NewCustomerDTO } from 'src/presentation/dtos/customer/new-customer.dto';
 
 @Controller('user')
 export class UserController {
