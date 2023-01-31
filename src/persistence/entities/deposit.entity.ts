@@ -1,12 +1,11 @@
 import { v4 as uuid } from 'uuid';
 import { DepositModel } from 'src/models/deposit.model';
-import { Account } from '../../models/account.model';
+import { AccountModel } from 'src/models';
 
 export class DepositEntity implements DepositModel {
-  idDep: string;
   id = uuid();
-  accountId: Account;
+  account: AccountModel;
   amount: number;
-  date_time: Date;
+  dateTime: number | Date;
   deleteAt: number | Date;
 }

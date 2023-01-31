@@ -1,30 +1,60 @@
-import { Injectable } from '@nestjs/common';
-import { AccountTypeEntity } from 'src/persistence/entities/account-type.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { BaseRepository } from './base/base.repository';
+import { AccountTypeEntity } from '../entities';
+import { AccountTypeRepositoryInterface } from './interfaces/account-type-respository.interface';
+
 @Injectable()
-export class DocumentTypeRepository {
-  private readonly database: Array<AccountTypeEntity>;
-
-  constructor() {
-    this.database = new Array<AccountTypeEntity>();
-  }
-
+export class AccountTypeRepository
+  extends BaseRepository<AccountTypeEntity>
+  implements AccountTypeRepositoryInterface
+{
+  
+  index: number;
+  data: AccountTypeEntity;
   register(entity: AccountTypeEntity): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    this.index = this.database.findIndex((item) => item.id === id);
+    this.data = this.database[this.index];
+    this.database[this.index] = {
+      ...this.data,
+      ...entity,
+      id: id,
+    };
+    return this.database[this.index];
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    this.index = this.database.findIndex((item) => item.id === id);
+    if (soft === true) {
+      const data = this.database[this.index];
+      data.state = false;
+      this.database[this.index] = {
+        ...data,
+      };
+    } else {
+      delete this.database[this.index];
+    }
   }
-
   findAll(): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    const bankAccount = this.database.find((item) => item.id === id);
+    if (bankAccount) return bankAccount;
+    else throw new NotFoundException(`El usuario con el Id ${id}, no existe`);
+  }
+
+  findByState(state: boolean): AccountTypeEntity[] {
+    const contidion = this.database.filter((item) => item.state == state);
+    return contidion;
+  }
+  findByName(name: string): AccountTypeEntity[] {
+    const customerName = this.database.filter((item) => item.name == name);
+    return customerName;
   }
 }

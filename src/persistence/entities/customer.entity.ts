@@ -21,5 +21,5 @@ export class CustomerEntity implements CustomerModel {
 
   state = true;
 
-  deletedAt?: Date | number;
+  deleteAt?: Date | number;
 }
