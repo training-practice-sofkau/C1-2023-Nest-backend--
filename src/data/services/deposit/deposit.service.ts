@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
-import { NewDepositDTO } from 'src/dtos/deposit/deposit.dto';
-import { DataRangeModel, DepositModel, PaginationModel } from 'src/models';
-import { AccountEntity, DepositEntity } from 'src/persistence/entities';
-import { DepositRepository } from 'src/persistence/repositories/deposit.repository';
+import { DataRangeModel, PaginationModel } from 'src/business/models';
+import { AccountEntity, DepositEntity, DepositRepository } from 'src/business/persistence';
+import { NewDepositDTO } from 'src/data/dtos';
 import { AccountService } from '../account';
 
 @Injectable()

@@ -1,10 +1,7 @@
-import { transformSync } from "@babel/core";
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { NewTransferDTO } from "src/dtos/transfer/new-transfer.dto";
-import { DataRangeModel, TransferModel } from "src/models";
-import { PaginationModel } from "src/models/pagination.model";
-import { AccountEntity, TransferEntity } from "src/persistence/entities";
-import { TransferRespository } from "src/persistence/repositories/transfer.repository";
+import { DataRangeModel, PaginationModel } from "src/business/models";
+import { AccountEntity, TransferEntity, TransferRespository } from "src/business/persistence";
+import { NewTransferDTO } from "src/data/dtos";
 import { AccountService } from "../account";
 
 @Injectable()

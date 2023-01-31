@@ -1,9 +1,7 @@
 import { Module } from "@nestjs/common";
-import { TransferController } from "src/controllers/transfer/transfer.controller";
-import { AccountTypeRepository } from "src/persistence/repositories/account-type.repository";
-import { AccountRepository } from "src/persistence/repositories/account.repository";
-import { TransferRespository } from "src/persistence/repositories/transfer.repository";
-import { AccountService, TransferService } from "src/services";
+import { AccountRepository, AccountTypeRepository, TransferRespository } from "src/business/persistence";
+import { AccountService, TransferService } from "src/data/services";
+import { TransferController } from "src/presentation";
 
 @Module({
     controllers:[TransferController],
