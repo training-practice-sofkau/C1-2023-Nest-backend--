@@ -5,6 +5,7 @@ import { AccountRepository } from '../../persistence/repositories';
 
 @Injectable()
 export class AccountService {
+  [x: string]: any;
   constructor(private readonly accountRepository: AccountRepository) {}
 
   /**
