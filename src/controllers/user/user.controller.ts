@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CustomerEntity } from '../../persistence/entities/customer.entity';
 import { CustomerService } from '../../services/customer/customer.service';
-import { NewCustomerDTO } from '../../dtos/new-customer.dto';
+import { NewCustomerDTO } from '../../dtos/customer/new-customer.dto';
 
 @Controller('user')
 export class UserController {
