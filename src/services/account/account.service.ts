@@ -8,6 +8,22 @@ import { AccountRepository } from '../../persistence/repositories';
 
 @Injectable()
 export class AccountService {
+ 
+  constructor(private readonly accountRepo: CustomerRepository) {}
+
+
+  findAll():AccountEntity[]{
+    return this.accountRepo.findAll();
+  }
+   /**
+ * Crear una cuenta
+ *
+ * @param {AccountModel} account
+ * @return {*}  {AccountEntity}
+ * @memberof AccountService
+ */(): AccountEntity[] {
+      throw new Error('Method not implemented.');
+  }
   constructor(private readonly accountRepository: AccountRepository) {}
 
   /**
