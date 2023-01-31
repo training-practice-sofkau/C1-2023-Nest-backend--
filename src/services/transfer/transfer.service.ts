@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TransferModel } from 'src/models/transfer.model';
+import { TransferModel } from 'src/data/models/transfer.model';
 import { TransferEntity } from 'src/persistence/entities/transfer.entity';
 import { TransferRepository } from '../../persistence/repositories/transfer.repository';
 
