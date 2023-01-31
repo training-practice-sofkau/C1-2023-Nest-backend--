@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put , } from '@nestjs/common';
-import { CustomerService } from '../../services/customer/customer.service';
-import { CustomerEntity } from '../../persistence/entities/customer.entity';
-import { NewCustomerDTO } from '../../dtos/new-customer.dto';
+import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
+import { CustomerEntity } from 'src/persistence/entities';
+import { CustomerService } from 'src/services';
+
 
 @Controller('user')
 export class UserController {
@@ -35,10 +36,7 @@ export class UserController {
     ): CustomerEntity{
     return this.customerService.updatedCustomer(Id, customer);
     }
-
-  
-
-    }
+}
 
 
 
