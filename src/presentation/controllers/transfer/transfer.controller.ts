@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { TransferDTO } from 'src/dtos';
+import { TransferDTO } from 'src/business/dtos';
 import { TransferEntity } from 'src/persistence/entities';
 import { TransferService } from 'src/services';
 

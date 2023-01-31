@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CustomerDTO } from 'src/dtos';
+import { CustomerDTO } from 'src/business/dtos';
 import { SecurityService } from 'src/services';
 
 @Controller('security')

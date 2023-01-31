@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { AccountDTO } from 'src/dtos';
+import { AccountDTO } from 'src/business/dtos';
 import { AccountEntity } from 'src/persistence/entities';
 import { AccountService } from 'src/services';
 

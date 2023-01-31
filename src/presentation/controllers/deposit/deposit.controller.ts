@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Post } from '@nestjs/common';
-import { DepositDTO } from 'src/dtos';
+import { DepositDTO } from 'src/business/dtos';
 import { DepositEntity } from 'src/persistence/entities';
 import { DepositService } from 'src/services';
 
