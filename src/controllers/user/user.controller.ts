@@ -40,10 +40,10 @@ export class UserController {
   }
 
   @Put()
-  updateAccount(
-    @Param('id') customerId: string,
-    @Body() custo: NewCustomerDTO,
+  updateCustomer(
+    @Param('id', ParseUUIDPipe) Id: string,
+    @Body() customer: NewCustomerDTO,
   ): CustomerEntity {
-    return this.customerService.updatedCustomer(customerId, custo);
+    return this.customerService.updatedCustomer(Id, customer);
   }
 }
