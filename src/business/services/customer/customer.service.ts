@@ -3,7 +3,7 @@ import {
   CustomerEntity,
   CustomerRepository,
   DocumentTypeEntity,
-} from 'src/persistence';
+} from 'src/data/persistence';
 import { NewCustomerDTO } from '../../presentation/dtos/new-customer.dto';
 
 @Injectable()

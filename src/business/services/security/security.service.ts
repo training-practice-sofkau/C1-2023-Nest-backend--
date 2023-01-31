@@ -5,7 +5,7 @@ import {
   AccountTypeEntity,
   CustomerEntity,
   CustomerRepository,
-} from 'src/persistence';
+} from 'src/data/persistence';
 import { v4 as uuid2 } from 'uuid';
 import { AccountService } from '../account/account.service';
 

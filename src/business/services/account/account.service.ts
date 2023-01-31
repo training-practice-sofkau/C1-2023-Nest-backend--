@@ -5,9 +5,9 @@ import {
   AccountTypeEntity,
   CustomerEntity,
   DocumentTypeEntity,
-} from 'src/persistence';
-import { AccountRepository } from 'src/persistence/repositories/account.repository';
-import { AccountTypeRepository } from 'src/persistence/repositories/account-type.repository';
+} from 'src/data/persistence';
+import { AccountRepository } from 'src/data/persistence/repositories/account.repository';
+import { AccountTypeRepository } from 'src/data/persistence/repositories/account-type.repository';
 
 @Injectable()
 export class AccountService {

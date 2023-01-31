@@ -7,11 +7,11 @@ import { CustomerService } from './services/customer/customer.service';
 import { UserController } from './presentation/controllers/user/user.controller';
 import { DepositService } from './services/deposit/deposit.service';
 import { TransferService } from './services/transfer/transfer.service';
-import { CustomerRepository } from './persistence';
-import { AccountRepository } from './persistence/repositories/account.repository';
-import { AccountTypeRepository } from './persistence/repositories/account-type.repository';
-import { DepositRepository } from './persistence/repositories/deposit.repository';
-import { TransferRepository } from './persistence/repositories/transfer.repository';
+import { CustomerRepository } from './data/persistence';
+import { AccountRepository } from './data/persistence/repositories/account.repository';
+import { AccountTypeRepository } from './data/persistence/repositories/account-type.repository';
+import { DepositRepository } from './data/persistence/repositories/deposit.repository';
+import { TransferRepository } from './data/persistence/repositories/transfer.repository';
 
 @Module({
   imports: [],

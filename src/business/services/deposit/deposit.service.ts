@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AccountEntity, DepositEntity } from 'src/persistence';
-import { DepositRepository } from 'src/persistence/repositories/deposit.repository';
+import { AccountEntity, DepositEntity } from 'src/data/persistence';
+import { DepositRepository } from 'src/data/persistence/repositories/deposit.repository';
 import { NewDepositDTO } from 'src/presentation/dtos/new-deposit-dto';
 
 @Injectable()
