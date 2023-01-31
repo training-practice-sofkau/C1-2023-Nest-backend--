@@ -1,17 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerModel } from 'src/models';
+import { UpdateSecurityDto } from 'src/dtos';
 import { CustomerEntity } from 'src/persistence/entities';
-import {
-  AccountRepository,
-  CustomerRepository,
-} from 'src/persistence/repositories';
+import { CustomerRepository } from 'src/persistence/repositories';
 import { AccountService } from '../account';
 
 @Injectable()
 export class CustomerService {
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly accountRepository: AccountRepository,
     private readonly accountService: AccountService,
   ) {}
 
@@ -27,15 +23,25 @@ export class CustomerService {
   }
 
   //Actualiza informacion del ususario solicitado
-  updateCustomer(customerId: string, customer: CustomerModel): CustomerEntity {
-    return this.customerRepository.upate(customerId, customer);
+  updateCustomer(
+    customerId: string,
+    customer: UpdateSecurityDto,
+  ): CustomerEntity {
+    const currentCustomer = this.customerRepository.findOneById(customerId);
+    let updatedCustomer = new CustomerEntity();
+    updatedCustomer = {
+      ...currentCustomer,
+      ...customer,
+      id: customerId,
+    };
+    return this.customerRepository.upate(customerId, updatedCustomer);
   }
 
   //Elimina el usuario solicitado de forma logica
   unsubscribe(customerId: string): boolean {
-    const currentAccounts = this.accountRepository.findByCustomer(customerId);
+    const currentAccounts =
+      this.accountService.getAccountsByCustomer(customerId);
     currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));
-    this.customerRepository.delete(customerId, true);
     return true;
   }
 
@@ -48,6 +54,6 @@ export class CustomerService {
       currentCustomer,
     );
     if (updatedCustomer) return true;
-    else return false;
+    return false;
   }
 }

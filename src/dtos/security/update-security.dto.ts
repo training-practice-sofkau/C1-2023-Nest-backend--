@@ -1,11 +1,11 @@
 import {
   IsBoolean,
-  IsDate,
   IsEmail,
   IsNotEmpty,
-  IsObject,
+  IsNumber,
   IsOptional,
   IsString,
+  IsUrl,
   IsUUID,
   Matches,
   MaxLength,
@@ -18,43 +18,41 @@ export class UpdateSecurityDto {
   @IsUUID()
   readonly id: string;
   @IsOptional()
-  @IsObject()
-  readonly documentType: {
-    id: string;
-    name: string;
-    state: boolean;
-  };
-  @IsOptional()
   @IsString()
+  @IsUUID()
+  readonly documentTypeId?: string;
+  @IsOptional()
   @IsNotEmpty()
-  readonly document: string;
+  @IsString()
+  @MaxLength(12)
+  readonly document?: string;
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MaxLength(500)
-  readonly fullName: string;
+  readonly fullName?: string;
   @IsOptional()
   @IsString()
   @IsEmail()
-  readonly email: string;
+  readonly email?: string;
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MaxLength(30)
-  readonly phone: string;
-  @IsOptional()
-  @IsString()
-  @Matches(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/))
-  @MinLength(8)
-  readonly password: string;
+  readonly phone?: string;
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @Matches(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/))
+  @MinLength(8)
+  readonly password?: string;
+  @IsOptional()
+  @IsUrl()
   readonly avatarUrl?: string;
   @IsOptional()
   @IsBoolean()
-  readonly state = true;
+  readonly state?: boolean;
   @IsOptional()
-  @IsDate()
+  @IsNumber()
   readonly deletedAt?: Date | number;
 }

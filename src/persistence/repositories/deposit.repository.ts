@@ -35,9 +35,8 @@ export class DepositRepository
       throw new ConflictException(
         'El deposito que intenta registrar ya existe en la base de datos',
       );
-    } else {
-      this.database.push(entity);
     }
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -56,16 +55,14 @@ export class DepositRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    const currentDeposit = this.findOneById(id);
+    this.findOneById(id);
     const index = this.database.findIndex((d) => d.id === id);
-    if (soft && currentDeposit) {
-      this.softDelete(index);
-    }
-    this.hardDelete(index);
+    if (soft) this.softDelete(index);
+    else this.hardDelete(index);
   }
 
   private hardDelete(index: number): void {
-    this.database.slice(index, 1);
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
@@ -82,10 +79,9 @@ export class DepositRepository
     const currentDeposit = this.findAll().find((d) => d.id === id);
     if (currentDeposit) {
       return currentDeposit;
-    } else {
-      throw new NotFoundException(
-        `El deposito con el Id ${id} no existe en la base de datos`,
-      );
     }
+    throw new NotFoundException(
+      `El deposito con el Id ${id} no existe en la base de datos`,
+    );
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DataRangeModel, DepositModel, PaginationModel } from 'src/models';
+import { CreateDepositDto } from 'src/dtos';
+import { DataRangeModel, PaginationModel } from 'src/models';
 import { DepositEntity } from 'src/persistence/entities';
 import { DepositRepository } from 'src/persistence/repositories';
 import { AccountService } from '../account';
@@ -11,10 +12,15 @@ export class DepositService {
     private readonly depositRepository: DepositRepository,
   ) {}
 
+  //Retorna todos los depositos registrados a la fecha
+  getAll(): DepositEntity[] {
+    return this.depositRepository.findAll();
+  }
+
   //Creacion de un deposito y actualiza el balance de la cuenta afectada
-  createDeposit(deposit: DepositModel): DepositEntity {
+  createDeposit(deposit: CreateDepositDto): DepositEntity {
     const newDeposit = new DepositEntity();
-    newDeposit.account = deposit.account;
+    newDeposit.account = this.accountService.getAccountById(deposit.accountId);
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = Date.now();
     this.depositRepository.register(newDeposit);
@@ -51,10 +57,5 @@ export class DepositService {
       deposits.push(currentDeposits[i + 1]);
     }
     return deposits;
-  }
-
-  //Retorna todos los depositos registrados a la fecha
-  getAll(): DepositEntity[] {
-    return this.depositRepository.findAll();
   }
 }

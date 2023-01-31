@@ -1,25 +1,22 @@
 import {
-  IsBoolean,
-  IsDate,
   IsEmail,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
+  IsUrl,
+  IsUUID,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 
 export class CreateCustomerDto {
-  @IsObject()
-  readonly documentType: {
-    id: string;
-    name: string;
-    state: boolean;
-  };
   @IsString()
+  @IsUUID()
+  readonly documentTypeId: string;
   @IsNotEmpty()
+  @IsString()
+  @MaxLength(12)
   readonly document: string;
   @IsString()
   @IsNotEmpty()
@@ -38,13 +35,6 @@ export class CreateCustomerDto {
   @MinLength(8)
   readonly password: string;
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
+  @IsUrl()
   readonly avatarUrl?: string;
-  @IsOptional()
-  @IsBoolean()
-  readonly state = true;
-  @IsOptional()
-  @IsDate()
-  readonly deletedAt?: Date | number;
 }

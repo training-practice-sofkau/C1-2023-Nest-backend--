@@ -1,33 +1,34 @@
 import {
   IsBoolean,
-  IsDate,
+  IsInt,
   IsNumber,
-  IsObject,
   IsOptional,
+  IsPositive,
   IsString,
   IsUUID,
 } from 'class-validator';
-import { CustomerDto } from '../customer';
 
 export class UpdateAccountDto {
-  @IsUUID()
-  @IsString()
   @IsOptional()
+  @IsString()
+  @IsUUID()
   readonly id?: string;
   @IsOptional()
-  @IsObject()
-  readonly customer?: CustomerDto;
   @IsString()
+  @IsUUID()
+  readonly customerId?: string;
   @IsOptional()
-  readonly accountType?: { id: string; name: string; state: boolean };
-  @IsNumber()
+  @IsString()
+  @IsUUID()
+  readonly accountTypeId?: string;
   @IsOptional()
+  @IsPositive()
+  @IsInt()
   readonly balance?: number;
+  @IsOptional()
   @IsBoolean()
-  @IsOptional()
   readonly state?: boolean;
-  @IsDate()
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   readonly deletedAt?: Date | number;
 }

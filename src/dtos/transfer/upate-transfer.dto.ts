@@ -1,37 +1,42 @@
 import {
   IsDate,
+  IsInt,
+  IsNotEmpty,
   IsNumber,
-  IsObject,
   IsOptional,
+  IsPositive,
   IsString,
   IsUUID,
+  MaxLength,
 } from 'class-validator';
-import { AccountDto } from '../account/account.dto';
 
 export class UpdateTransferDto {
   @IsOptional()
   @IsUUID()
   @IsString()
-  readonly id: string;
-  @IsOptional()
-  @IsObject()
-  readonly outcome: AccountDto;
-  @IsOptional()
-  @IsObject()
-  readonly income: AccountDto;
-  @IsOptional()
-  @IsNumber()
-  @IsDate()
-  readonly amount: number;
+  readonly id?: string;
   @IsOptional()
   @IsString()
-  readonly reason: string;
+  @IsUUID()
+  readonly outcomeId?: string;
+  @IsOptional()
+  @IsString()
+  @IsUUID()
+  readonly incomeId?: string;
+  @IsOptional()
+  @IsPositive()
+  @IsInt()
+  readonly amount?: number;
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(500)
+  readonly reason?: string;
+  @IsOptional()
+  @IsNumber()
+  readonly dateTime?: Date | number;
   @IsOptional()
   @IsDate()
   @IsNumber()
-  readonly dateTime: Date | number;
-  @IsOptional()
-  @IsDate()
-  @IsNumber()
-  readonly deletedAt: Date | number;
+  readonly deletedAt?: Date | number;
 }

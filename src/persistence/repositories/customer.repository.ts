@@ -18,9 +18,7 @@ export class CustomerRepository
         c.email.toLowerCase() === email.toLowerCase() &&
         c.password === password,
     );
-    if (currentCustomer) {
-      return true;
-    }
+    if (currentCustomer) return true;
     return false;
   }
 
@@ -31,9 +29,7 @@ export class CustomerRepository
     const currentCustomer = this.findAll().find(
       (c) => c.documentType.id === documentTypeId && c.document === document,
     );
-    if (currentCustomer) {
-      return currentCustomer;
-    }
+    if (currentCustomer) return currentCustomer;
     throw new NotFoundException(
       `No existe cliente con el numero de documento: ${document}`,
     );
@@ -43,9 +39,7 @@ export class CustomerRepository
     const currentCustomer = this.findAll().find(
       (c) => c.email.toLowerCase() === email.toLowerCase(),
     );
-    if (currentCustomer) {
-      return currentCustomer;
-    }
+    if (currentCustomer) return currentCustomer;
     throw new NotFoundException(`No existe cliente con el email: ${email}`);
   }
 
@@ -53,9 +47,7 @@ export class CustomerRepository
     const currentCustomer = this.findAll().find(
       (c) => c.phone.toLowerCase() === phone.toLowerCase(),
     );
-    if (currentCustomer) {
-      return currentCustomer;
-    }
+    if (currentCustomer) return currentCustomer;
     throw new NotFoundException(
       `No existe cliente con el número de teléfono: ${phone}`,
     );
@@ -83,9 +75,8 @@ export class CustomerRepository
       throw new ConflictException(
         'El cliente que intenta registrar ya existe en la base de datos',
       );
-    } else {
-      this.database.push(entity);
     }
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -104,22 +95,14 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const currentAccount = this.database.find((c) => c.id === id);
-    if (currentAccount) {
-      const index = this.database.findIndex((c) => c.id === id);
-      if (soft && currentAccount) {
-        this.softDelete(index);
-      }
-      this.hardDelete(index);
-    } else {
-      throw new NotFoundException(
-        `El cliente con el Id ${id} no existe en la base de datos!`,
-      );
-    }
+    this.findOneById(id);
+    const index = this.database.findIndex((c) => c.id === id);
+    if (soft) this.softDelete(index);
+    else this.hardDelete(index);
   }
 
   private hardDelete(index: number): void {
-    this.database.slice(index, 1);
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
@@ -136,12 +119,9 @@ export class CustomerRepository
 
   findOneById(id: string): CustomerEntity {
     const currentCustomer = this.findAll().find((c) => c.id === id);
-    if (currentCustomer) {
-      return currentCustomer;
-    } else {
-      throw new NotFoundException(
-        `El cliente con el Id ${id} no existe en la base de datos`,
-      );
-    }
+    if (currentCustomer) return currentCustomer;
+    throw new NotFoundException(
+      `El cliente con el Id ${id} no existe en la base de datos`,
+    );
   }
 }

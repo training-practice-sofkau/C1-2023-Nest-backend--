@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { AccountModel } from 'src/models';
+import { CreateAccountDto } from 'src/dtos';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
 import {
   AccountRepository,
@@ -23,18 +23,21 @@ export class AccountService {
     return this.accountRepository.findAll();
   }
 
+  //Retorna la cuenta segun el id
+  getAccountById(accountId: string): AccountEntity {
+    return this.accountRepository.findOneById(accountId);
+  }
+
   //Creacion de cuentas
-  createAccount(account: AccountModel): AccountEntity {
-    const currentAccountType = this.accountTypeRepository.findOneById(
-      account.accountType.id,
-    );
+  createAccount(account: CreateAccountDto): AccountEntity {
+    const currentAccountType = this.getAccountType(account.accountTypeId);
     const currentCustomer = this.customerRepository.findOneById(
-      account.customer.id,
+      account.customerId,
     );
     const newAccount = new AccountEntity();
     newAccount.accountType = currentAccountType;
-    newAccount.balance = 0;
     newAccount.customer = currentCustomer;
+    newAccount.balance = 0;
     this.accountRepository.register(newAccount);
     return newAccount;
   }
@@ -108,19 +111,35 @@ export class AccountService {
 
   //Eliminar una cuenta
   deleteAccount(accountId: string): void {
-    const currentDeposits = this.depositRepository.findByAccountId(accountId);
-    currentDeposits.forEach((d) => this.depositRepository.delete(d.id, true));
-    const currentTransfersIncome =
-      this.transferRepository.findByIncomeAccount(accountId);
-    const currentTransfersOutcome =
-      this.transferRepository.findByOutcomeAccount(accountId);
-    currentTransfersIncome.forEach((i) =>
-      this.transferRepository.delete(i.id, true),
-    );
-    currentTransfersOutcome.forEach((i) =>
-      this.transferRepository.delete(i.id, true),
-    );
-    this.accountRepository.delete(accountId, true);
+    const currentAccount = this.accountRepository.findOneById(accountId);
+    const balance = currentAccount.balance;
+    if (balance === 0) {
+      const currentDeposits = this.depositRepository.findByAccountId(accountId);
+      currentDeposits.forEach((d) => this.depositRepository.delete(d.id, true));
+      const currentTransfersIncome =
+        this.transferRepository.findByIncomeAccount(accountId);
+      const currentTransfersOutcome =
+        this.transferRepository.findByOutcomeAccount(accountId);
+      const totalTransfers = {
+        ...currentTransfersIncome,
+        ...currentTransfersOutcome,
+      };
+      if (totalTransfers.length > 0) {
+        for (const transfer of totalTransfers) {
+          this.transferRepository.delete(transfer.id, true);
+        }
+      }
+      this.accountRepository.delete(accountId, true);
+      const totalAccounts = this.accountRepository.findByCustomer(
+        currentAccount.customer.id,
+      ).length;
+      if (totalAccounts === 0)
+        this.customerRepository.delete(currentAccount.customer.id);
+    } else {
+      throw new ConflictException(
+        `No se puede eliminar la cuenta con el id ${accountId} ya que tiene saldo!`,
+      );
+    }
   }
 
   //Trae todas las cuentas relacionadas al cliente

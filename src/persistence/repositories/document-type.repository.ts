@@ -31,9 +31,8 @@ export class DocumentTypeRepository
       throw new ConflictException(
         'El tipo de documento que intenta registrar ya existe en la base de datos',
       );
-    } else {
-      this.database.push(entity);
     }
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -52,14 +51,14 @@ export class DocumentTypeRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const currentDocumentType = this.findOneById(id);
-    if (soft && currentDocumentType) {
+    this.findOneById(id);
+    if (soft) {
       throw new BadRequestException(
         'El borrado lógico no está implementado para tipos de documentos',
       );
     }
     const index = this.database.findIndex((d) => d.id === id);
-    this.database.slice(index, 1);
+    this.database.splice(index, 1);
   }
 
   findAll(): DocumentTypeEntity[] {
@@ -82,12 +81,9 @@ export class DocumentTypeRepository
     const currentDocumentType = hardDocumentTypeDataBase.find(
       (d) => d.id === id,
     );
-    if (currentDocumentType) {
-      return currentDocumentType;
-    } else {
-      throw new NotFoundException(
-        `El tipo de documento con el Id ${id} no existe en la base de datos`,
-      );
-    }
+    if (currentDocumentType) return currentDocumentType;
+    throw new NotFoundException(
+      `El tipo de documento con el Id ${id} no existe en la base de datos`,
+    );
   }
 }

@@ -10,9 +10,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { CreateCustomerDto, UpdateSecurityDto } from 'src/dtos';
-import { CustomerEntity } from 'src/persistence/entities';
 import { CustomerService, SecurityService } from 'src/services';
-import { v4 as uuid } from 'uuid';
 
 @Controller('user')
 export class UserController {
@@ -22,18 +20,13 @@ export class UserController {
   ) {}
 
   @Get()
-  findAllUsers(): CustomerEntity[] {
-    return this.customerService.getAll();
+  findAllUsers(): JSON {
+    return JSON.parse(JSON.stringify(this.customerService.getAll()));
   }
 
-  @Post('security/signUp')
-  registerUser(@Body() createCustomerDto: CreateCustomerDto): string {
-    let newCustomer = new CustomerEntity();
-    newCustomer = {
-      ...createCustomerDto,
-      id: uuid(),
-    };
-    return JSON.stringify(this.securityService.signUp(newCustomer));
+  @Post('security/signup')
+  registerUser(@Body() createCustomerDto: CreateCustomerDto): JSON {
+    return JSON.parse(this.securityService.signUp(createCustomerDto));
   }
 
   @Delete(':id')
@@ -45,13 +38,12 @@ export class UserController {
   updateUser(
     @Param('id', ParseUUIDPipe) customerId: string,
     @Body() updateSecurityDto: UpdateSecurityDto,
-  ) {
-    let currentCustomer = new CustomerEntity();
-    currentCustomer = {
-      ...updateSecurityDto,
-      id: customerId,
-    };
-    this.customerService.updateCustomer(customerId, currentCustomer);
+  ): JSON {
+    return JSON.parse(
+      JSON.stringify(
+        this.customerService.updateCustomer(customerId, updateSecurityDto),
+      ),
+    );
   }
 
   @Patch(':id')

@@ -37,9 +37,8 @@ export class AccountRepository
       throw new ConflictException(
         'La cuenta que intenta registrar ya existe en la base de datos',
       );
-    } else {
-      this.database.push(entity);
     }
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -58,16 +57,14 @@ export class AccountRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const currentAccount = this.findOneById(id);
+    this.findOneById(id);
     const index = this.database.findIndex((a) => a.id === id);
-    if (soft && currentAccount) {
-      this.softDelete(index);
-    }
-    this.hardDelete(index);
+    if (soft) this.softDelete(index);
+    else this.hardDelete(index);
   }
 
   private hardDelete(index: number): void {
-    this.database.slice(index, 1);
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
@@ -84,12 +81,9 @@ export class AccountRepository
 
   findOneById(id: string): AccountEntity {
     const currentAccount = this.findAll().find((a) => a.id === id);
-    if (currentAccount) {
-      return currentAccount;
-    } else {
-      throw new NotFoundException(
-        `La cuenta con el Id ${id} no existe en la base de datos!`,
-      );
-    }
+    if (currentAccount) return currentAccount;
+    throw new NotFoundException(
+      `La cuenta con el Id ${id} no existe en la base de datos!`,
+    );
   }
 }

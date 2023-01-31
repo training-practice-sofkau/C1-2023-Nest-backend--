@@ -54,9 +54,8 @@ export class TransferRepository
       throw new ConflictException(
         'La transferencia que intenta registrar ya existe en la base de datos',
       );
-    } else {
-      this.database.push(entity);
     }
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -75,16 +74,14 @@ export class TransferRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const currentTransfer = this.findOneById(id);
+    this.findOneById(id);
     const index = this.database.findIndex((t) => t.id === id);
-    if (soft && currentTransfer) {
-      this.softDelete(index);
-    }
-    this.hardDelete(index);
+    if (soft) this.softDelete(index);
+    else this.hardDelete(index);
   }
 
   private hardDelete(index: number): void {
-    this.database.slice(index, 1);
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
@@ -101,10 +98,9 @@ export class TransferRepository
     const currentDeposit = this.findAll().find((t) => t.id === id);
     if (currentDeposit) {
       return currentDeposit;
-    } else {
-      throw new NotFoundException(
-        `La transferencia con el Id ${id} no existe en la base de datos`,
-      );
     }
+    throw new NotFoundException(
+      `La transferencia con el Id ${id} no existe en la base de datos`,
+    );
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateTransferDto } from 'src/dtos';
 import { DataRangeModel, PaginationModel, TransferModel } from 'src/models';
 import { TransferEntity } from 'src/persistence/entities';
 import { TransferRepository } from 'src/persistence/repositories';
@@ -12,16 +13,20 @@ export class TransferService {
   ) {}
 
   //Registra la transferancia en el sistema y actualiza el balance en las cuentas afectadas
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: CreateTransferDto): TransferEntity {
+    const incomeAccount = this.accountService.getAccountById(transfer.incomeId);
+    const outcomeAccount = this.accountService.getAccountById(
+      transfer.outcomeId,
+    );
     const newTransfer = new TransferEntity();
     newTransfer.amount = transfer.amount;
     newTransfer.dateTime = Date.now();
-    newTransfer.income = transfer.income;
-    newTransfer.outcome = transfer.outcome;
+    newTransfer.income = incomeAccount;
+    newTransfer.outcome = outcomeAccount;
     newTransfer.reason = transfer.reason;
     this.transferRepository.register(newTransfer);
-    this.accountService.addBalance(transfer.income.id, transfer.amount);
-    this.accountService.removeBalance(transfer.outcome.id, transfer.amount);
+    this.accountService.addBalance(incomeAccount.id, transfer.amount);
+    this.accountService.removeBalance(outcomeAccount.id, transfer.amount);
     return newTransfer;
   }
 

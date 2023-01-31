@@ -1,26 +1,29 @@
 import {
-  IsDate,
+  IsInt,
   IsNumber,
-  IsObject,
   IsOptional,
+  IsPositive,
   IsString,
   IsUUID,
 } from 'class-validator';
-import { CreateAccountDto } from '../account';
 
 export class UpdateDepositDto {
-  @IsUUID()
+  @IsOptional()
   @IsString()
-  @IsOptional()
+  @IsUUID()
   readonly id?: string;
-  @IsObject()
-  readonly account: CreateAccountDto;
-  @IsNumber()
-  @IsDate()
-  readonly amount: number;
-  readonly dateTime: Date | number;
-  @IsDate()
-  @IsNumber()
   @IsOptional()
+  @IsString()
+  @IsUUID()
+  readonly accountId?: string;
+  @IsOptional()
+  @IsPositive()
+  @IsInt()
+  readonly amount?: number;
+  @IsOptional()
+  @IsNumber()
+  readonly dateTime?: Date | number;
+  @IsOptional()
+  @IsNumber()
   readonly deletedAt?: Date | number;
 }

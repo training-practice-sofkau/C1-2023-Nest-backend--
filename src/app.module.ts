@@ -13,6 +13,7 @@ import {
   AccountTypeRepository,
   CustomerRepository,
   DepositRepository,
+  DocumentTypeRepository,
   TransferRepository,
 } from './persistence/repositories';
 
@@ -35,6 +36,7 @@ import {
     TransferRepository,
     DepositRepository,
     CustomerRepository,
+    DocumentTypeRepository,
   ],
   exports: [
     AccountService,
@@ -47,6 +49,7 @@ import {
     TransferRepository,
     DepositRepository,
     CustomerRepository,
+    DocumentTypeRepository,
   ],
 })
 export class AppModule {}

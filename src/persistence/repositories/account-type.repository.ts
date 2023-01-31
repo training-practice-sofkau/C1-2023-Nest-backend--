@@ -31,9 +31,8 @@ export class AccountTypeRepository
       throw new ConflictException(
         'El tipo de cuenta que intenta registrar ya existe en la base de datos',
       );
-    } else {
-      this.database.push(entity);
     }
+    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
@@ -52,14 +51,14 @@ export class AccountTypeRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const currentAccountType = this.findOneById(id);
-    if (soft && currentAccountType) {
+    this.findOneById(id);
+    if (soft) {
       throw new BadRequestException(
         'El borrado lógico no está implementado para tipos de cuentas',
       );
     }
     const index = this.database.findIndex((a) => a.id === id);
-    this.database.slice(index, 1);
+    this.database.splice(index, 1);
   }
 
   findAll(): AccountTypeEntity[] {
@@ -80,12 +79,9 @@ export class AccountTypeRepository
       },
     ];
     const currentAccountType = hardAccountTypeDataBase.find((a) => a.id === id);
-    if (currentAccountType) {
-      return currentAccountType;
-    } else {
-      throw new NotFoundException(
-        `El tipo de cuenta con el Id ${id} no existe en la base de datos`,
-      );
-    }
+    if (currentAccountType) return currentAccountType;
+    throw new NotFoundException(
+      `El tipo de cuenta con el Id ${id} no existe en la base de datos`,
+    );
   }
 }

@@ -7,95 +7,105 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { TransferDto } from 'src/dtos/transfer/transfer.dto';
+import { CreateTransferDto, PaginationDto } from 'src/dtos';
 import { DataRangeModel, PaginationModel } from 'src/models';
-import { TransferEntity } from 'src/persistence/entities';
 import { TransferService } from 'src/services';
-import { v4 as uuid } from 'uuid';
 
 @Controller('transfer')
 export class TransferController {
   constructor(private readonly transferService: TransferService) {}
 
   @Get()
-  getAll(): string {
-    return JSON.stringify(this.transferService.getAll());
+  getAll(): JSON {
+    return JSON.parse(JSON.stringify(this.transferService.getAll()));
   }
 
-  @Get(':id,:page')
+  @Get(':id')
   getAllByAccount(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Param() page: number,
-  ): string {
-    const pages = <PaginationModel>{ size: 1, pages: 1, currentPage: page };
-    return JSON.stringify(this.transferService.getHistory(accountId, pages));
+    @Body() page: PaginationDto,
+  ): JSON {
+    const pages = <PaginationModel>{
+      size: 1,
+      pages: 1,
+      currentPage: page.currentPage,
+    };
+    return JSON.parse(
+      JSON.parse(
+        JSON.stringify(this.transferService.getHistory(accountId, pages)),
+      ),
+    );
   }
 
-  @Get('id,:page,:dateInit,:dateEnd,:range')
+  @Get('id')
   getByAccountAndDateRange(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Param() page: number,
-    @Param() dateInit: number,
-    @Param() dateEnd: number,
-    @Param() range: number,
-  ) {
-    const pages = <PaginationModel>{ size: 1, pages: 1, currentPage: page };
-    const dates = <DataRangeModel>{
-      range: range,
-      dateInit: dateInit,
-      dateEnd: dateEnd,
+    @Body() page: PaginationDto,
+  ): JSON {
+    const pages = <PaginationModel>{
+      size: 1,
+      pages: 1,
+      currentPage: page.currentPage,
     };
-    return JSON.stringify(
-      this.transferService.getHistory(accountId, pages, dates),
+    const dates = <DataRangeModel>{
+      range: page.range,
+      dateInit: page.dateInit,
+      dateEnd: page.dateEnd,
+    };
+    return JSON.parse(
+      JSON.stringify(this.transferService.getHistory(accountId, pages, dates)),
     );
   }
 
-  @Get('income/:id,:page,:dateInit,:dateEnd,:range')
+  @Get('income/:id')
   getByIncomeAccountAndDateRange(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Param() page: number,
-    @Param() dateInit: number,
-    @Param() dateEnd: number,
-    @Param() range: number,
-  ) {
-    const pages = <PaginationModel>{ size: 1, pages: 1, currentPage: page };
-    const dates = <DataRangeModel>{
-      range: range,
-      dateInit: dateInit,
-      dateEnd: dateEnd,
+    @Body() page: PaginationDto,
+  ): JSON {
+    const pages = <PaginationModel>{
+      size: 1,
+      pages: 1,
+      currentPage: page.currentPage,
     };
-    return JSON.stringify(
-      this.transferService.getHistoryIn(accountId, pages, dates),
+    const dates = <DataRangeModel>{
+      range: page.range,
+      dateInit: page.dateInit,
+      dateEnd: page.dateEnd,
+    };
+    return JSON.parse(
+      JSON.stringify(
+        this.transferService.getHistoryIn(accountId, pages, dates),
+      ),
     );
   }
 
-  @Get('outcome/:id,:page,:dateInit,:dateEnd,:range')
+  @Get('outcome/:id')
   getByOutcomeAccountAndDateRange(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Param() page: number,
-    @Param() dateInit: number,
-    @Param() dateEnd: number,
-    @Param() range: number,
-  ) {
-    const pages = <PaginationModel>{ size: 1, pages: 1, currentPage: page };
-    const dates = <DataRangeModel>{
-      range: range,
-      dateInit: dateInit,
-      dateEnd: dateEnd,
+    @Body() page: PaginationDto,
+  ): JSON {
+    const pages = <PaginationModel>{
+      size: 1,
+      pages: 1,
+      currentPage: page.currentPage,
     };
-    return JSON.stringify(
-      this.transferService.getHistoryOut(accountId, pages, dates),
+    const dates = <DataRangeModel>{
+      range: page.range,
+      dateInit: page.dateInit,
+      dateEnd: page.dateEnd,
+    };
+    return JSON.parse(
+      JSON.stringify(
+        this.transferService.getHistoryOut(accountId, pages, dates),
+      ),
     );
   }
 
   @Post()
-  createTransfer(@Body() depositDto: TransferDto): string {
-    let newTransfer = new TransferEntity();
-    newTransfer = {
-      ...depositDto,
-      id: uuid(),
-    };
-    return JSON.stringify(this.transferService.createTransfer(newTransfer));
+  createTransfer(@Body() createTransferDto: CreateTransferDto): JSON {
+    return JSON.parse(
+      JSON.stringify(this.transferService.createTransfer(createTransferDto)),
+    );
   }
 
   @Delete(':id')
