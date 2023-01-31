@@ -1,6 +1,6 @@
 // Libraries
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CustomerModel } from 'src/data/models';
+import { CustomerModel } from 'src/models';
 import {
   AccountTypeEntity,
   CustomerEntity,
