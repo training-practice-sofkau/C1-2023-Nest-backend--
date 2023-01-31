@@ -8,7 +8,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { NewAccountDto } from 'src/dtos';
+import { NewAccountDto } from 'src/presentation/dtos';
 import { AccountService } from 'src/services';
 import { AccountEntity } from '../../data/persistence/entities/account.entity';
 
