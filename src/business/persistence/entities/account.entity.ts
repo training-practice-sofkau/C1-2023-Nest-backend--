@@ -1,4 +1,4 @@
-import { AccountModel } from "src/models";
+import { AccountModel } from 'src/business/models';
 import { v4 as uuid } from 'uuid';
 import { AccountTypeEntity, CustomerEntity } from ".";
 

@@ -1,4 +1,4 @@
-import {TransferModel } from "src/models";
+import { TransferModel } from 'src/business/models';
 import { v4 as uuid } from 'uuid';
 import { AccountEntity } from "./";
 
