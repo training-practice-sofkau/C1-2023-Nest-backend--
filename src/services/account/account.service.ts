@@ -6,6 +6,7 @@ import { AccountRepository } from 'src/persistence/repositories/account.reposito
 
 @Injectable()
 export class AccountService {
+
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
