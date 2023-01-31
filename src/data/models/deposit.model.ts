@@ -1,4 +1,4 @@
-import { AccountModel } from './';
+import { AccountModel } from '.';
 
 export interface DepositModel {
   id: string;

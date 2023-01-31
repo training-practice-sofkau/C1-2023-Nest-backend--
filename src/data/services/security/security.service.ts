@@ -16,7 +16,7 @@ import { AccountService } from '../account';
 
 // Entities
 import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
-import { AccountDTO, CustomerDTO } from 'src/dtos';
+import { AccountDTO, CustomerDTO } from 'src/business/dtos';
 
 @Injectable()
 export class SecurityService {

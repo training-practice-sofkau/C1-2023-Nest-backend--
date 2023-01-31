@@ -1,4 +1,4 @@
-import { AccountModel } from './';
+import { AccountModel } from '.';
 
 export interface PaginationModel {
   length: number;

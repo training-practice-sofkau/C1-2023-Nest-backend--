@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common/exceptions';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
-import { AccountDTO } from 'src/dtos';
+import { AccountDTO } from 'src/business/dtos';
 import {
   AccountRepository,
   AccountTypeRepository,
