@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateSecurityDto } from 'src/dtos';
+import { UpdateSecurityDto } from 'src/business/dtos';
 import { CustomerEntity } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account';

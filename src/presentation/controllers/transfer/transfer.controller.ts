@@ -7,9 +7,9 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateTransferDto, PaginationDto } from 'src/dtos';
+import { CreateTransferDto, PaginationDto } from 'src/business/dtos';
 import { DataRangeModel, PaginationModel } from 'src/data/models';
-import { TransferService } from 'src/services';
+import { TransferService } from 'src/business/services';
 
 @Controller('transfer')
 export class TransferController {

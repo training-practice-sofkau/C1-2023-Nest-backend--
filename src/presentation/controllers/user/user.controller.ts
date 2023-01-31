@@ -9,8 +9,8 @@ import {
   ParseUUIDPipe,
   Param,
 } from '@nestjs/common';
-import { CreateCustomerDto, UpdateSecurityDto } from 'src/dtos';
-import { CustomerService, SecurityService } from 'src/services';
+import { CreateCustomerDto, UpdateSecurityDto } from 'src/business/dtos';
+import { CustomerService, SecurityService } from 'src/business/services';
 
 @Controller('user')
 export class UserController {

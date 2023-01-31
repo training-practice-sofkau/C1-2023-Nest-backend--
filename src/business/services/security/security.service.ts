@@ -3,13 +3,13 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateAccountDto, CreateCustomerDto } from 'src/dtos';
+import { CreateAccountDto, CreateCustomerDto } from 'src/business/dtos';
 import { CustomerEntity } from 'src/data/persistence/entities';
 import {
   CustomerRepository,
   DocumentTypeRepository,
 } from 'src/data/persistence/repositories';
-import { AccountService } from 'src/services';
+import { AccountService } from 'src/business/services';
 
 @Injectable()
 export class SecurityService {

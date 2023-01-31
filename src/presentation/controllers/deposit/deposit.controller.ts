@@ -7,10 +7,10 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateDepositDto } from 'src/dtos';
-import { PaginationDto } from 'src/dtos/pagination/pagination.dto';
+import { CreateDepositDto } from 'src/business/dtos';
+import { PaginationDto } from 'src/business/dtos/pagination/pagination.dto';
 import { DataRangeModel, PaginationModel } from 'src/data/models';
-import { DepositService } from 'src/services';
+import { DepositService } from 'src/business/services';
 
 @Controller('deposit')
 export class DepositController {

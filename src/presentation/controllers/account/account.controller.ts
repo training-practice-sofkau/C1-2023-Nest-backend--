@@ -7,8 +7,8 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateAccountDto } from 'src/dtos';
-import { AccountService } from 'src/services';
+import { CreateAccountDto } from 'src/business/dtos';
+import { AccountService } from 'src/business/services';
 
 @Controller('account')
 export class AccountController {
