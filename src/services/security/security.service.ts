@@ -1,25 +1,13 @@
 // Libraries
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { CustomerModel } from 'src/data/models';
 import {
-  Injectable,
-  InternalServerErrorException,
-  ParseUUIDPipe,
-  UnauthorizedException,
-} from '@nestjs/common';
+  AccountTypeEntity,
+  CustomerEntity,
+  CustomerRepository,
+} from 'src/persistence';
 import { v4 as uuid2 } from 'uuid';
-
-// Models
-import { CustomerModel } from '../../models';
-
-// Repositories
-//import { CustomerRepository } from '../../persistence/repositories';
-import { CustomerRepository } from 'src/persistence/repositories/customer.respository';
-
-// Services
-//import { AccountService } from '../account';
 import { AccountService } from '../account/account.service';
-
-// Entities
-import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
 
 @Injectable()
 export class SecurityService {

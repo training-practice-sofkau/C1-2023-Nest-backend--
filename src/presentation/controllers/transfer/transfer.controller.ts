@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
-import { NewTransferDTO } from 'src/dtos/new-transfer.dto';
-import { TransferEntity } from 'src/persistence';
+import { NewTransferDTO } from 'src/presentation/dtos/new-transfer.dto';
 import { TransferService } from 'src/services/transfer/transfer.service';
+import { TransferEntity } from 'src/persistence';
 
 @Controller('transfer')
 export class TransferController {
