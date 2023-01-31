@@ -35,8 +35,8 @@ export class CustomerService {
   unsubscribe(customerId: string): boolean {
     const currentAccounts = this.accountRepository.findByCustomer(customerId);
     currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));
-    const ok = this.customerRepository.findOneById(customerId);
-    return ok ? true : false;
+    this.customerRepository.delete(customerId, true);
+    return true;
   }
 
   //Cambiar estado de Cliente si está inactivo lo activa o viceversa

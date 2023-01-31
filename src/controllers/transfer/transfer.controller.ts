@@ -1,6 +1,17 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
+import { TransferDto } from 'src/dtos/transfer/transfer.dto';
 import { DataRangeModel, PaginationModel } from 'src/models';
+import { TransferEntity } from 'src/persistence/entities';
 import { TransferService } from 'src/services';
+import { v4 as uuid } from 'uuid';
 
 @Controller('transfer')
 export class TransferController {
@@ -39,18 +50,56 @@ export class TransferController {
     );
   }
 
+  @Get('income/:id,:page,:dateInit,:dateEnd,:range')
+  getByIncomeAccountAndDateRange(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @Param() page: number,
+    @Param() dateInit: number,
+    @Param() dateEnd: number,
+    @Param() range: number,
+  ) {
+    const pages = <PaginationModel>{ size: 1, pages: 1, currentPage: page };
+    const dates = <DataRangeModel>{
+      range: range,
+      dateInit: dateInit,
+      dateEnd: dateEnd,
+    };
+    return JSON.stringify(
+      this.transferService.getHistoryIn(accountId, pages, dates),
+    );
+  }
+
+  @Get('outcome/:id,:page,:dateInit,:dateEnd,:range')
+  getByOutcomeAccountAndDateRange(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @Param() page: number,
+    @Param() dateInit: number,
+    @Param() dateEnd: number,
+    @Param() range: number,
+  ) {
+    const pages = <PaginationModel>{ size: 1, pages: 1, currentPage: page };
+    const dates = <DataRangeModel>{
+      range: range,
+      dateInit: dateInit,
+      dateEnd: dateEnd,
+    };
+    return JSON.stringify(
+      this.transferService.getHistoryOut(accountId, pages, dates),
+    );
+  }
+
   @Post()
-  createDeposit(@Body() depositDto: DepositDto): string {
-    let newDeposit = new DepositEntity();
-    newDeposit = {
+  createTransfer(@Body() depositDto: TransferDto): string {
+    let newTransfer = new TransferEntity();
+    newTransfer = {
       ...depositDto,
       id: uuid(),
     };
-    return JSON.stringify(this.transferService.createDeposit(newDeposit));
+    return JSON.stringify(this.transferService.createTransfer(newTransfer));
   }
 
   @Delete(':id')
-  deleteDeposit(@Param('id', ParseUUIDPipe) depositId: string): void {
-    this.transferService.deleteDeposit(depositId);
+  deleteTransfer(@Param('id', ParseUUIDPipe) depositId: string): void {
+    this.transferService.deleteTransfer(depositId);
   }
 }

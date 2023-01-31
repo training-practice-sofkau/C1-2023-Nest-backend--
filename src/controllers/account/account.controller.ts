@@ -16,8 +16,7 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
   @Get()
   getAllAccounts(): string {
-    console.log(this.accountService.getAllAccounts);
-    return JSON.stringify(this.accountService.getAllAccounts);
+    return JSON.stringify(this.accountService.getAllAccounts());
   }
 
   @Get(':id')
@@ -42,7 +41,6 @@ export class AccountController {
     newAccount.customer = {
       ...accountDto.customer,
     };
-    //return JSON.stringify(newAccount);
     return JSON.stringify(this.accountService.createAccount(newAccount));
   }
 }

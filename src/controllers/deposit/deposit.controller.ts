@@ -1,4 +1,4 @@
-import { Delete, Put } from '@nestjs/common';
+import { Delete } from '@nestjs/common';
 import {
   Body,
   Controller,

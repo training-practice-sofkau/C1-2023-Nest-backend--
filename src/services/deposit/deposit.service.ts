@@ -12,7 +12,7 @@ export class DepositService {
   ) {}
 
   //Creacion de un deposito y actualiza el balance de la cuenta afectada
-  async createDeposit(deposit: DepositModel): Promise<DepositEntity> {
+  createDeposit(deposit: DepositModel): DepositEntity {
     const newDeposit = new DepositEntity();
     newDeposit.account = deposit.account;
     newDeposit.amount = deposit.amount;
@@ -23,16 +23,16 @@ export class DepositService {
   }
 
   //Eliminacion de un deposito
-  async deleteDeposit(depositId: string): Promise<void> {
+  deleteDeposit(depositId: string): void {
     this.depositRepository.delete(depositId, true);
   }
 
   //Retorna el listado de depositos relacionados a la cuenta de acuerdo a la paginacion solicitada
-  async getHistory(
+  getHistory(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): Promise<DepositEntity[]> {
+  ): DepositEntity[] {
     const currentDeposits = this.depositRepository.findByAccountId(accountId);
     pagination.size = currentDeposits.length;
     const deposits: DepositEntity[] = [];
@@ -54,7 +54,7 @@ export class DepositService {
   }
 
   //Retorna todos los depositos registrados a la fecha
-  async getAll(): Promise<DepositEntity[]> {
+  getAll(): DepositEntity[] {
     return this.depositRepository.findAll();
   }
 }

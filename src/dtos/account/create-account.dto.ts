@@ -11,14 +11,14 @@ export class CreateAccountDto {
   @IsObject()
   readonly customer: CustomerDto;
   @IsObject()
-  readonly accountType?: { id: string; name: string; state: boolean };
+  readonly accountType: { id: string; name: string; state: boolean };
   @IsNumber()
   readonly balance: number;
   @IsBoolean()
   @IsOptional()
   readonly state: boolean;
+  @IsOptional()
   @IsDate()
   @IsNumber()
-  @IsOptional()
-  readonly deletedAt: Date | number;
+  readonly deletedAt?: Date | number;
 }

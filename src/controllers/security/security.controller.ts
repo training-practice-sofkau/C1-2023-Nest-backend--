@@ -1,4 +1,5 @@
 // Libraries
+import { Param } from '@nestjs/common';
 import { Body, Controller } from '@nestjs/common';
 import { Post } from '@nestjs/common';
 import { SecurityDto } from 'src/dtos';
@@ -14,7 +15,7 @@ export class SecurityController {
   ) {}
 
   @Post('signIn')
-  login(@Body() securityDto: SecurityDto): string {
+  signIn(@Body() securityDto: SecurityDto): string {
     let currentCustomer = new CustomerEntity();
     currentCustomer = {
       ...securityDto,
@@ -28,8 +29,9 @@ export class SecurityController {
     return JSON.stringify(this.securityService.signIn(currentCustomer));
   }
 
-  @Post('signOut')
-  signOut(): string {
+  @Post('signout:token')
+  signOut(@Param('token') token: string): string {
+    this.securityService.signOut(token);
     return 'OK';
   }
 }

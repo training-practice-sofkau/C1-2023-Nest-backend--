@@ -74,7 +74,11 @@ export class CustomerRepository
   }
 
   register(entity: CustomerEntity): CustomerEntity {
-    const currentCustomers = this.findAll().find((c) => c.id === entity.id);
+    const currentCustomers = this.findAll().find(
+      (c) =>
+        c.email.toLowerCase() === entity.email.toLowerCase() &&
+        c.document.toLowerCase() === entity.document.toLocaleLowerCase(),
+    );
     if (currentCustomers) {
       throw new ConflictException(
         'El cliente que intenta registrar ya existe en la base de datos',
@@ -99,13 +103,19 @@ export class CustomerRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
-    const currentAccount = this.findOneById(id);
-    const index = this.database.findIndex((c) => c.id === id);
-    if (soft && currentAccount) {
-      this.softDelete(index);
+  delete(id: string, soft?: boolean): void {
+    const currentAccount = this.database.find((c) => c.id === id);
+    if (currentAccount) {
+      const index = this.database.findIndex((c) => c.id === id);
+      if (soft && currentAccount) {
+        this.softDelete(index);
+      }
+      this.hardDelete(index);
+    } else {
+      throw new NotFoundException(
+        `El cliente con el Id ${id} no existe en la base de datos!`,
+      );
     }
-    this.hardDelete(index);
   }
 
   private hardDelete(index: number): void {
@@ -115,7 +125,9 @@ export class CustomerRepository
   private softDelete(index: number): void {
     const currentCustomer = this.database[index];
     currentCustomer.deletedAt = Date.now();
-    this.upate(currentCustomer.id, currentCustomer);
+    this.database[index] = {
+      ...currentCustomer,
+    };
   }
 
   findAll(): CustomerEntity[] {
