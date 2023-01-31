@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CustomerEntity } from '../../data/persistence/entities';
-import { BaseRepository } from './base/base.repository';
-import { CustomerRepositoryInterface } from './interfaces/customer-repository.interface';
-
+import { CustomerEntity } from '../entities';
+import { BaseRepository } from './base';
+import { CustomerRepositoryInterface } from './interfaces';
 @Injectable()
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerRepositoryInterface
 {
+  protected database: CustomerEntity[];
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

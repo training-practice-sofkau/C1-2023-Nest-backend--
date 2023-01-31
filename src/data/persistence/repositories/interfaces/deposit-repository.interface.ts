@@ -1,5 +1,5 @@
-import { DepositEntity } from 'src/data/persistence/entities/deposit.entity';
-import { BaseRepositoryInterface } from './base/base-repository.interface';
+import { DepositEntity } from '../../entities';
+import { BaseRepositoryInterface } from './base';
 
 export type DepositRepositoryInterface = BaseRepositoryInterface<DepositEntity>;
 {

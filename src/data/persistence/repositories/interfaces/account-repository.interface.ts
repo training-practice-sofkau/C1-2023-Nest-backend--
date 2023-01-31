@@ -1,5 +1,5 @@
-import { AccountEntity } from 'src/data/persistence/entities/account.entity';
-import { BaseRepositoryInterface } from './base/base-repository.interface';
+import { AccountEntity } from '../../entities';
+import { BaseRepositoryInterface } from './base';
 
 export type AccountRepositoryInterface = BaseRepositoryInterface<AccountEntity>;
 {

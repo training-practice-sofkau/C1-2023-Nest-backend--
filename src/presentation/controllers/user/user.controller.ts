@@ -7,9 +7,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CustomerEntity } from '../../data/persistence/entities/customer.entity';
-import { CustomerService } from '../../services/customer/customer.service';
-import { NewCustomerDTO } from '../../presentation/dtos/new-customer.dto';
+import { CustomerService } from 'src/business/services';
+import { CustomerEntity } from 'src/data/persistence/entities';
+import { NewCustomerDTO } from 'src/presentation/dtos';
 
 @Controller('user')
 export class UserController {

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositModel } from 'src/data/models/deposit.model';
 import { DepositEntity } from 'src/data/persistence/entities';
-import { DepositRepository } from '../../persistence/repositories/deposit.repository';
+import { DepositRepository } from 'src/data/persistence/repositories';
 @Injectable()
 export class DepositService {
   constructor(private readonly depositRepository: DepositRepository) {}

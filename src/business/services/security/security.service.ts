@@ -5,8 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CustomerModel } from 'src/data/models';
-import { CustomerEntity, AccountTypeEntity } from 'src/data/persistence/entities';
-import { CustomerRepository } from 'src/persistence/repositories';
+import {
+  CustomerEntity,
+  AccountTypeEntity,
+} from 'src/data/persistence/entities';
+import { CustomerRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account/account.service';
 
 @Injectable()

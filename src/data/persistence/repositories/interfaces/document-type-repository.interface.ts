@@ -1,5 +1,5 @@
-import { BaseRepositoryInterface } from './base/base-repository.interface';
-import { DocumentTypeEntity } from '../../../data/persistence/entities';
+import { DocumentTypeEntity } from '../../entities';
+import { BaseRepositoryInterface } from './base';
 
 export type DocumentTypeRepositoryInterface =
   BaseRepositoryInterface<DocumentTypeEntity>;

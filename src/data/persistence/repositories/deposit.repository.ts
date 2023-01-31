@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DepositEntity } from '../../data/persistence/entities';
-import { BaseRepository } from './base/base.repository';
-import { DepositRepositoryInterface } from './interfaces/deposit-repository.interface';
+import { DepositEntity } from '../entities';
+import { BaseRepository } from './base';
+import { DepositRepositoryInterface } from './interfaces';
 
 @Injectable()
 export class DepositRepository

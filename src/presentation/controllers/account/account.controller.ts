@@ -2,15 +2,14 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
+import { AccountService } from 'src/business/services';
+import { AccountEntity } from 'src/data/persistence/entities';
 import { NewAccountDto } from 'src/presentation/dtos';
-import { AccountService } from 'src/services';
-import { AccountEntity } from '../../data/persistence/entities/account.entity';
 
 @Controller('account')
 export class AccountController {

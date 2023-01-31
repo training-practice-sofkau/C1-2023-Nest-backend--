@@ -1,5 +1,5 @@
-import { BaseRepositoryInterface } from './base/base-repository.interface';
-import { TransferEntity } from '../../../data/persistence/entities/transfer.entity';
+import { TransferEntity } from '../../entities';
+import { BaseRepositoryInterface } from './base';
 
 export type TransferRepositoryInterface =
   BaseRepositoryInterface<TransferEntity>;
