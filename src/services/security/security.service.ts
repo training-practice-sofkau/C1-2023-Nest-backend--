@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 
 // Models
-import { CustomerModel } from '../../models';
+import { CustomerModel } from '../../data/models';
 
 // Repositories
 import { CustomerRepository } from '../../persistence/repositories';

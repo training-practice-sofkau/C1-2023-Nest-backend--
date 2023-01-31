@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { DocumentTypeModel } from '../../models';
+import { DocumentTypeModel } from '../../data/models';
 
 export class DocumentTypeEntity implements DocumentTypeModel {
   id = uuid();
