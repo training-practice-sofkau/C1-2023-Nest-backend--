@@ -69,15 +69,17 @@ export class AccountService {
    * @param {number} amount
    * @memberof AccountService
    */
-  addBalance(accountId: string, amount: number): void {
+  addBalance(accountId: string, amount: number): AccountEntity {
     const balance = this.getBalance(accountId);
-    if (balance) {
+    if (balance != undefined) {
       const account = this.accountRepository.findOneById(accountId);
       account.balance = account.balance + amount;
-      this.accountRepository.update(accountId, account);
+      return this.accountRepository.update(accountId, account);
+    }
+    else {
+      throw new NotFoundException("No existe una cuenta con ese ID")
     }
   }
-
   /**
    * Remover balance de una cuenta
    *
@@ -85,17 +87,19 @@ export class AccountService {
    * @param {number} amount
    * @memberof AccountService
    */
-  removeBalance(accountId: string, amount: number): void {
+  removeBalance(accountId: string, amount: number): AccountEntity {
     const balance = this.getBalance(accountId);
-    if (balance) {
+    if (balance != undefined) {
       const account = this.accountRepository.findOneById(accountId);
       if (account.balance >= amount) {
         account.balance = account.balance - amount;
+        return this.accountRepository.update(accountId, account);
       } else {
         throw new NotFoundException('No se puede realizar esta operacion');
       }
-
-      this.accountRepository.update(accountId, account);
+    }
+    else {
+      throw new NotFoundException("No existe cuenta con este ID");
     }
   }
 
@@ -220,9 +224,9 @@ export class AccountService {
     const findAccount = this.accountRepository.findOneById(id)
     const newAccount = new AccountEntity()
     const newCustomer = new CustomerEntity()
-    newCustomer.id=account.customer
+    newCustomer.id = account.customer
     const newAccounType = new AccountTypeEntity()
-    newAccounType.id=account.accountType
+    newAccounType.id = account.accountType
     if (findAccount) {
       newAccount.balance = account.balance
       newAccount.accountType = newAccounType

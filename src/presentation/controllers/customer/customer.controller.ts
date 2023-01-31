@@ -17,6 +17,11 @@ export class CustomerController {
         return this.customerService.getCustomerInfo(id);
     }
 
+    @Get("/allAccounts/:id")
+    getAllAccounts(@Param("id", new ParseUUIDPipe()) id: string) {
+        return this.customerService.getAllAccounts(id)
+    }
+    
     @Post()
     registerUser(@Body() customer: newCustomerDTO): CustomerEntity {
         return this.customerService.createCustomer(customer);

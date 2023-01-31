@@ -159,4 +159,7 @@ export class AccountRepository
       throw new NotFoundException("No se encontro la informacion")
     }
   }
+  getAllAccounts(customerId: string): AccountEntity[] {
+    return this.findAll().filter(account => account.customer.id === customerId)
+  }
 }

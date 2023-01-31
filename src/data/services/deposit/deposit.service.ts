@@ -19,7 +19,7 @@ export class DepositService {
         const newDeposit = new DepositEntity()
         const newAccount = new AccountEntity()
         //this.accountService.getState(deposit.account) ??
-        if (true) {
+        if (this.accountService.getState(deposit.account)) {
             newDeposit.amount = deposit.amount;
             newDeposit.dateTime = Date.now()
             newAccount.id = deposit.account;

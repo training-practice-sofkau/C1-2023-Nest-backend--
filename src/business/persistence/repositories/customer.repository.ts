@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CustomerEntity } from '../entities';
+import { CustomerEntity , AccountEntity } from '../entities';
 import { BodyRepositoryAbstract } from './base/base.repository';
 import { CustomerRepositoryInterface } from './interface/customer/customer-repository.interface';
 

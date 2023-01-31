@@ -114,6 +114,8 @@ export class CustomerService {
     else {
       throw new BadRequestException()
     }
-
+  }
+  getAllAccounts(id:string){
+    return this.accountRepository.getAllAccounts(id)
   }
 }
