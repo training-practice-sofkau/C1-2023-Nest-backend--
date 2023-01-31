@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CustomerDTO } from 'src/business/dtos';
-import { SecurityService } from 'src/services';
+import { CustomerDTO } from '../../../business/dtos';
+import { SecurityService } from '../../../business/services';
 
 @Controller('security')
 export class SecurityController {

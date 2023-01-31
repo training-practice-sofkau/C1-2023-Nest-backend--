@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './controllers/user/user.controller';
-import { CustomerService } from './services/customer/customer.service';
-import { CustomerRepository } from './persistence/repositories/customer.repository';
+import { * } from './presentation/controllers/';
+import { * } from './business/services/customer/';
+import { * } from './data/persistence/repositories/';
 
 @Module({
   imports: [],

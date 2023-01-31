@@ -9,13 +9,16 @@ import {
 import {
   CustomerRepository,
   DocumentTypeRepository,
-} from '../../persistence/repositories';
+} from '../../../data/persistence/repositories';
 
 // Services
 import { AccountService } from '../account';
 
 // Entities
-import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
+import {
+  AccountTypeEntity,
+  CustomerEntity,
+} from '../../../data/persistence/entities';
 import { AccountDTO, CustomerDTO } from 'src/business/dtos';
 
 @Injectable()

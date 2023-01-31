@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { TransferDTO } from 'src/business/dtos';
-import { DataRangeModel, PaginationModel, TransferModel } from 'src/models';
-import { TransferEntity } from 'src/persistence/entities';
+import {
+  DataRangeModel,
+  PaginationModel,
+  TransferModel,
+} from '../../../data/models';
+import { TransferEntity } from '../../../data/persistence/entities';
 import {
   AccountRepository,
   TransferRepository,
-} from '../../persistence/repositories';
+} from '../../../data/persistence/repositories';
 @Injectable()
 export class TransferService {
   constructor(

@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { AccountDTO } from 'src/business/dtos';
-import { AccountEntity } from 'src/persistence/entities';
-import { AccountService } from 'src/services';
+import { AccountEntity } from '../../../data/persistence/entities';
+import { AccountService } from '../../../business/services';
 
 @Controller('account')
 export class AccountController {

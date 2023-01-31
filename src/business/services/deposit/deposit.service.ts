@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DepositDTO } from 'src/business/dtos';
-import { PaginationModel, DataRangeModel } from '../../models';
-import { DepositEntity } from '../../persistence/entities';
+import { PaginationModel, DataRangeModel } from '../../../data/models';
+import { DepositEntity } from '../../../data/persistence/entities';
 import {
   AccountRepository,
   DepositRepository,
-} from '../../persistence/repositories';
+} from '../../../data/persistence/repositories';
 
 @Injectable()
 export class DepositService {
