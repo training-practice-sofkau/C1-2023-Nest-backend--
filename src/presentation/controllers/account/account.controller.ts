@@ -7,9 +7,9 @@ import {
   ParseUUIDPipe,
   Put,
 } from '@nestjs/common';
-import { AccountService } from 'src/services';
-import { AccountEntity } from 'src/persistence/entities';
-import { NewAccountDto } from 'src/dtos/account/new-account.dto';
+import { AccountService } from 'src/business/services';
+import { AccountEntity } from 'src/data/persistence/entities';
+import { NewAccountDto } from 'src/presentation/dtos/account/new-account.dto';
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}

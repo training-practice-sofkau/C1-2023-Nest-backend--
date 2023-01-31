@@ -1,5 +1,4 @@
-import { AccountModel } from 'src/models';
-import { TransferModel } from 'src/models/transfer.model';
+import { AccountModel, TransferModel } from 'src/data/models';
 import { v4 as uuid } from 'uuid';
 
 export class TransferEntity implements TransferModel {

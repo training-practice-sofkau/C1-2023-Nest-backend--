@@ -6,8 +6,8 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CustomerEntity } from 'src/persistence/entities';
-import { CustomerService } from 'src/services/customer';
+import { CustomerService } from 'src/business/services/customer';
+import { CustomerEntity } from 'src/data/persistence/entities';
 import { NewCustomerDTO } from 'src/presentation/dtos/customer/new-customer.dto';
 
 @Controller('user')

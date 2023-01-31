@@ -8,6 +8,15 @@ import { AccountRepository } from 'src/data/persistence/repositories';
 
 @Injectable()
 export class AccountService {
+  findAll(): AccountEntity[] {
+    throw new Error('Method not implemented.');
+  }
+  findOneById(id: string): AccountEntity {
+    throw new Error('Method not implemented.');
+  }
+  updateAccount(id: string, account: NewAccountDto): AccountEntity {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly accountRepository: AccountRepository) {}
 
   /**
