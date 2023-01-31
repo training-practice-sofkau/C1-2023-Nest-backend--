@@ -4,11 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAccountDto, CreateCustomerDto } from 'src/dtos';
-import {
-  AccountEntity,
-  AccountTypeEntity,
-  CustomerEntity,
-} from 'src/persistence/entities';
+import { CustomerEntity } from 'src/persistence/entities';
 import {
   CustomerRepository,
   DocumentTypeRepository,
