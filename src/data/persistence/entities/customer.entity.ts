@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { DocumentTypeEntity } from './';
+import { DocumentTypeEntity } from '.';
 import { CustomerModel } from '../../models';
 
 export class CustomerEntity implements CustomerModel {

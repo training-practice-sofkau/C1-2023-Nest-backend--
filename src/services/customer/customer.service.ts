@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { NewCustomerDTO } from 'src/dtos/new-customer.dto';
 import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
-import { CustomerModel } from '../../models';
-import { CustomerEntity, DocumentTypeEntity } from '../../persistence/entities';
+import { CustomerModel } from '../../data/models';
+import { CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
 @Injectable()
 export class CustomerService {
   constructor(private readonly costumerRepository: CustomerRepository) {}

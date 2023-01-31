@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TransferEntity } from '../entities';
+import { TransferEntity } from '../../data/persistence/entities';
 import { BaseRepository } from './base/base.repository';
 import { TransferRepositoryInterface } from './interfaces/transfer-repository.interface';
 

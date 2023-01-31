@@ -4,8 +4,8 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CustomerModel } from 'src/models';
-import { CustomerEntity, AccountTypeEntity } from 'src/persistence/entities';
+import { CustomerModel } from 'src/data/models';
+import { CustomerEntity, AccountTypeEntity } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/persistence/repositories';
 import { AccountService } from '../account/account.service';
 

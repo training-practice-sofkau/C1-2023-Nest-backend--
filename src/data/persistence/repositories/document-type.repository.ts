@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DocumentTypeEntity } from '../entities';
+import { DocumentTypeEntity } from '../../data/persistence/entities';
 import { BaseRepository } from './base/base.repository';
 import { DocumentTypeRepositoryInterface } from './interfaces/document-type-repository.interface';
 

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AccountEntity } from '../entities';
+import { AccountEntity } from '../../data/persistence/entities';
 import { BaseRepository } from './base/base.repository';
 import { AccountRepositoryInterface } from './interfaces/account-repository.interface';
 

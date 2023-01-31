@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CustomerEntity } from '../../persistence/entities/customer.entity';
+import { CustomerEntity } from '../../data/persistence/entities/customer.entity';
 import { CustomerService } from '../../services/customer/customer.service';
 import { NewCustomerDTO } from '../../dtos/new-customer.dto';
 

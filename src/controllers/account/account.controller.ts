@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { NewAccountDto } from 'src/dtos';
 import { AccountService } from 'src/services';
-import { AccountEntity } from '../../persistence/entities/account.entity';
+import { AccountEntity } from '../../data/persistence/entities/account.entity';
 
 @Controller('account')
 export class AccountController {
