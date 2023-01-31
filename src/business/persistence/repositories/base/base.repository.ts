@@ -4,6 +4,7 @@ export abstract class BodyRepositoryAbstract<entity>
   implements BodyRepositoryInterface<entity>
 {
   protected readonly database: Array<entity>;
+  
   constructor() {
     this.database = new Array<entity>();
   }

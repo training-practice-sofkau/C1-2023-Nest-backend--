@@ -7,6 +7,7 @@ import { AccountRepositoryInterface } from './interface/account/account-reposito
 export class AccountRepository
   extends BodyRepositoryAbstract<AccountEntity>
   implements AccountRepositoryInterface {
+
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

@@ -30,7 +30,6 @@ export class SecurityService {
     if (answer) return 'Falta retornar un JWT';
     else throw new UnauthorizedException('Datos de identificación inválidos');
   }
-
   /**
    * Crear usuario en el sistema
    *
