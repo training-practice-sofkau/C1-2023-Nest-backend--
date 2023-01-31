@@ -15,7 +15,7 @@ import {
   DepositRepository,
   DocumentTypeRepository,
   TransferRepository,
-} from './persistence/repositories';
+} from './data/persistence/repositories';
 
 @Module({
   controllers: [

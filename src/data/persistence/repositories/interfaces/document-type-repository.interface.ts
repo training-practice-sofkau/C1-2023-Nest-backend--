@@ -1,4 +1,4 @@
-import { DocumentTypeEntity } from 'src/persistence/entities';
+import { DocumentTypeEntity } from 'src/data/persistence/entities';
 import { BaseRepositoryInterface } from './base';
 
 export interface DocumentTypeRepositoryInterface

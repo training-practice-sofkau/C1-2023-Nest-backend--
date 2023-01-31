@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateTransferDto, PaginationDto } from 'src/dtos';
-import { DataRangeModel, PaginationModel } from 'src/models';
+import { DataRangeModel, PaginationModel } from 'src/data/models';
 import { TransferService } from 'src/services';
 
 @Controller('transfer')

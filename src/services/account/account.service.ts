@@ -1,13 +1,16 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from 'src/dtos';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import {
+  AccountEntity,
+  AccountTypeEntity,
+} from 'src/data/persistence/entities';
 import {
   AccountRepository,
   AccountTypeRepository,
   CustomerRepository,
   DepositRepository,
   TransferRepository,
-} from 'src/persistence/repositories';
+} from 'src/data/persistence/repositories';
 
 @Injectable()
 export class AccountService {
