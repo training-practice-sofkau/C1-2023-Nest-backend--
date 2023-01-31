@@ -1,16 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { NewCustomerDTO } from 'src/dtos';
 import { SecurityService } from 'src/services';
 
 @Controller('security')
 export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
-  // @Post()
-  // signUp(@Body() signUp: NewCustomerDTO): string {
-  //   return this.securityService.signUp(signUp);
-  // }
-
-  // @Post()
-  // signIn(@Body() signIn:): string NewCustomerDTO{
-  //   return this.securityService.signIn(signIn);
-  // }
+ //Identificarse en el sistema
+  @Post()
+  verifyUser(@Body() security: NewCustomerDTO) {
+    return this.securityService.signIn(security);
+  }
 }

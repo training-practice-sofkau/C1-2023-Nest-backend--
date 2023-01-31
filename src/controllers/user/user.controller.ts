@@ -39,11 +39,11 @@ export class UserController {
     return this.customerService.unsubscribe(customerId);
   }
 
-  @Put()
-  updateCustomer(
-    @Param('id', ParseUUIDPipe) Id: string,
-    @Body() customer: NewCustomerDTO,
+  @Put(':Id')
+  updateCustome(
+    @Param('Id', ParseUUIDPipe) Id: string,
+    @Body() custome: NewCustomerDTO,
   ): CustomerEntity {
-    return this.customerService.updatedCustomer(Id, customer);
+    return this.customerService.updatedCustomer(Id, custome);
   }
 }
