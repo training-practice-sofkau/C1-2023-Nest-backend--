@@ -9,5 +9,4 @@ export class AccountEntity implements AccountModel {
   state = true;
   deleteAt?: number | Date;
   customerId: string;
-  accountTypeId: string;
 }
