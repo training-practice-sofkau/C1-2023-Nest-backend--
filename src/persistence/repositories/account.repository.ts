@@ -9,6 +9,7 @@ export class AccountRepository
   implements AccountRepositoryInterface {
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
+    console.log(this.database)
     return this.database.at(-1) ?? entity;
   }
   update(id: string, entity: AccountEntity): AccountEntity {
