@@ -1,4 +1,4 @@
-import { DocumentTypeEntity } from 'src/persistence/entities';
+import { DocumentTypeEntity } from 'src/business/persistence/entities';
 import { BodyRepositoryInterface } from '../model-repository.interface';
 
 export interface DocumentTypeRepositoryInterface

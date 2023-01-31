@@ -1,4 +1,4 @@
-import { DepositEntity } from 'src/persistence/entities';
+import { DepositEntity } from 'src/business/persistence/entities';
 import { BodyRepositoryInterface } from '../model-repository.interface';
 
 export interface DepositRepositoryInterface
