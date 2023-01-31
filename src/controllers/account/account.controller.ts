@@ -26,11 +26,6 @@ export class AccountController {
     return this.accountService.findOneById(id);
   }
 
-  @Post()
-  create(@Body() account: NewAccountDto): AccountEntity {
-    return this.accountService.createAccount(account);
-  }
-
   @Put()
   modifyAccount(
     @Param('id', new ParseUUIDPipe()) id: string,
