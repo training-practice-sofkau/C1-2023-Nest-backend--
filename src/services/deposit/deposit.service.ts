@@ -45,9 +45,16 @@ export class DepositService {
    */
   // getHistory(
   //   accountId: string,
-  //   pagination: PaginationModel,
-  //   dataRange?: DataRangeModel,
+  //   pagination?: Pagination,
+  //   dataRange?: DateRange,
   // ): DepositEntity[] {
-  //   throw new Error('This method is not implemented');
+  //   if (dataRange) {
+  //     return this.depositRepository.findByDataRange(
+  //       accountId,
+  //       dataRange?.dateInit,
+  //       dataRange?.dateEnd,
+  //       pagination,
+  //     );
+  //   } else return this.depositRepository.findByAccountId(accountId, pagination);
   // }
 }

@@ -25,18 +25,19 @@ export class CustomerService {
   }
 
   newCustomer(customer: NewCustomerDTO): CustomerEntity {
-    const documentType = new DocumentTypeEntity();
-    documentType.id = customer.documentTypeId;
+    const Customermap = this.transmap(customer);
+    return this.costumerRepository.register(Customermap);
+    // const documentType = new DocumentTypeEntity();
+    // documentType.id = customer.documentTypeId;
 
-    const newCustomer = new CustomerEntity();
-    newCustomer.documentType = documentType;
-    newCustomer.document = customer.document;
-    newCustomer.fullName = customer.fullName;
-    newCustomer.email = customer.email;
-    newCustomer.phone = customer.phone;
-    newCustomer.password = customer.password;
-
-    return this.costumerRepository.register(newCustomer);
+    // const newCustomer = new CustomerEntity();
+    // newCustomer.documentType = documentType;
+    // newCustomer.document = customer.document;
+    // newCustomer.fullName = customer.fullName;
+    // newCustomer.email = customer.email;
+    // newCustomer.phone = customer.phone;
+    // newCustomer.password = customer.password;
+    //return this.costumerRepository.register(newCustomer);
   }
   /**
    * Obtener información de un cliente
