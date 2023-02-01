@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common/decorators/modules/module.decorator";
-import { AccountController } from "src/presentation";
+import { AccountController } from "src/presentation/controllers";
 import { AccountRepository, AccountTypeRepository } from "src/data/persistence";
 import { AccountService } from "src/business/services";
 
