@@ -9,7 +9,7 @@ import {
   DepositRepository,
   DocumentTypeRepository,
   TransferRepository,
-} from './persistence';
+} from './data';
 
 // Services
 import {
@@ -18,7 +18,7 @@ import {
   DepositService,
   SecurityService,
   TransferService,
-} from './services';
+} from './business';
 
 // Controllers
 import {
@@ -27,7 +27,7 @@ import {
   DepositsController,
   SecurityController,
   TransfersController,
-} from './controllers';
+} from './presentation';
 
 @Module({
   imports: [],
