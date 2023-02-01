@@ -36,6 +36,14 @@ export class AccountService {
 
     const newAccount = new AccountEntity();
     newAccount.balance = account.balance;
+
+    //crear account type
+    //const accountType = new AccountTypeEntity();
+    /*const accountType = {
+      name: 'corriente',
+    };
+    const accoType = this.accountTypeRepository.register(accountType);
+    newAccount.accountType = accoType;*/
     return this.accountRepository.register(newAccount);
   }
 

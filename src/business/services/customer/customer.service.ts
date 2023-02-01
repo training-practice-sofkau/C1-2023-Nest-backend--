@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import {
+  AccountEntity,
   CustomerEntity,
   CustomerRepository,
   DocumentTypeEntity,
 } from 'src/data/persistence';
 import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
+import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly accountService: AccountService,
+  ) {}
 
   findAll(): CustomerEntity[] {
     return this.customerRepository.findAll();
@@ -25,6 +30,15 @@ export class CustomerService {
     newCustomer.email = customer.email;
     newCustomer.phone = customer.phone;
     newCustomer.password = customer.password;
+
+    //Crear cuenta
+    const acco = {
+      customer: newCustomer.id,
+      accountType: documentType.id,
+      balance: 0,
+    };
+    const account = this.accountService.createAccount(acco);
+    account.customer = newCustomer;
 
     return this.customerRepository.register(newCustomer);
   }
@@ -73,10 +87,10 @@ export class CustomerService {
    */
   unsubscribe(id: string): boolean {
     this.customerRepository.delete(id);
-    const customer = this.customerRepository.findOneById(id);
-    if (!customer) {
-      return true;
-    }
+    //const customer = this.customerRepository.findOneById(id);
+    //if (customer.deletedAt != undefined) {
+    //return true;
+    //}
     return false;
     /*delete hard, if (customer.deletedAt != undefined) {
       return true;

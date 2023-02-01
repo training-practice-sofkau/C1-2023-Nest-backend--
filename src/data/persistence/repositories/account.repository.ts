@@ -14,7 +14,6 @@ export class AccountRepository
   }
 
   update(id: string, entity: AccountEntity): AccountEntity {
-    console.log('database ', this.database[0].deletedAt);
     const index = this.database.findIndex(
       (item) => item.id === id && (item.deletedAt ?? true) === true,
     );

@@ -26,7 +26,7 @@ export class UserController {
     return this.customerService.newCustomer(customer);
   }
 
-  @Get()
+  @Get('/:id')
   getCustomer(@Param('id') id: string): CustomerEntity {
     console.log('entra en get');
     return this.customerService.getCustomerInfo(id);
@@ -41,7 +41,7 @@ export class UserController {
     return this.customerService.updatedCustomer(id, account);
   }
 
-  @Delete()
+  @Delete('/:id')
   deleteCustomer(@Param('id') id: string): void {
     this.customerService.unsubscribe(id);
   }

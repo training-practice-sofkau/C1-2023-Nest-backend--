@@ -14,36 +14,37 @@ export class CustomerRepository
   }
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
+    console.log('data ', this.database);
     const index = this.database.findIndex(
       (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
+    console.log('index ', index);
+    console.log('index >= 0 ', index >= 0);
     if (index >= 0) {
+      console.log('ENTRA EN IF');
       this.database[index] = {
         ...this.database[index],
         ...entity,
         id,
       } as CustomerEntity;
     } else {
+      console.log('ENTRA EN ELSE');
       throw new NotFoundException(`El ID ${id} no existe en base de datos`);
     }
     return this.database[index];
   }
 
   delete(id: string, soft?: boolean): void {
-    const customer = this.findOneById(id);
     if (soft || soft === undefined) {
-      customer.deletedAt = Date.now();
-      this.update(id, customer);
+      this.softDelete(id);
     } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
-      );
-      this.database.splice(index, 1);
+      this.hardDelete(id);
     }
   }
 
   findAll(): CustomerEntity[] {
-    return this.database.filter((item) => item.deletedAt === undefined);
+    //return this.database.filter((item) => item.deletedAt === undefined);
+    return this.database.filter((item) => item);
   }
 
   findOneById(id: string): CustomerEntity {
@@ -111,5 +112,23 @@ export class CustomerRepository
       (item) => item.fullName === fullName,
     );
     return customers;
+  }
+
+  private hardDelete(id: string): void {
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    this.database.splice(index, 1);
+  }
+
+  private softDelete(id: string): void {
+    const customer = this.findOneById(id);
+    console.log('acc ', customer);
+    const v: CustomerEntity = {
+      ...customer,
+    };
+    v.deletedAt = Date.now();
+    console.log('data soft ', this.database);
+    this.update(id, v);
   }
 }
