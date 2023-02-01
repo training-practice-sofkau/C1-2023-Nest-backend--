@@ -38,6 +38,7 @@ export class AccountService {
     } else {
       newAccount.customer = newCustomer;
       newAccount.accountType = newAccountType;
+      this.accountTypeRepository.register(newAccountType)
       return this.accountRepository.register(newAccount);
     }
   }
@@ -143,7 +144,7 @@ export class AccountService {
    * @param {boolean} state
    * @memberof AccountService
    */
-  changeState(accountId: string, state: boolean): void {
+  changeState(accountId: string, state: boolean): AccountEntity {
     const account = this.accountRepository.findOneById(accountId);
     if (account) {
       const accountTypeState = this.accountTypeRepository.findByStateId(
@@ -151,12 +152,16 @@ export class AccountService {
       );
       if (accountTypeState) {
         account.state = state;
+        return this.accountRepository.update(accountId, account);
       } else {
         throw new NotFoundException(
           'No se puede cambiar de estado, ya que el tipo de cuenta esta en ' +
           accountTypeState,
         );
       }
+    }
+    else {
+      throw new NotFoundException("No se encontro cuenta con ese ID ")
     }
   }
 
@@ -193,8 +198,9 @@ export class AccountService {
       );
     } else {
       account.accountType.id = accountTypeId;
+      const accountTypeDataBase = this.accountTypeRepository.findOneById(accountTypeId)
       this.accountRepository.update(accountId, account);
-      return this.accountTypeRepository.update(accountTypeId, accountType);
+      return this.accountTypeRepository.update(accountTypeId, accountTypeDataBase);
     }
   }
 
@@ -207,11 +213,11 @@ export class AccountService {
   deleteAccount(accountId: string): void {
     const balance = this.getBalance(accountId);
     if (balance > 0) {
-      throw new NotFoundException('No se puede eliminar');
+      throw new BadRequestException('No se puede eliminar, la cuenta tiene saldo');
     } else {
       const state = this.getState(accountId);
       if (state) {
-        throw new NotFoundException('No se puede eliminar');
+        throw new BadRequestException('No se puede eliminar, la cuenta se encuentra activa');
       } else {
         this.accountRepository.delete(accountId);
       }
@@ -236,5 +242,11 @@ export class AccountService {
     else {
       throw new NotFoundException("No se encontro la cuenta")
     }
+  }
+
+  createTypeAccount(name: string): AccountTypeEntity {
+    const newAccountType = new AccountTypeEntity()
+    newAccountType.name = name
+    return this.accountTypeRepository.register(newAccountType)
   }
 }

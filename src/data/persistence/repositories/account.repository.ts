@@ -46,12 +46,7 @@ export class AccountRepository
     const accountIndex = this.database.findIndex(
       (account) => account.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   findByState(state: boolean): AccountEntity[] {
     let arrayState: AccountEntity[] = [];
@@ -105,12 +100,7 @@ export class AccountRepository
     const accountIndex = this.database.findIndex(
       (account) => account.accountType.id === id,
     );
-    if (accountIndex >= 0) {
-      return this.database[accountIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    return this.database[accountIndex];
   }
   findByDocumentTypeId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(

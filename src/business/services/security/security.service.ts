@@ -7,6 +7,7 @@ import {
 import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
 import { NewAccountDTO, newCustomerDTO, NewSecurityDTO } from 'src/business/dtos';
 import { AccountService } from '../account';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class SecurityService {
@@ -56,7 +57,7 @@ export class SecurityService {
 
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+        accountType.id = uuid();
         const newAccount = new NewAccountDTO();
         newAccount.customer = customer.id;
         newAccount.accountType = accountType.id;
