@@ -16,11 +16,9 @@ export class TransferService {
    * @memberof TransferService
    */
     createTransfer(transfer: NewTransferDTO): TransferEntity {
-        const newTransfer = new TransferEntity()
-        const newOutcome = new AccountEntity()
-        newOutcome.id = transfer.outcome
-        const newIncome = new AccountEntity()
-        newIncome.id = transfer.income
+        let newTransfer = new TransferEntity()
+        const newOutcome = this.accountService.findOneById(transfer.outcome)
+        const newIncome = this.accountService.findOneById(transfer.income)
         const incomeAccount = this.accountService.getState(transfer.income)
         const outcomeAccount = this.accountService.getState(transfer.outcome)
         ///Se deja por ahora en true y true para probar su implementacion.
@@ -32,6 +30,8 @@ export class TransferService {
                 newTransfer.income = newIncome
                 newTransfer.amount = transfer.amount
                 newTransfer.reason = transfer.reason
+                this.accountService.addBalance(newIncome.id, transfer.amount)
+                this.accountService.removeBalance(newOutcome.id, transfer.amount)
                 return this.transferRepository.register(newTransfer)
             }
             else {

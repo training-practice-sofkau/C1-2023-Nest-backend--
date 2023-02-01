@@ -17,13 +17,14 @@ export class DepositService {
    */
     createDeposit(deposit: NewDepositDTO): DepositEntity {
         const newDeposit = new DepositEntity()
-        const newAccount = new AccountEntity()
+        const newAccount = this.accountService.findOneById(deposit.account)
         //this.accountService.getState(deposit.account) ??
         if (this.accountService.getState(deposit.account)) {
             newDeposit.amount = deposit.amount;
             newDeposit.dateTime = Date.now()
             newAccount.id = deposit.account;
             newDeposit.account = newAccount
+            this.accountService.addBalance(deposit.account, deposit.amount)
             return this.depositRepository.register(newDeposit)
         }
         else {

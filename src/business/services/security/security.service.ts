@@ -41,7 +41,7 @@ export class SecurityService {
   signUp(user: newCustomerDTO): string {
     const newCustomer = new CustomerEntity();
     const newDocumentType = new DocumentTypeEntity()
-    newDocumentType.id = user.documentTypeId;
+    newDocumentType.id = uuid();
     const findCustomer = this.customerRepository.findByEmail(user.email);
     if (findCustomer) {
       throw new BadRequestException();
