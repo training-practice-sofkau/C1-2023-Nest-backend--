@@ -1,6 +1,7 @@
 // Libraries
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { newCustomerDTO, NewSecurityDTO, SecurityService } from 'src/data';
+import { newCustomerDTO, NewSecurityDTO } from 'src/business/dtos';
+import { SecurityService } from 'src/business/services';
 
 @Controller('security')
 export class SecurityController {
