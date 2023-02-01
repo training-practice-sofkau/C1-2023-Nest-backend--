@@ -28,6 +28,8 @@ export class TransferService {
             //this.accountService.getBalance(transfer.outcome)
             //Se deja asi para que pase
             if (this.accountService.getBalance(transfer.outcome) >= transfer.amount) {
+                newTransfer.outcome = newOutcome
+                newTransfer.income = newIncome
                 newTransfer.amount = transfer.amount
                 newTransfer.reason = transfer.reason
                 return this.transferRepository.register(newTransfer)

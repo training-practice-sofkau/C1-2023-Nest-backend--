@@ -16,7 +16,7 @@ export class CustomerRepository
   }
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const customerIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (customer) => customer.id === id && customer.deletedAt===undefined,
     );
     if (customerIndex >= 0) {
       const data = this.database[customerIndex];
@@ -115,9 +115,15 @@ export class CustomerRepository
     }
   }
   private softDelete(id: string): void {
+    let newCustomer = new CustomerEntity()
     const customer = this.findOneById(id);
-    customer.deletedAt = Date.now();
-    this.update(id, customer);
+    newCustomer={
+      ...newCustomer,
+      ...customer,
+      id: id,
+    };
+    newCustomer.deletedAt= Date.now()
+    this.update(id, newCustomer);
   }
   findByPhone(phone: string): CustomerEntity[] {
     let arrayPhone: CustomerEntity[] = [];
