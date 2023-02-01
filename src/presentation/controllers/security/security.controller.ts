@@ -5,15 +5,15 @@ import { SecurityService } from 'src/business/services';
 
 @Controller('security')
 export class SecurityController {
-    constructor( private readonly securityService:SecurityService){}
+    constructor(private readonly securityService: SecurityService) { }
 
-    @Post()
-    verifyCustomer(@Body() security:NewSecurityDTO){
-        this.securityService.signIn(security)
+    @Post("/login")
+    login(@Body() security: NewSecurityDTO) {
+        return this.securityService.signIn(security)
     }
 
     @Post("/register")
-    createCustomer(@Body() customer:newCustomerDTO){
+    createCustomer(@Body() customer: newCustomerDTO) {
         return this.securityService.signUp(customer)
     }
 }

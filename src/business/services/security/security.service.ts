@@ -8,12 +8,14 @@ import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEnti
 import { NewAccountDTO, newCustomerDTO, NewSecurityDTO } from 'src/business/dtos';
 import { AccountService } from '../account';
 import { v4 as uuid } from 'uuid';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private readonly jwtService: JwtService
   ) { }
 
   /**
@@ -23,12 +25,16 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: NewSecurityDTO): string {
+  signIn(user: NewSecurityDTO): {} {
     const answer = this.customerRepository.findEmailAndPassword(
       user.email,
       user.password,
     );
-    if (answer) return 'Falta retornar un JWT';
+    if (answer) {
+      const customer = this.customerRepository.findByEmail(user.email)
+      console.log(this.jwtService.sign({ id: customer.id }))
+      return { access_token: this.jwtService.sign({ id: customer.id }) }
+    }
     else throw new UnauthorizedException('Datos de identificación inválidos');
   }
   /**
@@ -38,7 +44,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: newCustomerDTO): string {
+  signUp(user: newCustomerDTO): {} {
     const newCustomer = new CustomerEntity();
     const newDocumentType = new DocumentTypeEntity()
     newDocumentType.id = uuid();
@@ -64,7 +70,7 @@ export class SecurityService {
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return 'Falta retornar un JWT, se creo una cuenta con ID: ' + account.id;
+        if (account) return { access_token: this.jwtService.sign({ id: customer.id }) };
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -77,6 +83,6 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signOut(JWToken: string): void {
-    throw new Error('Method not implemented.');
+
   }
 }
