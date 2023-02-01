@@ -5,6 +5,7 @@ import {
   AccountTypeEntity,
 } from 'src/data/persistence/entities';
 import { AccountRepository } from 'src/data/persistence/repositories';
+import { NewAccountDto } from 'src/presentation/dtos/account/new-account.dto';
 
 @Injectable()
 export class AccountService {
