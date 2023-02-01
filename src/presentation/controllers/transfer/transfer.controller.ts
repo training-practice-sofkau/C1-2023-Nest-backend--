@@ -30,4 +30,13 @@ export class TransferController {
         newDataRange.range = data.range;
         return this.transferService.getHistoryOut(id, newPagination, newDataRange)
     }
+
+    @Post("/historyIncome/:id")
+    getHistoryIncome(@Param("id", new ParseUUIDPipe()) id: string, @Body() data: { actualPage: number, range: number }) {
+        const newPagination = new PaginationEntity()
+        newPagination.actualPage = data.actualPage;
+        const newDataRange = new DataRangeEntity()
+        newDataRange.range = data.range;
+        return this.transferService.getHistoryIn(id, newPagination, newDataRange)
+    }
 }
