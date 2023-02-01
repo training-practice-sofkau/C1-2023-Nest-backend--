@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDepositDto } from 'src/business/dtos';
-import { DataRangeModel, PaginationModel } from 'src/data/models';
-import { DepositEntity } from 'src/data/persistence/entities';
-import { DepositRepository } from 'src/data/persistence/repositories';
-import { AccountService } from '../account';
+import { AccountService, CreateDepositDto } from 'src/business';
+import {
+  DateRangeModel,
+  PaginationModel,
+  DepositEntity,
+  DepositRepository,
+} from 'src/data';
 
 @Injectable()
 export class DepositService {
@@ -37,24 +39,27 @@ export class DepositService {
   getHistory(
     accountId: string,
     pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    dateRange?: DateRangeModel,
   ): DepositEntity[] {
-    const currentDeposits = this.depositRepository.findByAccountId(accountId);
-    pagination.size = currentDeposits.length;
-    const deposits: DepositEntity[] = [];
-    let range = 0;
-    if (dataRange && dataRange.range > 0) {
-      range = dataRange.range;
+    let currentDeposits: DepositEntity[];
+    if (dateRange) {
+      const dateInit = dateRange.dateEnd ?? new Date('1999-01-01').getTime();
+      const dateEnd = dateRange.dateEnd ?? Date.now();
+      const deposits = this.depositRepository.findByAccountId(accountId);
+      currentDeposits = deposits.filter(
+        ({ dateTime }) => dateTime >= dateInit && dateTime <= dateEnd,
+      );
     } else {
-      range = 10;
+      currentDeposits = this.depositRepository.findByAccountId(accountId);
     }
+    pagination.size = currentDeposits.length;
+    const range = pagination.range ?? 10;
     pagination.pages = Math.round(pagination.size / range);
-    for (
-      let i = pagination.currentPage * range;
-      i < pagination.currentPage * range + range;
-      i++
-    ) {
-      deposits.push(currentDeposits[i + 1]);
+    const deposits: DepositEntity[] = [];
+    const start = pagination.currentPage * range - range;
+    const end = start + range;
+    for (let i = start; i < end; i++) {
+      currentDeposits[i] ? deposits.push(currentDeposits[i]) : (i = end);
     }
     return deposits;
   }

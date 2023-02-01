@@ -1,16 +1,14 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateAccountDto } from 'src/business/dtos';
+import { CreateAccountDto } from 'src/business';
 import {
   AccountEntity,
   AccountTypeEntity,
-} from 'src/data/persistence/entities';
-import {
   AccountRepository,
   AccountTypeRepository,
   CustomerRepository,
   DepositRepository,
   TransferRepository,
-} from 'src/data/persistence/repositories';
+} from 'src/data';
 
 @Injectable()
 export class AccountService {
@@ -47,7 +45,7 @@ export class AccountService {
 
   //Consultar solo cuentas activas
   private getOneActiveState(accountId: string): AccountEntity {
-    if (this.getState(accountId)) {
+    if (!this.getState(accountId)) {
       throw new ConflictException('Cuenta inactiva');
     }
     const currentAccount = this.accountRepository.findOneById(accountId);
@@ -70,7 +68,7 @@ export class AccountService {
   //Remueve o elimina balance de la cuenta -- resta valor a la cuenta
   removeBalance(accountId: string, amount: number): void {
     const currentAccount = this.getOneActiveState(accountId);
-    if (!this.verifyAmountToRemoveBalance(accountId, amount)) {
+    if (this.verifyAmountToRemoveBalance(accountId, amount)) {
       throw new ConflictException('Saldo insuficiente');
     }
     currentAccount.balance -= amount;

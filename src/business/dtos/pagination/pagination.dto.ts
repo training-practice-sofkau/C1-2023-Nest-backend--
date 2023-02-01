@@ -1,17 +1,18 @@
-import { IsInt, IsNumber, IsOptional, IsPositive } from 'class-validator';
+import { IsInt, IsOptional, IsPositive } from 'class-validator';
 
 export class PaginationDto {
+  @IsOptional()
   @IsPositive()
   @IsInt()
-  currentPage: number;
+  currentPage?: number;
   @IsOptional()
   @IsPositive()
   @IsInt()
   range?: number;
   @IsOptional()
-  @IsNumber()
+  @IsPositive()
   dateInit?: number | Date;
   @IsOptional()
-  @IsNumber()
+  @IsPositive()
   dateEnd?: number | Date;
 }

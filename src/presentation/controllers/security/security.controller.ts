@@ -14,9 +14,7 @@ export class SecurityController {
 
   @Post('signIn')
   signIn(@Body() securityDto: SecurityDto): JSON {
-    return JSON.parse(
-      this.securityService.signIn(securityDto.password, securityDto.email),
-    );
+    return JSON.parse(this.securityService.signIn(securityDto));
   }
 
   @Post('signout:token')

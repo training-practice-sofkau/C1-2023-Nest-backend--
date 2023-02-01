@@ -62,7 +62,9 @@ export class TransferRepository
   upate(id: string, entity: TransferEntity): TransferEntity {
     const currentTransfer = this.findOneById(id);
     if (JSON.stringify(currentTransfer) === JSON.stringify(entity)) {
-      throw new ConflictException('Los datos a actualizar ya existen');
+      throw new ConflictException(
+        'Los datos de la transferencia a actualizar ya existen',
+      );
     }
     const index = this.database.findIndex((t) => t.id === id);
     this.database[index] = {
@@ -97,7 +99,7 @@ export class TransferRepository
   findOneById(id: string): TransferEntity {
     const currentDeposit = this.findAll().find((t) => t.id === id);
     if (currentDeposit) {
-      return currentDeposit;
+      return Object.assign({}, currentDeposit);
     }
     throw new NotFoundException(
       `La transferencia con el Id ${id} no existe en la base de datos`,

@@ -43,7 +43,9 @@ export class DepositRepository
   upate(id: string, entity: DepositEntity): DepositEntity {
     const currentDeposit = this.findOneById(id);
     if (JSON.stringify(currentDeposit) === JSON.stringify(entity)) {
-      throw new ConflictException('Los datos a actualizar ya existen');
+      throw new ConflictException(
+        'Los datos del deposito a actualizar ya existen!',
+      );
     }
     const index = this.database.findIndex((d) => d.id === id);
     this.database[index] = {
@@ -66,9 +68,11 @@ export class DepositRepository
   }
 
   private softDelete(index: number): void {
-    const currentAccount = this.database[index];
-    currentAccount.deletedAt = Date.now();
-    this.upate(currentAccount.id, currentAccount);
+    const currentDeposit = this.database[index];
+    currentDeposit.deletedAt = Date.now();
+    this.database[index] = {
+      ...currentDeposit,
+    };
   }
 
   findAll(): DepositEntity[] {
@@ -78,7 +82,7 @@ export class DepositRepository
   findOneById(id: string): DepositEntity {
     const currentDeposit = this.findAll().find((d) => d.id === id);
     if (currentDeposit) {
-      return currentDeposit;
+      return Object.assign({}, currentDeposit);
     }
     throw new NotFoundException(
       `El deposito con el Id ${id} no existe en la base de datos`,

@@ -45,7 +45,9 @@ export class AccountRepository
   upate(id: string, entity: AccountEntity): AccountEntity {
     const currentAccount = this.findOneById(id);
     if (JSON.stringify(currentAccount) === JSON.stringify(entity)) {
-      throw new ConflictException('Los datos a actualizar ya existen');
+      throw new ConflictException(
+        'Los datos de la cuenta a actualizar ya existen',
+      );
     }
     const index = this.database.findIndex((i) => i.id === id);
     this.database[index] = {
@@ -81,7 +83,7 @@ export class AccountRepository
 
   findOneById(id: string): AccountEntity {
     const currentAccount = this.findAll().find((a) => a.id === id);
-    if (currentAccount) return currentAccount;
+    if (currentAccount) return Object.assign({}, currentAccount);
     throw new NotFoundException(
       `La cuenta con el Id ${id} no existe en la base de datos!`,
     );

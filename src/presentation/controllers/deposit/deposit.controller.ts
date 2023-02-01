@@ -7,10 +7,9 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateDepositDto } from 'src/business/dtos';
-import { PaginationDto } from 'src/business/dtos/pagination/pagination.dto';
-import { DataRangeModel, PaginationModel } from 'src/data/models';
+import { CreateDepositDto, PaginationDto } from 'src/business';
 import { DepositService } from 'src/business/services';
+import { DateRangeModel, PaginationModel } from 'src/data';
 
 @Controller('deposit')
 export class DepositController {
@@ -24,35 +23,24 @@ export class DepositController {
   @Get(':id')
   getAllByAccount(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Body() page: PaginationDto,
+    @Body() pagination: PaginationDto,
   ): JSON {
-    const pages = <PaginationModel>{
-      size: 1,
-      pages: 1,
-      currentPage: page.currentPage,
+    const paginationModel = <PaginationModel>{
+      range: pagination.range,
+      currentPage: pagination.currentPage ?? 1,
+    };
+    const dateRangeModule = <DateRangeModel>{
+      dateInit: pagination.dateInit,
+      dateEnd: pagination.dateEnd,
     };
     return JSON.parse(
-      JSON.stringify(this.depositService.getHistory(accountId, pages)),
-    );
-  }
-
-  @Get('id')
-  getByAccountAndDateRange(
-    @Param('id', ParseUUIDPipe) accountId: string,
-    @Body() page: PaginationDto,
-  ): JSON {
-    const pages = <PaginationModel>{
-      size: 1,
-      pages: 1,
-      currentPage: page.currentPage,
-    };
-    const dates = <DataRangeModel>{
-      range: page.range,
-      dateInit: page.dateInit,
-      dateEnd: page.dateEnd,
-    };
-    return JSON.parse(
-      JSON.stringify(this.depositService.getHistory(accountId, pages, dates)),
+      JSON.stringify(
+        this.depositService.getHistory(
+          accountId,
+          paginationModel,
+          dateRangeModule,
+        ),
+      ),
     );
   }
 

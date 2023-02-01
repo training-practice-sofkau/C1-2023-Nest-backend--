@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTransferDto } from 'src/business/dtos';
-import { DataRangeModel, PaginationModel } from 'src/data/models';
-import { TransferEntity } from 'src/data/persistence/entities';
-import { TransferRepository } from 'src/data/persistence/repositories';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { CreateTransferDto } from 'src/business';
+import {
+  DateRangeModel,
+  PaginationModel,
+  TransferEntity,
+  TransferRepository,
+} from 'src/data';
 import { AccountService } from '../account';
 
 @Injectable()
@@ -24,46 +27,76 @@ export class TransferService {
     newTransfer.income = incomeAccount;
     newTransfer.outcome = outcomeAccount;
     newTransfer.reason = transfer.reason;
-    this.transferRepository.register(newTransfer);
-    this.accountService.addBalance(incomeAccount.id, transfer.amount);
-    this.accountService.removeBalance(outcomeAccount.id, transfer.amount);
-    return newTransfer;
+    if (outcomeAccount.balance >= transfer.amount) {
+      this.transferRepository.register(newTransfer);
+      this.accountService.addBalance(incomeAccount.id, transfer.amount);
+      this.accountService.removeBalance(outcomeAccount.id, transfer.amount);
+      newTransfer.income = this.accountService.getAccountById(
+        transfer.incomeId,
+      );
+      newTransfer.outcome = this.accountService.getAccountById(
+        transfer.outcomeId,
+      );
+      return newTransfer;
+    }
+    throw new ConflictException('Saldo insuficiente');
   }
 
   //Devuelve historial de transferencias con cuenta de entrada enviada junto a paginacion y rangos
   getHistoryOut(
     accountId: string,
     pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    dateRange?: DateRangeModel,
   ): TransferEntity[] {
     const currentTransfers =
       this.transferRepository.findByOutcomeAccount(accountId);
-    return this.historyPagination(currentTransfers, pagination, dataRange);
+    if (dateRange) {
+      const transfersDateRange = this.getTransfersDateRange(
+        currentTransfers,
+        dateRange,
+      );
+      return this.historyPagination(transfersDateRange, pagination);
+    }
+    return this.historyPagination(currentTransfers, pagination);
   }
 
   //Devuelve historial de transferencias con cuenta de salida enviada junto a paginacion y rangos
   getHistoryIn(
     accountId: string,
     pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    dateRange?: DateRangeModel,
   ): TransferEntity[] {
     const currentTransfers =
       this.transferRepository.findByIncomeAccount(accountId);
-    return this.historyPagination(currentTransfers, pagination, dataRange);
+    if (dateRange) {
+      const transfersDateRange = this.getTransfersDateRange(
+        currentTransfers,
+        dateRange,
+      );
+      return this.historyPagination(transfersDateRange, pagination);
+    }
+    return this.historyPagination(currentTransfers, pagination);
   }
 
   //Devuelve todas las transferencias realizadas segun paginacion y rango
   getHistory(
     accountId: string,
     pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    dateRange?: DateRangeModel,
   ): TransferEntity[] {
     const currentTransfersOut =
       this.transferRepository.findByOutcomeAccount(accountId);
     const currentTransfersIn =
       this.transferRepository.findByIncomeAccount(accountId);
     const currentTransfers = [...currentTransfersIn, ...currentTransfersOut];
-    return this.historyPagination(currentTransfers, pagination, dataRange);
+    if (dateRange) {
+      const transfersDateRange = this.getTransfersDateRange(
+        currentTransfers,
+        dateRange,
+      );
+      return this.historyPagination(transfersDateRange, pagination);
+    }
+    return this.historyPagination(currentTransfers, pagination);
   }
 
   //Borrado de la transferencia enviada
@@ -75,23 +108,15 @@ export class TransferService {
   private historyPagination(
     transfersList: TransferEntity[],
     pagination: PaginationModel,
-    dataRange?: DataRangeModel,
   ): TransferEntity[] {
     pagination.size = transfersList.length;
-    const transfers: TransferEntity[] = [];
-    let range = 0;
-    if (dataRange && dataRange.range > 0) {
-      range = dataRange.range;
-    } else {
-      range = 10;
-    }
+    const range = pagination.range ?? 10;
     pagination.pages = Math.round(pagination.size / range);
-    for (
-      let i = pagination.currentPage * range;
-      i < pagination.currentPage * range + range;
-      i++
-    ) {
-      transfers.push(transfersList[i + 1]);
+    const transfers: TransferEntity[] = [];
+    const start = pagination.currentPage * range - range;
+    const end = start + range;
+    for (let i = start; i < end; i++) {
+      transfersList[i] ? transfers.push(transfersList[i]) : (i = end);
     }
     return transfers;
   }
@@ -99,5 +124,18 @@ export class TransferService {
   //Retorna todas las transferencias registradas en el sistema
   getAll(): TransferEntity[] {
     return this.transferRepository.findAll();
+  }
+
+  //retorna el array con el filtro de fechas
+  private getTransfersDateRange(
+    transfers: TransferEntity[],
+    dateRange: DateRangeModel,
+  ): TransferEntity[] {
+    const dateInit = dateRange.dateEnd ?? new Date('1999-01-01').getTime();
+    const dateEnd = dateRange.dateEnd ?? Date.now();
+    const transfersDateRange = transfers.filter(
+      ({ dateTime }) => dateTime >= dateInit && dateTime <= dateEnd,
+    );
+    return transfersDateRange;
   }
 }

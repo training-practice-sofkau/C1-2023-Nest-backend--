@@ -1,6 +1,4 @@
-export interface DataRangeModel {
-  range: number;
-  orderBy?: string;
+export interface DateRangeModel {
   dateInit: number | Date;
   dateEnd: number | Date;
 }

@@ -16,6 +16,7 @@ import {
   DocumentTypeRepository,
   TransferRepository,
 } from './data/persistence/repositories';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   controllers: [
@@ -37,6 +38,7 @@ import {
     DepositRepository,
     CustomerRepository,
     DocumentTypeRepository,
+    JwtService,
   ],
   exports: [
     AccountService,
@@ -50,6 +52,7 @@ import {
     DepositRepository,
     CustomerRepository,
     DocumentTypeRepository,
+    JwtService,
   ],
 })
 export class AppModule {}

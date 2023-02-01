@@ -83,7 +83,9 @@ export class CustomerRepository
   upate(id: string, entity: CustomerEntity): CustomerEntity {
     const currentCustomer = this.findOneById(id);
     if (JSON.stringify(currentCustomer) === JSON.stringify(entity)) {
-      throw new ConflictException('Los datos a actualizar ya existen');
+      throw new ConflictException(
+        'Los datos del cliente a actualizar ya existen',
+      );
     }
     const index = this.database.findIndex((c) => c.id === id);
     this.database[index] = {
@@ -119,7 +121,7 @@ export class CustomerRepository
 
   findOneById(id: string): CustomerEntity {
     const currentCustomer = this.findAll().find((c) => c.id === id);
-    if (currentCustomer) return currentCustomer;
+    if (currentCustomer) return Object.assign({}, currentCustomer);
     throw new NotFoundException(
       `El cliente con el Id ${id} no existe en la base de datos`,
     );
