@@ -143,7 +143,6 @@ export class AccountRepository
     const accountIndex = this.database.findIndex(
       (account) => account.id === id,
     );
-    console.log(this.database)
     return this.database[accountIndex].state;
   }
   changeStateId(id: string, state: boolean): void {
