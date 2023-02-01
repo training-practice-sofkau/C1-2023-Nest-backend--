@@ -1,4 +1,4 @@
-import { AccountTypeEntity } from 'src/business/persistence/entities';
+import { AccountTypeEntity } from 'src/data/persistence/entities';
 import { BodyRepositoryInterface } from '../model-repository.interface';
 
 export interface AccountTypeRepositoryInterface

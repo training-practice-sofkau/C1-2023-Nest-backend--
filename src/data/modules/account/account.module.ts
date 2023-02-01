@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common/decorators/modules/module.decorator";
 import { AccountController } from "src/presentation";
-import { AccountTypeRepository, AccountRepository } from "src/business/persistence";
-import { AccountService } from "src/data/services";
+import { AccountRepository, AccountTypeRepository } from "src/data/persistence";
+import { AccountService } from "src/business/services";
 
 @Module({
     controllers: [AccountController],

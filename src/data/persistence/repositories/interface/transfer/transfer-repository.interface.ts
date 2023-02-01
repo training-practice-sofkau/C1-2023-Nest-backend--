@@ -1,4 +1,4 @@
-import { TransferEntity } from 'src/business/persistence/entities';
+import { TransferEntity } from 'src/data/persistence/entities';
 import { BodyRepositoryInterface } from '../model-repository.interface';
 
 export interface TransferRepositoryInterface

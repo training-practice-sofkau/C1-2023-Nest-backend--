@@ -1,4 +1,4 @@
-import { CustomerEntity } from 'src/business/persistence/entities';
+import { CustomerEntity } from 'src/data/persistence/entities';
 import { BodyRepositoryInterface } from '../model-repository.interface';
 
 export interface CustomerRepositoryInterface
