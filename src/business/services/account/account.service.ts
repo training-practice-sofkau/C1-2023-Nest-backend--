@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeRepository, CustomerEntity } from 'src/business/persistence';
-import { NewAccountDTO } from 'src/data/dtos';
+import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeRepository, CustomerEntity } from 'src/data/persistence';
+import { NewAccountDTO } from 'src/business/dtos';
 
 @Injectable()
 export class AccountService {

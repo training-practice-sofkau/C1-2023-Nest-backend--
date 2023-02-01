@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { AccountRepository, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/business/persistence';
-import { newCustomerDTO } from 'src/data/dtos';
+import { AccountRepository, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
+import { newCustomerDTO } from 'src/business/dtos';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()

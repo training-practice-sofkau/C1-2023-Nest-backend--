@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { DataRangeModel, PaginationModel } from "src/business/models";
-import { AccountEntity, TransferEntity, TransferRespository } from "src/business/persistence";
-import { NewTransferDTO } from "src/data/dtos";
+import { DataRangeModel, PaginationModel } from "src/data/models";
+import { AccountEntity, TransferEntity, TransferRespository } from "src/data/persistence";
+import { NewTransferDTO } from "src/business/dtos";
 import { AccountService } from "../account";
 
 @Injectable()

@@ -4,8 +4,8 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/business/persistence';
-import { NewAccountDTO, newCustomerDTO, NewSecurityDTO } from 'src/data/dtos';
+import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
+import { NewAccountDTO, newCustomerDTO, NewSecurityDTO } from 'src/business/dtos';
 import { AccountService } from '../account';
 
 @Injectable()
