@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositEntity } from '../entities/deposit.entity';
+import { AccountRepository } from './account.repository';
 import { BaseRepository } from './base';
 import { DepositRepositoryInterface } from './interfaces';
 
@@ -8,6 +9,10 @@ export class DepositRepository
   extends BaseRepository<DepositEntity>
   implements DepositRepositoryInterface
 {
+  constructor(private readonly accountRepository: AccountRepository) {
+    super();
+  }
+
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -76,12 +81,38 @@ export class DepositRepository
     accountId: string,
     limit: number,
     offset: number,
-  ) {
+  ): DepositEntity[] {
+    console.log(Date.now());
+    /* const accounts = this.database.filter(
+      (item) => item.account.id === accountId,
+    );*/
+    const deposits = this.findAll();
+    console.log('account ', deposits);
+    if (limit && offset) {
+      console.log('entra en if');
+      const inicio = limit * offset;
+      const u = deposits.filter((item) => item.account.id === accountId);
+      const a = [1, 2, 3, 4, 5];
+      console.log('limit ', limit, 'offset ', offset, 'inicio ', inicio);
+      const uu = a.slice(inicio, inicio + limit);
+      console.log('u ', u);
+      console.log('u ', uu);
+      return u;
+      //return deposits.slice(inicio, inicio + limit);
+    }
+    return deposits;
+    /*
+    console.log('item ', item);
+          console.log('accountId', accountId);
+          console.log('accountId', typeof accountId);
+          console.log('item.account.id ', typeof item.account.id);
+          console.log('item.account.id ', item.account.id === accountId);
+    
     const startIndex = (offset - 1) * limit;
     const endIndex = startIndex + limit;
     const accounts = this.database.filter(
       (item) => item.account.id === accountId,
     );
-    return accounts.slice(startIndex, endIndex);
+    return accounts.slice(startIndex, endIndex);*/
   }
 }

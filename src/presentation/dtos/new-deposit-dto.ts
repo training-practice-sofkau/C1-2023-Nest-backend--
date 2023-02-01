@@ -7,6 +7,6 @@ export class NewDepositDTO {
   @IsNumber()
   amount: number;
 
-  @IsDate()
+  @IsNumber()
   dateTime: Date | number;
 }

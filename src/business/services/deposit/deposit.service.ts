@@ -23,7 +23,8 @@ export class DepositService {
     const newDeposit = new DepositEntity();
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = deposit.dateTime;
-
+    newDeposit.account = newAccount;
+    console.log('newDeposit ', newDeposit);
     return this.depositRepository.register(newDeposit);
   }
 
@@ -48,13 +49,13 @@ export class DepositService {
    */
   getHistory(
     accountId: string,
-    { limit, offset }: PaginationModel,
+    pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
     return this.depositRepository.findByAccountIdAndPagination(
       accountId,
-      limit,
-      offset,
+      pagination.limit,
+      pagination.offset,
     );
   }
 }
