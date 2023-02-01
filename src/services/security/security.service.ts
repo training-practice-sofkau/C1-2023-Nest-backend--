@@ -5,9 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CustomerModel } from 'src/models';
-import { CustomerEntity, AccountTypeEntity } from 'src/persistence/entities';
+import {
+  CustomerEntity,
+  AccountTypeEntity,
+  DocumentTypeEntity,
+} from 'src/persistence/entities';
 import { CustomerRepository } from 'src/persistence/repositories';
 import { AccountService } from '../account/account.service';
+import { NewCustomerDTO } from '../../dtos/new-customer.dto';
 
 @Injectable()
 export class SecurityService {
@@ -31,7 +36,19 @@ export class SecurityService {
     if (answer) return 'Falta retornar un JWT';
     else throw new UnauthorizedException('Datos de identificación inválidos');
   }
+  transmap(customer: NewCustomerDTO): CustomerEntity {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = customer.documentTypeId;
+    const newCustomer = new CustomerEntity();
+    newCustomer.documentType = documentType;
+    newCustomer.document = customer.document;
+    newCustomer.fullName = customer.fullName;
+    newCustomer.email = customer.email;
+    newCustomer.phone = customer.phone;
+    newCustomer.password = customer.password;
 
+    return newCustomer;
+  }
   /**
    * Crear usuario en el sistema
    *
@@ -39,23 +56,16 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: CustomerModel): string {
-    const newCustomer = new CustomerEntity();
-    newCustomer.documentType = user.documentType;
-    newCustomer.document = user.document;
-    newCustomer.fullName = user.fullName;
-    newCustomer.email = user.email;
-    newCustomer.phone = user.phone;
-    newCustomer.password = user.password;
-
+  signUp(user: NewCustomerDTO): string {
+    const newCustomer = this.transmap(user);
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {
       const accountType = new AccountTypeEntity();
       accountType.id = 'Falta el ID del tipo de cuenta';
       const newAccount = {
-        customer,
-        accountType,
+        CustomerEntityId: customer.id,
+        accontType: accountType.id,
         id: '',
         balance: 0,
         state: true,

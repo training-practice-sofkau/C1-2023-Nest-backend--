@@ -26,18 +26,18 @@ export class UserController {
     return this.customerService.newCustomer(customer);
   }
   // obtener la informacion del cliente
-  @Post()
-  getCustomerInf(
-    @Param('id', ParseUUIDPipe) customerId: string,
-  ): CustomerEntity {
+  @Get(':id')
+  getCustomerInf(@Param('id') customerId: string): CustomerEntity {
     return this.customerService.getCustomerInfo(customerId);
   }
 
-  //Darse de baja Cliente
-  @Post()
+  //Desactivar cuenta
+  @Post(':id')
   unsubscribe(@Param('id', ParseUUIDPipe) customerId: string): boolean {
     return this.customerService.unsubscribe(customerId);
   }
+
+  //actualizar usuario
 
   @Put(':Id')
   updateCustome(

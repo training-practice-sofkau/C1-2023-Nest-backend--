@@ -5,9 +5,9 @@ import { SecurityService } from 'src/services';
 @Controller('security')
 export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
- //Identificarse en el sistema
-  @Post()
-  verifyUser(@Body() security: NewCustomerDTO) {
-    return this.securityService.signIn(security);
-  }
+  //Identificarse en el sistema
+  // @Post()
+  // verifyUser(@Body() security: NewCustomerDTO) {
+  //   return this.securityService.signIn(security);
+  // }
 }

@@ -1,17 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { AccountModel } from 'src/models';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import {
+  AccountEntity,
+  AccountTypeEntity,
+  DocumentTypeEntity,
+} from 'src/persistence/entities';
 import { AccountTypeRepository } from 'src/persistence/repositories/account-type.repository';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
+import { NewAccountDto } from '../../dtos/new-account.dto';
+import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
 
 @Injectable()
 export class AccountService {
-
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository,
   ) {}
 
+  newmap(account: NewAccountDto): AccountEntity {
+    const account1 = new AccountEntity();
+    account1.customer = this.customerRepository.findOneById(
+      account.CustomerEntityId,
+    );
+    account1.accountType = this.accountTypeRepository.findOneById(
+      account.accontType,
+    );
+    return account1;
+  }
   /**
    * Crear una cuenta
    *
@@ -19,10 +35,8 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
-    const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+  createAccount(account: NewAccountDto): AccountEntity {
+    const newAccount = this.newmap(account);
     return this.accountRepository.register(newAccount);
   }
 
@@ -107,9 +121,11 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  // getAccountType(accountId: string): AccountTypeEntity {
-  //   this.accountRepository.findOneById(accountId).accountType;
-  // }
+  getAccountType(accountId: string): AccountTypeEntity {
+    let account2 = new AccountTypeEntity();
+    account2 = this.accountRepository.findOneById(accountId).accountType;
+    return account2;
+  }
 
   /**
    * Cambiar el tipo de cuenta a una cuenta
@@ -123,8 +139,10 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    return (this.accountRepository.findOneById(accountId).accountType =
-      this.accountTypeRepository.findOneById(accountTypeId));
+    const accountchange = this.accountRepository.findOneById(accountId);
+    accountchange.accountType =
+      this.accountTypeRepository.findOneById(accountTypeId);
+    return this.accountRepository.update(accountId, accountchange).accountType;
   }
 
   /**
