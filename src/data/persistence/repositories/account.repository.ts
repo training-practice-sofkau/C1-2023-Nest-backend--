@@ -14,10 +14,13 @@ export class AccountRepository
   }
 
   update(id: string, entity: AccountEntity): AccountEntity {
+    console.log('database ', this.database[0].deletedAt);
     const index = this.database.findIndex(
       (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
+    console.log('index ', index);
     if (index >= 0) {
+      //account.deletedAt = Date.now();
       this.database[index] = {
         ...this.database[index],
         ...entity,
@@ -30,20 +33,22 @@ export class AccountRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const account = this.findOneById(id);
+    console.log('soft ', soft);
     if (soft || soft === undefined) {
-      account.deletedAt = Date.now();
-      this.update(id, account);
+      console.log('entra en if reposiroty');
+      this.softDelete(id);
     } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
-      );
-      this.database.splice(index, 1);
+      console.log('entra en else reposiroty');
+      this.hardDelete(id);
     }
   }
 
   findAll(): AccountEntity[] {
-    return this.database.filter((item) => item.deletedAt === undefined);
+    return this.database.filter((item) => {
+      console.log('item ', item);
+      console.log('item ', item.deletedAt);
+      return item;
+    });
   }
 
   findOneById(id: string): AccountEntity {
@@ -72,13 +77,25 @@ export class AccountRepository
     );
     return accounts;
   }
-  private hardDelete(index: number): void {
+
+  private hardDelete(id: string): void {
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
     this.database.splice(index, 1);
   }
 
-  private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
-    this.update(this.database[index].id, this.database[index]);
+  private softDelete(id: string): void {
+    const account = this.findOneById(id);
+    console.log('acc ', account);
+    //account.deletedAt = Date.now();
+    //account.id = '98';
+    const v: AccountEntity = {
+      ...account,
+    };
+    v.deletedAt = Date.now();
+    console.log('data soft ', this.database);
+    this.update(id, v);
   }
 }
 

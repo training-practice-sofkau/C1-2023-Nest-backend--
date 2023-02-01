@@ -164,17 +164,21 @@ export class AccountService {
    * @param {boolean} state
    * @memberof AccountService
    */
-  changeState(accountId: string, state: boolean): void {
-    const account = this.accountRepository.findOneById(accountId);
+  changeState(accountId: string, state: string): void {
+    console.log('state in ser ', state);
+    let account = this.accountRepository.findOneById(accountId);
     if (!account) {
       throw new NotFoundException(
         `La cuenta ${account} no existe en base de datos`,
       );
     }
-    if (!account.state) {
-      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
-    }
-    account.state = state;
+    let booleanState = true;
+    if (state === 'false') booleanState = false;
+    account = {
+      ...account,
+      state: booleanState,
+    };
+    this.accountRepository.update(accountId, account);
   }
 
   /**
@@ -194,6 +198,7 @@ export class AccountService {
     if (!account.state) {
       throw new NotFoundException(`La cuenta ${account} esta desactivada`);
     }
+    console.log('account.accountType ', account.accountType);
     return account.accountType;
   }
 
@@ -230,7 +235,7 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId);
+    return this.accountRepository.delete(accountId);
   }
 
   verifyAccountAndState(accountId: string): object {

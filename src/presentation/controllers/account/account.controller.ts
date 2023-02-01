@@ -18,7 +18,6 @@ export class AccountController {
 
   @Get()
   findAllAccounts(): AccountEntity[] {
-    console.log('entra en get');
     return this.accountService.findAll();
   }
 
@@ -32,21 +31,20 @@ export class AccountController {
     @Body() account: NewAccountDTO,
     @Param('id') id: string,
   ): AccountEntity {
-    console.log('entra en put');
     return this.accountService.updatedAccount(id, account);
   }
 
   @Get('/balance/:id')
-  findAllBalance(@Param('id') id: string): number {
+  getBalance(@Param('id') id: string): number {
     return this.accountService.getBalance(id);
   }
 
-  @Post('/balance/:id')
+  @Post('/balance/add/:id')
   addBalance(@Param('id') id: string, @Query('amount') amount: number): void {
     return this.accountService.addBalance(id, amount);
   }
 
-  @Post('/balance/:id')
+  @Post('/balance/remove/:id')
   removeBalance(
     @Param('id') id: string,
     @Query('amount') amount: number,
@@ -62,19 +60,19 @@ export class AccountController {
     return this.accountService.verifyAmountIntoBalance(id, amount);
   }
 
-  @Get('/state')
+  @Get('/state/:id')
   getState(@Param('id') id: string): boolean {
     return this.accountService.getState(id);
   }
 
-  @Post('/state')
-  changeState(@Param('id') id: string, state: boolean): void {
-    this.accountService.changeState(id, state);
+  @Post('/state/:id')
+  changeState(@Param('id') id: string, @Query('state') state: string): void {
+    return this.accountService.changeState(id, state);
   }
 
-  @Get()
+  @Get('/accountType/:id')
   getAccountType(@Param('id') id: string) {
-    this.accountService.getAccountType(id);
+    return this.accountService.getAccountType(id);
   }
 
   @Post('/state')
@@ -82,8 +80,8 @@ export class AccountController {
     this.accountService.changeAccountType(id, accountTypeId);
   }
 
-  @Delete()
+  @Delete('/:id')
   deleteAccount(@Param('id') id: string): void {
-    this.accountService.deleteAccount(id);
+    return this.accountService.deleteAccount(id);
   }
 }
