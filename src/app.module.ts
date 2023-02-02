@@ -19,6 +19,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Calculator } from './Week2Day3/observer/calculator';
 import { CrearFiguras } from './Week2Day3/factory/CrearFiguras';
+import { Strategy } from './Week2Day3/strategy/strategy';
 
 @Module({
   controllers: [
@@ -29,6 +30,7 @@ import { CrearFiguras } from './Week2Day3/factory/CrearFiguras';
     DepositsController,
     Calculator,
     CrearFiguras,
+    Strategy,
   ],
   providers: [
     AccountService,
