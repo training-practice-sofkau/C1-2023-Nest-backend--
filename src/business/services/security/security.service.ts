@@ -1,11 +1,17 @@
 // Libraries
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CustomerModel } from 'src/data/models';
 import {
   AccountTypeEntity,
   CustomerEntity,
   CustomerRepository,
+  DocumentTypeEntity,
 } from 'src/data/persistence';
+import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
 import { v4 as uuid2 } from 'uuid';
 import { AccountService } from '../account/account.service';
 
@@ -39,9 +45,12 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: CustomerModel): string {
+  signUp(user: NewCustomerDTO): string {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = user.documentTypeId;
+
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = user.documentType;
+    newCustomer.documentType = documentType;
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
@@ -52,21 +61,31 @@ export class SecurityService {
 
     if (customer) {
       const accountType = new AccountTypeEntity();
-      accountType.id = 'kjndkeswncfeṕrfk';
+      //accountType.id = newCustomer;
       const newAccount = {
-        id: uuid2(), //no estaba
-        customer,
-        accountType,
+        customer: customer.id,
+        accountType: accountType.id,
         balance: 0, //no estaba
-        state: true, //no estaba
       };
 
-      //const account = this.accountService.createAccount(newAccount);
-      //if (account) return 'Falta retornar un JWT';
-      //else throw new InternalServerErrorException();
-    } //else throw new InternalServerErrorException();
-    return 'bien';
+      const account = this.accountService.createAccount(newAccount);
+      if (account) return 'Falta retornar un JWT';
+      else throw new InternalServerErrorException();
+    } else throw new InternalServerErrorException();
   }
+
+  /**
+   *  //Crear cuenta
+    const acco = {
+      customer: newCustomer.id,
+      accountType: documentType.id,
+      balance: 0,
+    };
+    const account = this.accountService.createAccount(acco);
+    account.customer = newCustomer;
+
+    return this.customerRepository.register(newCustomer);
+   */
 
   /**
    * Salir del sistema

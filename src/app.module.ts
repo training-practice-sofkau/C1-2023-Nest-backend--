@@ -12,6 +12,8 @@ import { CustomerService } from './business/services';
 import { AccountService } from './business/services/account/account.service';
 import { DepositService } from './business/services/deposit/deposit.service';
 import { TransferService } from './business/services/transfer/transfer.service';
+import { SecurityController } from './controllers/security/security.controller';
+import { SecurityController } from './presentation/controllers/security/security.controller';
 
 @Module({
   imports: [],
@@ -20,6 +22,7 @@ import { TransferService } from './business/services/transfer/transfer.service';
     AccountController,
     DepositController,
     TransferController,
+    SecurityController,
   ],
   providers: [
     CustomerService,

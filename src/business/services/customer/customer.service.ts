@@ -19,7 +19,7 @@ export class CustomerService {
     return this.customerRepository.findAll();
   }
 
-  newCustomer(customer: NewCustomerDTO): CustomerEntity {
+  /*newCustomer(customer: NewCustomerDTO): CustomerEntity {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentTypeId;
 
@@ -41,7 +41,7 @@ export class CustomerService {
     account.customer = newCustomer;
 
     return this.customerRepository.register(newCustomer);
-  }
+  }*/
 
   /**
    * Obtener información de un cliente
