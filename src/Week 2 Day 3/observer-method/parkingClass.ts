@@ -5,10 +5,12 @@ export class Parking implements Observable {
     private spaces: Observer[] = []
     add(clients: Observer): string {
         this.spaces.push(clients)
+        this.sendData()
         return "Se ha ocupado un espacio en el parqueadero"
     }
     remove(clients: Observer): string {
         this.spaces.splice(0, 1)
+        this.sendData()
         return "Se ha desocupado un espacio en el parqueadero"
     }
     spacesParkint(){

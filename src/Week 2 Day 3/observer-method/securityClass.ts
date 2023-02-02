@@ -7,7 +7,8 @@ export class Secutiry implements Observer {
         this.observable = observable;
     }
     readData() {
-        console.log(this.observable.spacesParkint)
+        const spacesFree = this.observable.spacesParkint()
+        console.log(spacesFree)
     }
 
 }
