@@ -1,10 +1,10 @@
-import { IsNumber, IsUUID } from 'class-validator';
+import { IsNumberString, IsUUID } from 'class-validator';
 
 export class NewAccountDto {
   @IsUUID()
-  CustomerEntityId: string;
+  CustomerEntityId: string; //id cliente
   @IsUUID()
-  accontType: string;
-  @IsNumber()
-  balance: number;
+  accontType: string; //id tipo de cuenta
+  @IsNumberString()
+  balance: string; //dinero con el que se quiere crear en la cuenta
 }

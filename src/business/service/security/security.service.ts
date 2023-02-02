@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { NewCustomerDTO } from 'src/business/dtos';
-import { CustomerModel } from 'src/data/models';
 import {
   AccountTypeEntity,
   CustomerEntity,
@@ -13,6 +12,7 @@ import {
 } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/data/persistence/repository';
 import { AccountService } from '../account';
+import { NewSecurityDTO } from '../../dtos/new-security.dto';
 
 @Injectable()
 export class SecurityService {
@@ -28,7 +28,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: CustomerModel): string {
+  signIn(user: NewSecurityDTO): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
@@ -67,7 +67,7 @@ export class SecurityService {
         CustomerEntityId: customer.id,
         accontType: accountType.id,
         id: '',
-        balance: 0,
+        balance: '5',
         state: true,
       };
 

@@ -1,11 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DepositModel } from 'src/data/models';
 import { DepositEntity } from 'src/data/persistence/entities';
-import { DepositRepository } from 'src/data/persistence/repository';
-
+import {
+  DepositRepository,
+  AccountRepository,
+} from 'src/data/persistence/repository';
+import { NewDepositDTO } from '../../dtos/new-deposit.dto';
 @Injectable()
 export class DepositService {
-  constructor(private readonly depositRepository: DepositRepository) {}
+  constructor(
+    private readonly depositRepository: DepositRepository,
+    private readonly accountRepository: AccountRepository,
+  ) {}
+
+  mapDeposit(deposit: NewDepositDTO): DepositEntity {
+    const depos = new DepositEntity(); // declarar la entidad
+    const account = this.accountRepository.findOneById(deposit.accountId); //se crea atributo y se ingresa al repositorio a buscar el id
+    depos.account = account; // se iguala el atributo a lo que busca en este caso seria el id
+    depos.amount = deposit.amount; // se iguala el atributo en la busqueda del amount
+    return depos;
+  }
   /**
    * Crear un deposito
    *
@@ -13,11 +26,8 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
-    const depositNew = new DepositEntity();
-    depositNew.account = deposit.account;
-    depositNew.amount = deposit.amount;
-    depositNew.dateTime = Date.now();
+  createDeposit(deposit: NewDepositDTO): DepositEntity {
+    const depositNew = this.mapDeposit(deposit);
     return this.depositRepository.register(depositNew);
   }
 

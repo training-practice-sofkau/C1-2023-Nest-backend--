@@ -26,6 +26,7 @@ export class AccountService {
     account1.accountType = this.accountTypeRepository.findOneById(
       account.accontType,
     );
+    account1.balance = Number(account.balance);
     return account1;
   }
   /**
@@ -58,8 +59,8 @@ export class AccountService {
    * @param {number} amount
    * @memberof AccountService
    */
-  addBalance(accountId: string, amount: number): void {
-    this.accountRepository.findOneById(accountId).balance += amount; //se va asuma el monto al balance
+  addBalance(accountId: string, amount: number): number {
+    return (this.accountRepository.findOneById(accountId).balance += amount); //se va asuma el monto al balance
   }
 
   /**

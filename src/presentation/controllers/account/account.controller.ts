@@ -22,18 +22,19 @@ export class AccountController {
   createAccoun(@Body() account: NewAccountDto): AccountEntity {
     return this.accountService.createAccount(account);
   }
-
+  //obtener balance
   @Get('balance/:accountId')
   getBalanc(@Param('accountId', ParseUUIDPipe) accountId: string): number {
     return this.accountService.getBalance(accountId);
   }
-
+  //agregar balance
   @Put('add/:accountId')
   addBalanc(
     @Param('accountId', ParseUUIDPipe) accountId: string,
     @Param('amount') amount: number,
-  ): void {
+  ): string {
     this.accountService.addBalance(accountId, amount);
+    return 'se agrego';
   }
 
   @Put('remove/:accountId')
