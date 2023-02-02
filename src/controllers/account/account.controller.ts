@@ -13,7 +13,7 @@ export class AccountController {
       return this.accountService.createAccount(account);
     }
   
-    @Get(':id')
+    @Get('balance/:id')
     getBalance(@Param('id') accountId: string): number {
       return this.accountService.getBalance(accountId);
     }

@@ -31,14 +31,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    const account = this.accountRepository.findOneById(accountId);
-    if (!account) {
-      throw new Error('La cuenta no existe');
-    }
-    if(account.deletedAt){
-       throw new Error('La cuenta se ha eliminado');
-    }
-    return account.balance;
+    return this.accountRepository.findOneById(accountId).balance;
   }
 
 

@@ -1,18 +1,10 @@
-import { IsEmail, IsNumberString, IsString, IsUUID, MaxLength } from "class-validator";
+import { IsNumberString, IsUUID, } from "class-validator";
 
 export class NewAccountDTO{
     @IsUUID()
-    customer: string;
+    CustomerEntity: string;
     @IsUUID()
-    accountType: string;   
-    @IsNumberString()
-    document: string;
-    @IsEmail()
-    email: string;
-    @IsNumberString()
-    @MaxLength(30)
-    phone: string;
-    @IsString()
-    @MaxLength(500)
-    fullName: string;
+    accountType: string;
+    @IsNumberString()   
+    balance: number;
 }
