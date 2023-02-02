@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { NewCustomerDTO } from 'src/dtos/new-customer.dto';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common'
 import { CustomerEntity } from 'src/persistence/entities';
 import { CustomerService } from 'src/services/customer';
 
@@ -18,9 +18,9 @@ export class UserController {
   }
    
    @Get(':id')
-   getCustomerInf(@Param('id') customerId: string):  CustomerEntity {
-     return this.customerService.getCustomerInfo(customerId);
-     
+   getCustomerInf(@Param('id') customerId: string): string {
+    //  return this.customerService.getCustomerInfo(customerId);
+      return "hola"
    }
  
    //Desactivar cuenta

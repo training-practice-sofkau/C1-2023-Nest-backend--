@@ -10,7 +10,10 @@ import { AccountTypeRepositoryInterface } from './interfaces/accouny-type.reposi
 
 @Injectable()
 export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> implements AccountTypeRepositoryInterface
+
 {
+  constructor( ){super();
+  this.database.push({id: "d8d0be69-27ae-4898-8fcd-37669ff45a13", name: "corriente", state: true})}
   findByState(state: boolean): AccountTypeEntity[] {
     return this.database.filter((item) => item.state === state);
   }

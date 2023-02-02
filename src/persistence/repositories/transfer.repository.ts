@@ -9,8 +9,8 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
   findByDateRange(accountId: string, arg1: number, arg2: number) {
     throw new Error("Method not implemented.");
   }
-  findByIncomeId(accountId: string) {
-    throw new Error("Method not implemented.");
+  findByIncomeId(accountId: string): TransferEntity[] {
+    return this.findAll().filter(t => t.income.id === accountId);
   }
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
@@ -63,7 +63,11 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    const currentTransfers = this.findByOutcomeId(accountId).filter(
+      (t) => t.dateTime <= dateEnd && t.dateTime >= dateInit,
+    );
+    return currentTransfers;
+  
   }
 
   findIncomeByDataRange(
@@ -71,8 +75,16 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    const currentTransfers = this.findByIncomeId(accountId).filter(
+      (t) => t.dateTime <= dateEnd && t.dateTime >= dateInit,
+    );
+    return currentTransfers;
   }
+  findByOutcomeId(accountId: string): TransferEntity[] {
+    return this.findAll().filter(t => t.outcome.id === accountId);
+  }
+  
+
   }
 
 

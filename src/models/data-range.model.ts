@@ -1,3 +1,4 @@
 export interface DataRangeModel {
-    range?: number
-}
+    range: number;
+    orderBy: string;
+  }

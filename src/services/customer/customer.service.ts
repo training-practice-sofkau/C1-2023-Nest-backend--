@@ -48,7 +48,7 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
+  updatedCustomer(id: string, customer: NewCustomerDTO): CustomerEntity {
     return this.updatedCustomer(id, customer);
   }
 

@@ -1,4 +1,4 @@
-import { IsNumberString, IsString, IsUUID, MaxLength } from "class-validator";
+import { IsEmail, IsNumberString, IsString, IsUUID, MaxLength } from "class-validator";
 
 export class NewAccountDTO{
     @IsUUID()

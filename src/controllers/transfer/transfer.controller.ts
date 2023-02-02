@@ -9,20 +9,20 @@ export class TransferController {
   constructor(private readonly transferService: TransferService) {}
 
   @Get('/:accountId/history/out')
-  getHistoryOut(
+  async getHistoryOut(
     @Param('accountId') accountId: string,
     @Query() pagination: PaginationModel,
     @Query() dataRange?: DataRangeModel,
-  ): TransferEntity[] {
+  ):Promise<TransferEntity[]> {
     return this.transferService.getHistoryOut(accountId, pagination, dataRange);
   }
 
   @Get('/:accountId/history/in')
-  getHistoryIn(
+  async getHistoryIn(
     @Param('accountId') accountId: string,
     @Query() pagination: PaginationModel,
     @Query() dataRange?: DataRangeModel,
-  ): TransferEntity[] {
+  ): Promise <TransferEntity[]>{
     return this.transferService.getHistoryIn(accountId, pagination, dataRange);
   }
 

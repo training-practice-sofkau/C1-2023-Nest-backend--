@@ -1,7 +1,9 @@
-import { IsNumberString, IsString, MaxLength } from "class-validator";
+import { IsNumberString, IsString, IsUUID, MaxLength } from "class-validator";
 
 export class NewTransferDTO {
+    @IsUUID()
     outcome: number;
+    @IsUUID()
     income:number;
     @IsNumberString()
     amount: number;

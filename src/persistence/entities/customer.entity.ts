@@ -12,6 +12,6 @@ export class CustomerEntity implements CustomerModel {
     password: string;
     avatarUrl?: string;
     state: boolean;
-    deletedAt?: number | Date;
+    deletedAt?: Date| number;
     
 }

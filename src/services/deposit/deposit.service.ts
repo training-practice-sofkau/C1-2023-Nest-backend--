@@ -3,12 +3,12 @@ import { DepositModel } from 'src/models';
 import { DataRangeModel } from 'src/models/data-range.model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { DepositEntity } from 'src/persistence/entities/deposite.entity';
-import { DepositeRepository } from 'src/persistence/repositories/deposite.repository';
+import { DepositRepository } from 'src/persistence/repositories/deposit.repository';
 import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class DepositService {
-    constructor(private readonly depositRepository: DepositeRepository, private readonly accountService: AccountService) { }
+    constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService) { }
     /**
    * Crear un deposito
    *
@@ -17,13 +17,15 @@ export class DepositService {
    * @memberof DepositService
    */
     createDeposit(deposit: DepositModel): DepositEntity {
-        if (this.accountService.getState(deposit.account.id)) {
-            deposit.dateTime = deposit.dateTime = new Date() 
-            return this.depositRepository.register(deposit)}
-        else {
-            throw new NotFoundException("La cuenta no se encuentra activa")
-        }
-    }
+        const newDeposit = new DepositEntity();
+        newDeposit.account = deposit.account;
+        newDeposit.amount = deposit.amount;
+        newDeposit.dateTime = Date.now();
+        this.depositRepository.register(newDeposit);
+        this.accountService.addBalance(newDeposit.account.id, newDeposit.amount);
+        return newDeposit;
+  }
+    
 
     /**
      * Borrar un deposito
