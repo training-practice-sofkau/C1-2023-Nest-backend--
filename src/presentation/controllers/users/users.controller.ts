@@ -12,8 +12,8 @@ import {
 import { CreateCustomerDto, UpdateSecurityDto } from 'src/business';
 import { CustomerService, SecurityService } from 'src/business/services';
 
-@Controller('user')
-export class UserController {
+@Controller('users')
+export class UsersController {
   constructor(
     private readonly customerService: CustomerService,
     private readonly securityService: SecurityService,

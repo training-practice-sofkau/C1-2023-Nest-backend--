@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AccountService, CreateDepositDto } from 'src/business';
 import {
   DateRangeModel,
@@ -41,6 +41,9 @@ export class DepositService {
     pagination: PaginationModel,
     dateRange?: DateRangeModel,
   ): DepositEntity[] {
+    if (!pagination) {
+      throw new BadRequestException(`Se debe paginar la solicitud`);
+    }
     let currentDeposits: DepositEntity[];
     if (dateRange) {
       const dateInit = dateRange.dateEnd ?? new Date('1999-01-01').getTime();
@@ -52,11 +55,15 @@ export class DepositService {
     } else {
       currentDeposits = this.depositRepository.findByAccountId(accountId);
     }
-    pagination.size = currentDeposits.length;
-    const range = pagination.range ?? 10;
-    pagination.pages = Math.round(pagination.size / range);
+    const currentPage = pagination?.currentPage ?? 1;
+    const range = Math.round(currentDeposits.length / pagination?.pages ?? 10);
+    if (range < currentPage) {
+      throw new BadRequestException(
+        `La pagina ${currentPage} no existe o está vacía`,
+      );
+    }
     const deposits: DepositEntity[] = [];
-    const start = pagination.currentPage * range - range;
+    const start = currentPage * range - range;
     const end = start + range;
     for (let i = start; i < end; i++) {
       currentDeposits[i] ? deposits.push(currentDeposits[i]) : (i = end);

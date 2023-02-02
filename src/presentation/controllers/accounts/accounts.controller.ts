@@ -10,8 +10,8 @@ import {
 import { CreateAccountDto } from 'src/business/dtos';
 import { AccountService } from 'src/business/services';
 
-@Controller('account')
-export class AccountController {
+@Controller('accounts')
+export class AccountsController {
   constructor(private readonly accountService: AccountService) {}
   @Get()
   getAllAccounts(): JSON {

@@ -7,12 +7,16 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateTransferDto, PaginationDto } from 'src/business/dtos';
+import {
+  CreateTransferDto,
+  DateRangeDto,
+  PaginationDto,
+} from 'src/business/dtos';
 import { DateRangeModel, PaginationModel } from 'src/data/models';
 import { TransferService } from 'src/business/services';
 
-@Controller('transfer')
-export class TransferController {
+@Controller('transfers')
+export class TransfersController {
   constructor(private readonly transferService: TransferService) {}
 
   @Get()
@@ -23,22 +27,15 @@ export class TransferController {
   @Get(':id')
   getAllByAccount(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Body() pagination: PaginationDto,
+    @Body('pagination') pagination: PaginationDto,
+    @Body('dateRange') dateRange?: DateRangeDto,
   ): JSON {
-    const paginationModel = <PaginationModel>{
-      range: pagination.range,
-      currentPage: pagination.currentPage ?? 1,
-    };
-    const dateRangeModule = <DateRangeModel>{
-      dateInit: pagination.dateInit,
-      dateEnd: pagination.dateEnd,
-    };
     return JSON.parse(
       JSON.stringify(
         this.transferService.getHistory(
           accountId,
-          paginationModel,
-          dateRangeModule,
+          <PaginationModel>pagination,
+          <DateRangeModel>dateRange,
         ),
       ),
     );
@@ -47,22 +44,15 @@ export class TransferController {
   @Get('income/:id')
   getByIncomeAccountAndDateRange(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Body() pagination: PaginationDto,
+    @Body('pagination') pagination: PaginationDto,
+    @Body('dateRange') dateRange?: DateRangeDto,
   ): JSON {
-    const paginationModel = <PaginationModel>{
-      range: pagination.range,
-      currentPage: pagination.currentPage ?? 1,
-    };
-    const dateRangeModule = <DateRangeModel>{
-      dateInit: pagination.dateInit,
-      dateEnd: pagination.dateEnd,
-    };
     return JSON.parse(
       JSON.stringify(
         this.transferService.getHistoryIn(
           accountId,
-          paginationModel,
-          dateRangeModule,
+          <PaginationModel>pagination,
+          <DateRangeModel>dateRange,
         ),
       ),
     );
@@ -71,22 +61,15 @@ export class TransferController {
   @Get('outcome/:id')
   getByOutcomeAccountAndDateRange(
     @Param('id', ParseUUIDPipe) accountId: string,
-    @Body() pagination: PaginationDto,
+    @Body('pagination') pagination: PaginationDto,
+    @Body('dateRange') dateRange?: DateRangeDto,
   ): JSON {
-    const paginationModel = <PaginationModel>{
-      range: pagination.range,
-      currentPage: pagination.currentPage ?? 1,
-    };
-    const dateRangeModule = <DateRangeModel>{
-      dateInit: pagination.dateInit,
-      dateEnd: pagination.dateEnd,
-    };
     return JSON.parse(
       JSON.stringify(
         this.transferService.getHistoryOut(
           accountId,
-          paginationModel,
-          dateRangeModule,
+          <PaginationModel>pagination,
+          <DateRangeModel>dateRange,
         ),
       ),
     );

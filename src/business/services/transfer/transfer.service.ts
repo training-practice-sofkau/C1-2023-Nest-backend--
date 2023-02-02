@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateTransferDto } from 'src/business';
 import {
   DateRangeModel,
@@ -14,6 +18,11 @@ export class TransferService {
     private readonly transferRepository: TransferRepository,
     private readonly accountService: AccountService,
   ) {}
+
+  //Retorna todas las transferencias registradas en el sistema
+  getAll(): TransferEntity[] {
+    return this.transferRepository.findAll();
+  }
 
   //Registra la transferancia en el sistema y actualiza el balance en las cuentas afectadas
   createTransfer(transfer: CreateTransferDto): TransferEntity {
@@ -109,21 +118,20 @@ export class TransferService {
     transfersList: TransferEntity[],
     pagination: PaginationModel,
   ): TransferEntity[] {
-    pagination.size = transfersList.length;
-    const range = pagination.range ?? 10;
-    pagination.pages = Math.round(pagination.size / range);
+    const currentPage = pagination?.currentPage ?? 1;
+    const range = Math.round(transfersList.length / pagination?.pages ?? 10);
+    if (range < currentPage) {
+      throw new BadRequestException(
+        `La pagina ${currentPage} no existe o está vacía`,
+      );
+    }
     const transfers: TransferEntity[] = [];
-    const start = pagination.currentPage * range - range;
+    const start = currentPage * range - range;
     const end = start + range;
     for (let i = start; i < end; i++) {
       transfersList[i] ? transfers.push(transfersList[i]) : (i = end);
     }
     return transfers;
-  }
-
-  //Retorna todas las transferencias registradas en el sistema
-  getAll(): TransferEntity[] {
-    return this.transferRepository.findAll();
   }
 
   //retorna el array con el filtro de fechas
