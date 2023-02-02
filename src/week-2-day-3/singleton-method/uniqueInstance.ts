@@ -22,7 +22,3 @@ class OnlyInstance {
         return this.saldo
     }
 }
-
-let uni = OnlyInstance;
-const only=uni.getInstance()
-console.log(only)
