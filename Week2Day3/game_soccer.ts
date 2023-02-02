@@ -43,3 +43,18 @@ class GameRegistry {
         return this.games;
     }
 }
+// Crear una instancia de la clase GameRegistry
+const gameRegistry = GameRegistry.getInstance();
+
+// Agregar juegos al mapa
+gameRegistry.addGame("game1", {name: "Game 1", developer: "Developer 1"});
+gameRegistry.addGame("game2", {name: "Game 2", developer: "Developer 2"});
+gameRegistry.addGame("game3", {name: "Game 3", developer: "Developer 3"});
+
+// Obtener un juego específico
+const game1 = gameRegistry.getGame("game1");
+console.log(game1);
+
+// Obtener todos los juegos
+const allGames = gameRegistry.getAllGames();
+console.log(allGames);
