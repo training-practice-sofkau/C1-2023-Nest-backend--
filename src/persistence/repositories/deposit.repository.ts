@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositEntity } from '../entities';
 import { BaseRepository } from './base/';
-import { BaseRepositoryInterface } from './interfaces/';
+import { DepositRepositoryInterface } from './interfaces/';
 
 @Injectable()
-export class CustomerRepository
+export class DepositRepository
   extends BaseRepository<DepositEntity>
-  implements BaseRepositoryInterface<DepositEntity>
+  implements DepositRepositoryInterface
 {
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);

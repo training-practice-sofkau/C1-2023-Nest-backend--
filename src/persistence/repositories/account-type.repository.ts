@@ -1,12 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountTypeEntity as AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base/';
-import { BaseRepositoryInterface } from './interfaces/';
+import { AccountTypeRepositoryInterface } from './interfaces/';
 @Injectable()
-export class CustomerRepository
+export class AccountTypeRepository
   extends BaseRepository<AccountTypeEntity>
-  implements BaseRepositoryInterface<AccountTypeEntity>
+  implements AccountTypeRepositoryInterface
 {
+  constructor() {
+    super();
+    this.database.push({
+      id: 'ab27c9ac-a01c-4c22-a6d6-ce5ab3b79185',
+      name: 'Cuenta de ahorrros',
+      state: true,
+    });
+    this.database.push({
+      id: '10b6c590-85fa-4621-b85a-4021e882c080',
+      name: 'Cuenta corriente',
+      state: true,
+    });
+  }
+
   register(entity: AccountTypeEntity): AccountTypeEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

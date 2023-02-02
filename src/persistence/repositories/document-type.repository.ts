@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
-import { BaseRepository } from './base/';
-import { BaseRepositoryInterface } from './interfaces/';
+import { BaseRepository } from './base';
+import { DocumentTypeRepositoryInterface } from './interfaces';
 
 @Injectable()
 export class DocumentTypeRepository
   extends BaseRepository<DocumentTypeEntity>
-  implements BaseRepositoryInterface<DocumentTypeEntity>
+  implements DocumentTypeRepositoryInterface
 {
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     this.database.push(entity);
