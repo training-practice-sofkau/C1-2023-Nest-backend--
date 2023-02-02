@@ -1,24 +1,24 @@
 // Libraries
-import { Param } from '@nestjs/common';
-import { Body, Controller } from '@nestjs/common';
-import { Post } from '@nestjs/common';
-import { SecurityDto } from 'src/business/dtos';
-import { CustomerService, SecurityService } from 'src/business/services';
+import { Body, Controller, Headers, Param, Post } from '@nestjs/common';
+import { CreateCustomerDto, SecurityDto } from 'src/business/dtos';
+import { SecurityService } from 'src/business/services';
 
 @Controller('security')
 export class SecurityController {
-  constructor(
-    private readonly customerService: CustomerService,
-    private readonly securityService: SecurityService,
-  ) {}
+  constructor(private readonly securityService: SecurityService) {}
 
-  @Post('signIn')
+  @Post('signup')
+  registerUser(@Body() createCustomerDto: CreateCustomerDto): JSON {
+    return JSON.parse(this.securityService.signUp(createCustomerDto));
+  }
+
+  @Post('signin')
   signIn(@Body() securityDto: SecurityDto): JSON {
     return JSON.parse(this.securityService.signIn(securityDto));
   }
 
-  @Post('signout:token')
-  signOut(@Param('token') token: string): string {
+  @Post('signout')
+  signOut(@Headers('Authorization') token: string): string {
     this.securityService.signOut(token);
     return 'OK';
   }

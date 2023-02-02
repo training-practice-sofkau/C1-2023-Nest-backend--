@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateDepositDto, DateRangeDto, PaginationDto } from 'src/business';
 import { DepositService } from 'src/business/services';
-import { DateRangeModel, PaginationModel } from 'src/data';
+import { DateRangeModel, PaginationModel } from 'src/data/models';
 
 @Controller('deposits')
 export class DepositsController {

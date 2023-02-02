@@ -12,7 +12,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class UpdateSecurityDto {
+export class UpdateCustomerDto {
   @IsOptional()
   @IsString()
   @IsUUID()

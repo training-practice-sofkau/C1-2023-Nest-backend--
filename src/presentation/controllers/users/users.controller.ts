@@ -1,32 +1,23 @@
-import { Patch } from '@nestjs/common';
-import { Put } from '@nestjs/common';
 import {
   Body,
   Controller,
   Get,
-  Post,
   Delete,
   ParseUUIDPipe,
   Param,
+  Put,
+  Patch,
 } from '@nestjs/common';
-import { CreateCustomerDto, UpdateSecurityDto } from 'src/business';
-import { CustomerService, SecurityService } from 'src/business/services';
+import { UpdateCustomerDto } from 'src/business/dtos';
+import { CustomerService } from 'src/business/services';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly customerService: CustomerService,
-    private readonly securityService: SecurityService,
-  ) {}
+  constructor(private readonly customerService: CustomerService) {}
 
   @Get()
   findAllUsers(): JSON {
     return JSON.parse(JSON.stringify(this.customerService.getAll()));
-  }
-
-  @Post('security/signup')
-  registerUser(@Body() createCustomerDto: CreateCustomerDto): JSON {
-    return JSON.parse(this.securityService.signUp(createCustomerDto));
   }
 
   @Delete(':id')
@@ -37,7 +28,7 @@ export class UsersController {
   @Put(':id')
   updateUser(
     @Param('id', ParseUUIDPipe) customerId: string,
-    @Body() updateSecurityDto: UpdateSecurityDto,
+    @Body() updateSecurityDto: UpdateCustomerDto,
   ): JSON {
     return JSON.parse(
       JSON.stringify(

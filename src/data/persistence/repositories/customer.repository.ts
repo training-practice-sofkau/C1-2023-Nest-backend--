@@ -68,7 +68,7 @@ export class CustomerRepository
   register(entity: CustomerEntity): CustomerEntity {
     const currentCustomers = this.findAll().find(
       (c) =>
-        c.email.toLowerCase() === entity.email.toLowerCase() &&
+        c.email.toLowerCase() === entity.email.toLowerCase() ||
         c.document.toLowerCase() === entity.document.toLocaleLowerCase(),
     );
     if (currentCustomers) {

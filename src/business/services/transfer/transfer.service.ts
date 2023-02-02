@@ -3,13 +3,10 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { CreateTransferDto } from 'src/business';
-import {
-  DateRangeModel,
-  PaginationModel,
-  TransferEntity,
-  TransferRepository,
-} from 'src/data';
+import { CreateTransferDto } from 'src/business/dtos';
+import { DateRangeModel, PaginationModel } from 'src/data/models';
+import { TransferEntity } from 'src/data/persistence/entities';
+import { TransferRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account';
 
 @Injectable()
@@ -119,17 +116,17 @@ export class TransferService {
     pagination: PaginationModel,
   ): TransferEntity[] {
     const currentPage = pagination?.currentPage ?? 1;
-    const range = Math.round(transfersList.length / pagination?.pages ?? 10);
-    if (range < currentPage) {
-      throw new BadRequestException(
-        `La pagina ${currentPage} no existe o está vacía`,
-      );
-    }
+    const range = pagination?.range ?? 10;
     const transfers: TransferEntity[] = [];
     const start = currentPage * range - range;
     const end = start + range;
     for (let i = start; i < end; i++) {
       transfersList[i] ? transfers.push(transfersList[i]) : (i = end);
+    }
+    if (Math.ceil(Math.round(transfersList.length / range)) < currentPage) {
+      throw new BadRequestException(
+        `La pagina ${currentPage} no existe o está vacía`,
+      );
     }
     return transfers;
   }
@@ -139,7 +136,7 @@ export class TransferService {
     transfers: TransferEntity[],
     dateRange: DateRangeModel,
   ): TransferEntity[] {
-    const dateInit = dateRange.dateEnd ?? new Date('1999-01-01').getTime();
+    const dateInit = dateRange.dateInit ?? new Date('1999-01-01').getTime();
     const dateEnd = dateRange.dateEnd ?? Date.now();
     const transfersDateRange = transfers.filter(
       ({ dateTime }) => dateTime >= dateInit && dateTime <= dateEnd,

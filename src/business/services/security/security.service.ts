@@ -28,8 +28,9 @@ export class SecurityService {
 
   //Logueo en el sistema
   signIn(securityDto: SecurityDto): string {
-    const { password, email, fullName, id, document, phone, ...answer } =
+    const { password, email, fullName, id, document, phone, state, ...answer } =
       this.customerRepository.findOneByEmail(securityDto.email);
+    if (state) throw new UnauthorizedException('Usuario inactivo');
     if (answer)
       if (compareSync(securityDto.password, password)) {
         return JSON.stringify({
@@ -82,9 +83,15 @@ export class SecurityService {
   }
 
   //Cierre de sesión
-  signOut(JWToken: string): void {
-    if (!JWToken)
-      throw new InternalServerErrorException('Error al cerrar sesión');
+  signOut(jwtToken: string): void {
+    jwtToken = jwtToken.replace('Bearer ', '');
+    try {
+      const a = this.jwtService.verify(jwtToken, {
+        secret: jwtConstants.secret,
+      });
+    } catch (e) {
+      throw new UnauthorizedException(`Error token invalido`);
+    }
   }
 
   private jwt(payload: string): string {

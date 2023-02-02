@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateSecurityDto } from 'src/business/dtos';
+import { UpdateCustomerDto } from 'src/business/dtos';
 import { CustomerEntity } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account';
@@ -25,7 +25,7 @@ export class CustomerService {
   //Actualiza informacion del ususario solicitado
   updateCustomer(
     customerId: string,
-    customer: UpdateSecurityDto,
+    customer: UpdateCustomerDto,
   ): CustomerEntity {
     const currentCustomer = this.customerRepository.findOneById(customerId);
     let updatedCustomer = new CustomerEntity();
