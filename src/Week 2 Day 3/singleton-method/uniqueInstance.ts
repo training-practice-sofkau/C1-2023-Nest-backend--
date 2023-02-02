@@ -10,7 +10,6 @@ class OnlyInstance {
         }
         return this.instance;
     }
-
     private getSaldo() {
         return this.saldo;
     }
