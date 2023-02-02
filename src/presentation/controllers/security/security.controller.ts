@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { NewSecurityDTO } from 'src/business';
 import { SecurityService } from 'src/business/service';
-import { NewSecurityDTO } from '../../../business/dtos/new-security.dto';
-import { CustomerEntity } from '../../../data/persistence/entities/customer.entity';
+import { CustomerEntity } from 'src/data/persistence/entities';
 
 @Controller('security')
 export class SecurityController {

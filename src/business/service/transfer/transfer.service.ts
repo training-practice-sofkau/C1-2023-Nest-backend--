@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TransferModel } from 'src/data/models';
 import { TransferEntity } from 'src/data/persistence/entities';
-import { TransferRepository } from 'src/data/persistence/repository/transfer.repository';
+import { TransferRepository } from 'src/data/persistence/repository';
 
 @Injectable()
 export class TransferService {

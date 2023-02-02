@@ -4,15 +4,15 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { NewCustomerDTO } from 'src/business/dtos';
 import { CustomerModel } from 'src/data/models';
 import {
-  CustomerEntity,
   AccountTypeEntity,
+  CustomerEntity,
   DocumentTypeEntity,
 } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/data/persistence/repository';
-import { AccountService } from '../account/account.service';
-import { NewCustomerDTO } from '../../dtos/new-customer.dto';
+import { AccountService } from '../account';
 
 @Injectable()
 export class SecurityService {

@@ -8,10 +8,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { NewAccountDto } from 'src/business/dtos';
-import { AccountTypeEntity } from 'src/data/persistence/entities';
-import { AccountService } from 'src/business/service';
-import { AccountEntity } from '../../../data/persistence/entities/account.entity';
+import { AccountService, NewAccountDto } from 'src/business';
+import {
+  AccountEntity,
+  AccountTypeEntity,
+} from 'src/data/persistence/entities';
 
 @Controller('account')
 export class AccountController {
