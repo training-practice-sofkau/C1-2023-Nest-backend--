@@ -1,10 +1,55 @@
+// Libraries
 import { Module } from '@nestjs/common';
-import { SecurityController } from './controllers';
-import { AccountService } from './services/account/account.service';
+
+// Repositories
+import {
+  AccountRepository,
+  AccountTypeRepository,
+  CustomerRepository,
+  DepositRepository,
+  DocumentTypeRepository,
+  TransferRepository,
+} from './data';
+
+// Services
+import {
+  AccountService,
+  CustomerService,
+  DepositService,
+  SecurityService,
+  TransferService,
+} from './business';
+
+// Controllers
+import {
+  AccountsController,
+  CustomersController,
+  DepositsController,
+  SecurityController,
+  TransfersController,
+} from './presentation';
 
 @Module({
   imports: [],
-  controllers: [SecurityController],
-  providers: [AccountService],
+  controllers: [
+    AccountsController,
+    CustomersController,
+    DepositsController,
+    SecurityController,
+    TransfersController,
+  ],
+  providers: [
+    AccountService,
+    CustomerService,
+    DepositService,
+    SecurityService,
+    TransferService,
+    AccountRepository,
+    AccountTypeRepository,
+    CustomerRepository,
+    DepositRepository,
+    DocumentTypeRepository,
+    TransferRepository,
+  ],
 })
 export class AppModule {}
