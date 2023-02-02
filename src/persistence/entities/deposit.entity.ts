@@ -4,7 +4,7 @@ import { AccountEntity } from "./";
 
 export class DepositEntity implements DepositModel {
     id = uuid();
-    accountId: AccountEntity;
+    account: AccountEntity;
     amount = 0;
     dateTime: number | Date;
     deletedAt?: number | Date | undefined;

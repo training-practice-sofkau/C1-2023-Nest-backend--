@@ -55,7 +55,7 @@ export class TransferRespository
   }
   findByIncomeCustomerId(id: string): TransferEntity {
     const transferIndex = this.database.findIndex(
-      (transfer) => transfer.income.customerId.id === id,
+      (transfer) => transfer.income.customer.id === id,
     );
     if (transferIndex >= 0) {
       return this.database[transferIndex];
@@ -65,23 +65,23 @@ export class TransferRespository
     }
 
   }
-  findByIncomeId(id: string): TransferEntity {
-    const transferIndex = this.database.findIndex(
+  findByIncomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
       (transfer) => transfer.income.id === id,
     );
-    if (transferIndex >= 0) {
-      return this.database[transferIndex];
+    if (transferArray.length > 0) {
+      return transferArray;
     }
     else {
       throw new NotFoundException("No se encontro transferencia")
     }
   }
-  findByOutcomeId(id: string): TransferEntity {
-    const transferIndex = this.database.findIndex(
+  findByOutcomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
       (transfer) => transfer.outcome.id === id,
     );
-    if (transferIndex >= 0) {
-      return this.database[transferIndex];
+    if (transferArray.length > 0) {
+      return transferArray;
     }
     else {
       throw new NotFoundException("No se encontro transferencia")
@@ -89,7 +89,7 @@ export class TransferRespository
   }
   findByOutcomeCustomerId(id: string): TransferEntity {
     const transferIndex = this.database.findIndex(
-      (transfer) => transfer.outcome.customerId.id === id,
+      (transfer) => transfer.outcome.customer.id === id,
     );
     if (transferIndex >= 0) {
       return this.database[transferIndex];
@@ -127,7 +127,7 @@ export class TransferRespository
       throw new NotFoundException("No se encontro ningun elemento")
     }
   }
-  hardDelete(id: string): void {
+  private hardDelete(id: string): void {
     const transferIndex = this.database.findIndex(
       (transfer) => transfer.id === id
     );
@@ -138,7 +138,7 @@ export class TransferRespository
       throw new NotFoundException("No se encontro ningun elemento")
     }
   }
-  softDelete(id: string): void {
+  private softDelete(id: string): void {
     const transfer = this.findOneById(id)
     transfer.deletedAt = Date.now()
     this.update(id, transfer)
@@ -147,5 +147,9 @@ export class TransferRespository
     let arrayDate: TransferEntity[] = []
     arrayDate = this.database.sort()
     return arrayDate
+  }
+  findByDateRange(id: string, DateMin: number | Date, DateMax: Number | Date): TransferEntity[] {
+    const arrayTransfers = this.findAll()
+    return arrayTransfers.filter(transfer => (transfer.id === id && transfer.dateTime >= DateMin && transfer.dateTime <= DateMax))
   }
 }

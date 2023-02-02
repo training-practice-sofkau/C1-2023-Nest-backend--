@@ -84,5 +84,9 @@ export class AccountTypeRepository
       throw new NotFoundException("No se encontro la informacion")
     }
   }
+  findByStateId(id: string): boolean {
+    const accountType = this.findOneById(id)
+    return accountType.state
+  }
 
 }

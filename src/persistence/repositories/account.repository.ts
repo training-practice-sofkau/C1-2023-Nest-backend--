@@ -95,7 +95,7 @@ export class AccountRepository
   }
   findByCustomerId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
-      (account) => account.customerId.id === id,
+      (account) => account.customer.id === id,
     );
     if (accountIndex >= 0) {
       return this.database[accountIndex];
@@ -117,7 +117,7 @@ export class AccountRepository
   }
   findByDocumentTypeId(id: string): AccountEntity {
     const accountIndex = this.database.findIndex(
-      (account) => account.customerId.documentType.id === id,
+      (account) => account.customer.documentType.id === id,
     );
     if (accountIndex >= 0) {
       return this.database[accountIndex];
@@ -126,7 +126,7 @@ export class AccountRepository
       throw new NotFoundException("No se encontro la informacion")
     }
   }
-  hardDelete(id: string): void {
+  private hardDelete(id: string): void {
     const accountIndex = this.database.findIndex(
       (account) => account.id === id
     );
@@ -137,9 +137,33 @@ export class AccountRepository
       throw new NotFoundException("No se encontro ningun elemento")
     }
   }
-  softDelete(id: string): void {
+  private softDelete(id: string): void {
     const account = this.findOneById(id)
     account.deletedAt = Date.now()
     this.update(id, account)
+  }
+  findByStateId(id: string): boolean {
+    const accountIndex = this.database.findIndex(
+      (account) => account.id === id,
+    );
+    if (accountIndex >= 0) {
+      return this.database[accountIndex].state;
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
+  }
+  changeStateId(id: string, state: boolean): void {
+    const accountIndex = this.database.findIndex(
+      (account) => account.id === id,
+    );
+    if (accountIndex >= 0) {
+      const account = this.database[accountIndex]
+      account.state = state
+      this.update(id, account)
+    }
+    else {
+      throw new NotFoundException("No se encontro la informacion")
+    }
   }
 }

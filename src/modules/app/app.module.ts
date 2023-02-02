@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SecurityController } from 'src/controllers';
 import { AccountModule } from '../account/account.module';
-import { AccountTpModule } from '../accounttp/accounttp.module';
 import { DepositModule } from '../deposit/deposit.module';
-import { DocumentTypeModule } from '../document-type/document-type.module';
 import { TransferModule } from '../transfer/transfer.module';
-import { UserModule } from '../user/user.module';
+import { CustomerModule } from '../customer/customer.module';
+
 
 @Module({
-  imports: [UserModule, AccountModule, AccountTpModule, DocumentTypeModule, TransferModule, DepositModule],
+  imports: [CustomerModule],
   controllers: [SecurityController],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
