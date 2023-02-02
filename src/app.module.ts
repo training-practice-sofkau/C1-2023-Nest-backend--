@@ -18,6 +18,7 @@ import {
 } from './data/persistence/repositories';
 import { JwtService } from '@nestjs/jwt';
 import { Calculator } from './Week2Day3/observer/calculator';
+import { CrearFiguras } from './Week2Day3/factory/CrearFiguras';
 
 @Module({
   controllers: [
@@ -27,6 +28,7 @@ import { Calculator } from './Week2Day3/observer/calculator';
     TransfersController,
     DepositsController,
     Calculator,
+    CrearFiguras,
   ],
   providers: [
     AccountService,
