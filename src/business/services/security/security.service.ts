@@ -83,6 +83,6 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signOut(JWToken: string): void {
-
+    
   }
 }
