@@ -57,7 +57,7 @@ export class AccountRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
+  delete(id: string, soft?: boolean): void {
     const currentAccount = this.findOneById(id);
     const index = this.database.findIndex((a) => a.id === id);
     if (soft && currentAccount) {

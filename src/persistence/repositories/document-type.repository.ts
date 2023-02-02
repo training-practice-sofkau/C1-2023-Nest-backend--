@@ -51,7 +51,7 @@ export class DocumentTypeRepository
     return this.database[index];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
+  delete(id: string, soft?: boolean): void {
     const currentDocumentType = this.findOneById(id);
     if (soft && currentDocumentType) {
       throw new BadRequestException(
