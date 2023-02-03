@@ -24,7 +24,7 @@ export class UserController {
    }
  
    //Desactivar cuenta
-   @Post(':id')
+   @Post('desactivar/:id')
    unsubscribe(@Param('id', ParseUUIDPipe) customerId: string): boolean {
      return this.customerService.unsubscribe(customerId);
    }
@@ -36,6 +36,6 @@ export class UserController {
      @Param('Id', ParseUUIDPipe) Id: string,
      @Body() custome: NewCustomerDTO,
    ): CustomerEntity {
-     return this.customerService.updatedCustomer(Id, custome);
+     return this.customerService.updateCustomer(Id, custome);
    }
 }

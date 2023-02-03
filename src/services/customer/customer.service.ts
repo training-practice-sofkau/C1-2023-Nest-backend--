@@ -48,8 +48,9 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: NewCustomerDTO): CustomerEntity {
-    return this.updatedCustomer(id, customer);
+  updateCustomer(id: string, customer: NewCustomerDTO): CustomerEntity {
+    const map = this.newCustomer(customer);
+    return this.customerRepository.update(id, map);
   }
 
   /**

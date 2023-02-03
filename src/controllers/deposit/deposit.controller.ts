@@ -16,7 +16,7 @@ export class DepositController {
      * @return {*}  {DepositEntity}
      * @memberof DepositController
      */
-    @Post()
+    @Post('register')
     async createDeposit(@Body() deposit: DepositModel): Promise<DepositEntity> {
         try {
             return await this.depositService.createDeposit(deposit);

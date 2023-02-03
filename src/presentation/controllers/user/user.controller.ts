@@ -36,6 +36,6 @@ export class UserController {
      @Param('Id', ParseUUIDPipe) Id: string,
      @Body() custome: NewCustomerDTO,
    ): CustomerEntity {
-     return this.customerService.updatedCustomer(Id, custome);
+     return this.customerService.updateCustomer(Id, custome);
    }
 }

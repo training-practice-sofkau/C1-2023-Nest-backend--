@@ -20,6 +20,7 @@ export class AccountService {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
+    newAccount.balance = account.balance;
     return this.accountRepository.register(newAccount);
   }
 
@@ -42,13 +43,12 @@ export class AccountService {
    * @param {number} amount
    * @memberof AccountService
    */
-  addBalance(accountId: string, amount: number): void {
-    const account = this.accountRepository.findOneById(accountId);
-    if(!account) {
-      throw new Error('La cuenta no existe');
-    }
-    account.balance += amount;
+  addBalance(accountId: string, amount: number): number {
+    let account = new AccountEntity();
+    account = this.accountRepository.findOneById(accountId);
+    account.balance = Number(account.balance) + Number(amount);
     this.accountRepository.update(accountId, account);
+    return account.balance;
   }
 
   /**
@@ -59,14 +59,13 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    const account = this.accountRepository.findOneById(accountId);
-    if (account.balance < amount) {
-      throw new Error('Saldo insuficiente');
+    if (this.verifyAmountIntoBalance(accountId, amount)) {
+      this.accountRepository.findOneById(accountId).balance -= amount;
+    } else {
+      throw new Error(
+        'El valor que desea retirar no puede ser mayor al saldo que tiene en su cuenta',
+      );
     }
-
-    account.balance -= amount;
-
-    this.accountRepository.delete(accountId);
   }
 
   /**

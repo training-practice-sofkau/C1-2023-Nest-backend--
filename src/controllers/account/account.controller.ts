@@ -19,21 +19,22 @@ export class AccountController {
     }
   
     @Put(':id')
-    addBalance(@Param('id') accountId: string, @Body('amount') amount: number): void {
-      return this.accountService.addBalance(accountId, amount);
+    addBalance(@Param('id') accountId: string, @Body('amount') amount: number): string {
+       this.accountService.addBalance(accountId, amount);
+       return "operacion exitosa"
     }
   
-    @Delete(':id')
+    @Put(':id')
     removeBalance(@Param('id') accountId: string, @Body('amount') amount: number): void {
       return this.accountService.removeBalance(accountId, amount);
     }
   
-    @Get(':id/state')
+    @Get('state/:id')
     getState(@Param('id') accountId: string): boolean {
       return this.accountService.getState(accountId);
     }
   
-    @Put(':id/state')
+    @Put('changestate/:id')
     changeState(@Param('id') accountId: string, @Body('state') state: boolean): void {
       return this.accountService.changeState(accountId, state);
     }

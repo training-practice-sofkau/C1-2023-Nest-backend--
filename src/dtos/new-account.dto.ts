@@ -6,5 +6,5 @@ export class NewAccountDTO{
     @IsUUID()
     accountType: string;
     @IsNumberString()   
-    balance: number;
+    balance: string;
 }

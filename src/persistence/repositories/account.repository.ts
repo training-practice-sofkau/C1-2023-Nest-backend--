@@ -18,8 +18,8 @@ export class AccountRepository extends BaseRepository<AccountEntity> implements 
       this.database[index] = {
         ...this.database[index],
         ...entity,
-        id,
-      } 
+        id, 
+      } as AccountEntity;
     } else {
       throw new NotFoundException(`El ID ${id} no existe en base de datos`);
     }
