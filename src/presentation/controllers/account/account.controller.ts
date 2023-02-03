@@ -49,7 +49,7 @@ export class AccountController {
   @Get('verify/:accountId')
   verifyAmountIntoBalanc(
     @Param('accountId', ParseUUIDPipe) accountId: string,
-    @Param('amount') amount: number,
+    @Body('amount') amount: number,
   ): boolean {
     return this.accountService.verifyAmountIntoBalance(accountId, amount);
   }
