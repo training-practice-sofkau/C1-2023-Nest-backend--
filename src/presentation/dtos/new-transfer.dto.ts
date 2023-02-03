@@ -12,6 +12,6 @@ export class NewTransferDTO {
 
   reason: string;
 
-  @IsDate()
+  @IsNumber()
   dateTime: Date | number;
 }

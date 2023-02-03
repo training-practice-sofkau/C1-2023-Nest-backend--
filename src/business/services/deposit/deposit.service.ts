@@ -49,13 +49,13 @@ export class DepositService {
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
+    pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
     return this.depositRepository.findByAccountIdAndPagination(
       accountId,
-      pagination.limit,
-      pagination.offset,
+      pagination?.limit,
+      pagination?.offset,
     );
   }
 }

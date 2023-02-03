@@ -12,7 +12,7 @@ export class TransferController {
     return this.transferService.createTransfer(transfer);
   }
 
-  @Delete()
+  @Delete('/:id')
   deleteDeposit(@Param('id') id: string): void {
     this.transferService.deleteTransfer(id);
   }

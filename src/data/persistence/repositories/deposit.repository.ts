@@ -79,29 +79,21 @@ export class DepositRepository
 
   findByAccountIdAndPagination(
     accountId: string,
-    limit: number,
-    offset: number,
+    limit?: number,
+    offset?: number,
   ): DepositEntity[] {
-    console.log(Date.now());
-    /* const accounts = this.database.filter(
-      (item) => item.account.id === accountId,
-    );*/
     const deposits = this.findAll();
-    console.log('account ', deposits);
+    let res = [];
     if (limit && offset) {
-      console.log('entra en if');
       const inicio = limit * offset;
-      const u = deposits.filter((item) => item.account.id === accountId);
-      const a = [1, 2, 3, 4, 5];
-      console.log('limit ', limit, 'offset ', offset, 'inicio ', inicio);
-      const uu = a.slice(inicio, inicio + limit);
-      console.log('u ', u);
-      console.log('u ', uu);
-      return u;
-      //return deposits.slice(inicio, inicio + limit);
+      res = deposits.slice(inicio, inicio + limit);
+    } else {
+      res = deposits;
     }
-    return deposits;
-    /*
+    return res.filter((item) => item.account.id === accountId);
+    //return deposits;
+  }
+  /*
     console.log('item ', item);
           console.log('accountId', accountId);
           console.log('accountId', typeof accountId);
@@ -114,5 +106,4 @@ export class DepositRepository
       (item) => item.account.id === accountId,
     );
     return accounts.slice(startIndex, endIndex);*/
-  }
 }

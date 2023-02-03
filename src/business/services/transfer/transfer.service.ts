@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { PaginationModel } from 'src/data/models/pagination.model';
-import { TransferEntity } from 'src/data/persistence';
+import { AccountEntity, TransferEntity } from 'src/data/persistence';
 import { TransferRepository } from 'src/data/persistence/repositories/transfer.repository';
 import { NewTransferDTO } from 'src/presentation/dtos/new-transfer.dto';
 
@@ -16,9 +16,15 @@ export class TransferService {
    * @memberof TransferService
    */
   createTransfer(transfer: NewTransferDTO): TransferEntity {
+    const newAccountIncome = new AccountEntity();
+    newAccountIncome.id = transfer.income;
+    const newAccountOutcome = new AccountEntity();
+    newAccountOutcome.id = transfer.outcome;
+
     const newTransfer = new TransferEntity();
-    //newTransfer.income = transfer.income;
-    //newTransfer.outcome = transfer.outcome;
+    newTransfer.amount = transfer.amount;
+    newTransfer.dateTime = transfer.dateTime;
+    newTransfer.reason = transfer.reason;
     return this.transferRepository.register(newTransfer);
   }
 

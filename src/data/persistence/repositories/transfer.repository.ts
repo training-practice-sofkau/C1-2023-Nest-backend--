@@ -30,16 +30,14 @@ export class TransferRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const transfer = this.findOneById(id);
     if (soft || soft === undefined) {
-      transfer.deletedAt = Date.now();
-      this.update(id, transfer);
+      console.log('entra en if reposiroty');
+      this.softDelete(id);
     } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
-      );
-      this.hardDelete(index);
+      console.log('entra en else reposiroty');
+      this.hardDelete(id);
     }
+    console.log('DATABSE', this.database);
   }
 
   findAll(): TransferEntity[] {
@@ -82,12 +80,21 @@ export class TransferRepository
     return transfers;
   }
 
-  private hardDelete(index: number): void {
+  private hardDelete(id: string): void {
+    const index = this.database.findIndex(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
     this.database.splice(index, 1);
   }
 
-  private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
-    this.update(this.database[index].id, this.database[index]);
+  private softDelete(id: string): void {
+    const transfer = this.findOneById(id);
+    console.log('acc ', transfer);
+    const v: TransferEntity = {
+      ...transfer,
+    };
+    v.deletedAt = Date.now();
+    console.log('data soft ', this.database);
+    this.update(id, v);
   }
 }
