@@ -16,4 +16,9 @@ export class SecurityController {
     createCustomer(@Body() customer: newCustomerDTO) {
         return this.securityService.signUp(customer)
     }
+
+    @Get("/logout")
+    logout(@Body() token:string){
+        return this.securityService.signOut(token)
+    }
 }

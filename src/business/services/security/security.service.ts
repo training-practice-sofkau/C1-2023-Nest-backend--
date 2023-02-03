@@ -4,19 +4,29 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
-import { NewAccountDTO, newCustomerDTO, NewSecurityDTO } from 'src/business/dtos';
+import {
+  AccountTypeEntity,
+  CustomerEntity,
+  CustomerRepository,
+  DocumentTypeEntity,
+} from 'src/data/persistence';
+import {
+  NewAccountDTO,
+  newCustomerDTO,
+  NewSecurityDTO,
+} from 'src/business/dtos';
 import { AccountService } from '../account';
 import { v4 as uuid } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from 'src/configs/constants.config';
 
 @Injectable()
 export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
-    private readonly jwtService: JwtService
-  ) { }
+    private readonly jwtService: JwtService,
+  ) {}
 
   /**
    * Identificarse en el sistema
@@ -31,11 +41,10 @@ export class SecurityService {
       user.password,
     );
     if (answer) {
-      const customer = this.customerRepository.findByEmail(user.email)
-      console.log(this.jwtService.sign({ id: customer.id }))
-      return { access_token: this.jwtService.sign({ id: customer.id }) }
-    }
-    else throw new UnauthorizedException('Datos de identificación inválidos');
+      const customer = this.customerRepository.findByEmail(user.email);
+      console.log(this.jwtService.sign({ id: customer.id }));
+      return { access_token: this.jwtService.sign({ id: customer.id }) };
+    } else throw new UnauthorizedException('Datos de identificación inválidos');
   }
   /**
    * Crear usuario en el sistema
@@ -46,7 +55,7 @@ export class SecurityService {
    */
   signUp(user: newCustomerDTO): {} {
     const newCustomer = new CustomerEntity();
-    const newDocumentType = new DocumentTypeEntity()
+    const newDocumentType = new DocumentTypeEntity();
     newDocumentType.id = uuid();
     const findCustomer = this.customerRepository.findByEmail(user.email);
     if (findCustomer) {
@@ -70,7 +79,8 @@ export class SecurityService {
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return { access_token: this.jwtService.sign({ id: customer.id }) };
+        if (account)
+          return { access_token: this.jwtService.sign({ id: customer.id }) };
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -83,6 +93,9 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signOut(JWToken: string): void {
-    
+    this.jwtService.verify(JWToken, {
+      secret: jwtConstants.secret,
+      maxAge: '0h',
+    });
   }
 }
