@@ -19,30 +19,6 @@ export class CustomerService {
     return this.customerRepository.findAll();
   }
 
-  /*newCustomer(customer: NewCustomerDTO): CustomerEntity {
-    const documentType = new DocumentTypeEntity();
-    documentType.id = customer.documentTypeId;
-
-    const newCustomer = new CustomerEntity();
-    newCustomer.documentType = documentType;
-    newCustomer.document = customer.document;
-    newCustomer.fullName = customer.fullName;
-    newCustomer.email = customer.email;
-    newCustomer.phone = customer.phone;
-    newCustomer.password = customer.password;
-
-    //Crear cuenta
-    const acco = {
-      customer: newCustomer.id,
-      accountType: documentType.id,
-      balance: 0,
-    };
-    const account = this.accountService.createAccount(acco);
-    account.customer = newCustomer;
-
-    return this.customerRepository.register(newCustomer);
-  }*/
-
   /**
    * Obtener información de un cliente
    *

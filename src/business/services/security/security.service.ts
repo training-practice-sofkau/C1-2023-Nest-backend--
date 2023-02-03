@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { CustomerModel } from 'src/data/models';
 import {
   AccountTypeEntity,
@@ -12,7 +13,6 @@ import {
   DocumentTypeEntity,
 } from 'src/data/persistence';
 import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
-import { v4 as uuid2 } from 'uuid';
 import { AccountService } from '../account/account.service';
 
 @Injectable()
@@ -20,6 +20,7 @@ export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private jwtService: JwtService,
   ) {}
 
   /**
@@ -69,7 +70,12 @@ export class SecurityService {
       };
 
       const account = this.accountService.createAccount(newAccount);
-      if (account) return 'Falta retornar un JWT';
+
+      const payload = { id: customer.id, fullName: customer.fullName };
+
+      const token = this.jwtService.sign(payload);
+
+      if (account) return token;
       else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();
   }
@@ -93,7 +99,12 @@ export class SecurityService {
    * @param {string} JWToken
    * @memberof SecurityService
    */
-  signOut(JWToken: string): void {
-    throw new Error('Method not implemented.');
+  signOut(JWToken: string): boolean {
+    console.log(
+      'this.jwtService.verify(JWToken) ',
+      this.jwtService.verify(JWToken),
+    );
+    if (this.jwtService.verify(JWToken)) return true;
+    return false;
   }
 }
