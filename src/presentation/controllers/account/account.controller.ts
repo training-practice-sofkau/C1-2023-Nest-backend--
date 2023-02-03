@@ -31,20 +31,21 @@ export class AccountController {
   @Put('add/:accountId')
   addBalanc(
     @Param('accountId', ParseUUIDPipe) accountId: string,
-    @Param('amount') amount: number,
+    @Body('amount') amount: number,
   ): string {
     this.accountService.addBalance(accountId, amount);
     return 'se agrego';
   }
-
+  //Remover balance de una cuenta
   @Put('remove/:accountId')
   removeBalance(
     @Param('accountId', ParseUUIDPipe) accountId: string,
-    @Param('amount') amount: number,
-  ): void {
+    @Body('amount') amount: number,
+  ): string {
     this.accountService.removeBalance(accountId, amount);
+    return 'se desconto';
   }
-
+  //Verificar la disponibilidad de un monto a retirar en una cuenta
   @Get('verify/:accountId')
   verifyAmountIntoBalanc(
     @Param('accountId', ParseUUIDPipe) accountId: string,
@@ -52,12 +53,12 @@ export class AccountController {
   ): boolean {
     return this.accountService.verifyAmountIntoBalance(accountId, amount);
   }
-
+  //Obtener el estado de una cuenta
   @Get('state/:accountId')
   getStat(@Param('accountId', ParseUUIDPipe) accountId: string): boolean {
     return this.accountService.getState(accountId);
   }
-
+  //Cambiar el estado de una cuenta
   @Put('state/:accountId')
   changeState(
     @Param('accountId', ParseUUIDPipe) accountId: string,
@@ -65,20 +66,20 @@ export class AccountController {
   ): void {
     this.accountService.changeState(accountId, state);
   }
-
+  //Obtener el tipo de cuenta de una cuenta
   @Get('type/:accountId')
   getAccountType(@Param('accountId') accountId: string): AccountTypeEntity {
     return this.accountService.getAccountType(accountId);
   }
-
-  @Put()
+  //Cambiar el tipo de cuenta a una cuenta
+  @Put('type/:accountId')
   changeAccountType(
     @Param('accountId') accountid: string,
     @Param('accountTypeId') accountTypeId: string,
   ): AccountTypeEntity {
     return this.accountService.changeAccountType(accountid, accountTypeId);
   }
-
+  //Borrar una cuenta
   @Delete(':accountId')
   deleteAccount(@Param('accountId', ParseUUIDPipe) accountId: string): void {
     this.accountService.deleteAccount(accountId);

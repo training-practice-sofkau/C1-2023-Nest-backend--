@@ -80,6 +80,7 @@ export class CustomerService {
     if (unsubscribe.state) {
       unsubscribe.state = false;
     }
+    this.costumerRepository.update(id, unsubscribe);
     return unsubscribe.state;
   }
 }

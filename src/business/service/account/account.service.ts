@@ -60,7 +60,11 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): number {
-    return (this.accountRepository.findOneById(accountId).balance += amount); //se va asuma el monto al balance
+    let accountEntity = new AccountEntity();
+    accountEntity = this.accountRepository.findOneById(accountId);
+    accountEntity.balance += Number(amount);
+    this.accountRepository.update(accountId, accountEntity);
+    return accountEntity.balance; //se va asuma el monto al balance
   }
 
   /**
@@ -112,7 +116,9 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    this.accountRepository.findOneById(accountId).state = state;
+    const newState = this.accountRepository.findOneById(accountId);
+    newState.state = state;
+    this.accountRepository.update(accountId, newState);
   }
 
   /**
