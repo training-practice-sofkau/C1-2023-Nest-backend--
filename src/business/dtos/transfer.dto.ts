@@ -20,9 +20,6 @@ export class TransferDTO {
   @MaxLength(500)
   reason: string;
 
-  @IsDateString()
+  @IsString()
   dateTime: string;
-
-  @IsDateString()
-  deletedAt?: string;
 }

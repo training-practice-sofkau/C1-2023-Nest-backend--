@@ -9,6 +9,4 @@ export class DepositDTO {
 
   @IsString()
   dateTime: string;
-
-  deletedAt?: Date | number;
 }
