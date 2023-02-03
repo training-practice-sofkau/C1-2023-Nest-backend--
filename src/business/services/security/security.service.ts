@@ -68,7 +68,7 @@ export class SecurityService {
         accountType: accountType.id,
         balance: 0, //no estaba
       };
-
+      console.log('customer.id ', customer.id);
       const account = this.accountService.createAccount(newAccount);
 
       const payload = { id: customer.id, fullName: customer.fullName };

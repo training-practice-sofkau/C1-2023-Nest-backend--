@@ -14,6 +14,7 @@ import { TransferService } from './business/services/transfer/transfer.service';
 import { SecurityController } from './presentation/controllers/security/security.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { SecurityService } from './business/services/security/security.service';
+import { CustomerController } from './presentation/controllers/customer/customer.controller';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SecurityService } from './business/services/security/security.service';
     DepositController,
     TransferController,
     SecurityController,
+    CustomerController,
   ],
   providers: [
     CustomerService,
