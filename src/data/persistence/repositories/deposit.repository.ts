@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { DepositEntity } from '../entities/deposit.entity';
 import { AccountRepository } from './account.repository';
 import { BaseRepository } from './base';
@@ -77,7 +78,7 @@ export class DepositRepository
     return deposits;
   }
 
-  findByAccountIdAndPagination(
+  /*findByAccountIdAndPagination(
     accountId: string,
     limit?: number,
     offset?: number,
@@ -92,5 +93,41 @@ export class DepositRepository
     }
     return res.filter((item) => item.account.id === accountId);
     //return deposits;
+  }*/
+  findByAccountIdAndPagination(
+    accountId: string,
+    limit?: number,
+    offset?: number,
+    startDate?: number | Date,
+    endDate?: number | Date,
+  ): DepositEntity[] {
+    let transfers: DepositEntity[] = [];
+    console.log('database ', this.database);
+    if (limit && offset) {
+      console.log('entra en if');
+      console.log('limit ', typeof limit);
+      console.log('limit ', typeof offset);
+      const inicio = Number(limit) * Number(offset);
+      console.log('inicio ', inicio);
+      transfers = this.database.slice(inicio, inicio + limit);
+      console.log('transfers ', transfers);
+    }
+
+    if (startDate && endDate) {
+      console.log('ENTRA EN DATE');
+      transfers = this.database.filter(
+        (item: DepositEntity) =>
+          startDate >= item.dateTime && endDate <= item.dateTime,
+      );
+    }
+    //console.log(transfers[0].account.id);
+    transfers = transfers.filter((item) => {
+      console.log('entra filter');
+      console.log(item.account.id);
+      console.log(accountId);
+      return item.account.id === accountId;
+    });
+    console.log('TRANSFER FIN ', transfers);
+    return transfers;
   }
 }

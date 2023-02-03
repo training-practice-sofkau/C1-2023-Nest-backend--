@@ -19,11 +19,14 @@ export class DepositService {
   createDeposit(deposit: NewDepositDTO): DepositEntity {
     const newAccount = new AccountEntity();
     newAccount.id = deposit.account;
+    newAccount.balance = deposit.amount;
 
     const newDeposit = new DepositEntity();
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = deposit.dateTime;
+    //console.log('new Date', new Date('2022-06-01').valueOf());
     newDeposit.account = newAccount;
+    //2022-06-01
     console.log('newDeposit ', newDeposit);
     return this.depositRepository.register(newDeposit);
   }
@@ -56,6 +59,8 @@ export class DepositService {
       accountId,
       pagination?.limit,
       pagination?.offset,
+      dataRange?.startDate,
+      dataRange?.endDate,
     );
   }
 }

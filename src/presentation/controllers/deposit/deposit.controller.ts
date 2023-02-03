@@ -30,7 +30,13 @@ export class DepositController {
     @Param('id') id: string,
     @Query('limit') limit: number,
     @Query('offset') offset: number,
+    @Query('startDate') startDate: number,
+    @Query('endDate') endDate: number,
   ): DepositEntity[] {
-    return this.depositService.getHistory(id, { limit, offset });
+    return this.depositService.getHistory(
+      id,
+      { limit, offset },
+      { startDate, endDate },
+    );
   }
 }
