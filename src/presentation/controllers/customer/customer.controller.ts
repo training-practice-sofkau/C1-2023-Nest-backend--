@@ -37,4 +37,9 @@ export class CustomerController {
     deleteUser(@Param("id", new ParseUUIDPipe()) id: string) {
         return this.customerService.deleteCustomer(id)
     }
+
+    @Post("/findByFullName")
+    findByFullName(@Body() name:{name:string}){
+        return this.customerService.findByFullName(name.name)
+    }
 }

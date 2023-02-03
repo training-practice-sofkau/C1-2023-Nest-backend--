@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { AccountRepository, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
+import { AccountEntity, AccountRepository, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
 import { newCustomerDTO } from 'src/business/dtos';
 import { v4 as uuid } from 'uuid';
 
@@ -115,7 +115,11 @@ export class CustomerService {
       throw new BadRequestException()
     }
   }
-  getAllAccounts(id:string){
+  getAllAccounts(id: string) :AccountEntity[]{
     return this.accountRepository.getAllAccounts(id)
+  }
+
+  findByFullName(name: string): CustomerEntity[] {
+    return this.customerRepository.findByFullName(name)
   }
 }

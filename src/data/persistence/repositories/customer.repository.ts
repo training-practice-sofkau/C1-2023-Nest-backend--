@@ -94,7 +94,7 @@ export class CustomerRepository
   findByFullName(name: string): CustomerEntity[] {
     let arrayName: CustomerEntity[] = [];
     this.database.map((customer) => {
-      if (customer.fullName.includes(name)) {
+      if (customer.fullName.toLowerCase().includes(name.toLowerCase())) {
         arrayName.push(customer);
       }
     });
