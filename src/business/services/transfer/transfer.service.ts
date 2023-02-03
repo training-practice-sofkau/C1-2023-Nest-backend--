@@ -39,10 +39,15 @@ export class TransferService {
    */
   getHistoryOut(
     accountId: string,
-    //pagination: PaginationModel,
-    //dataRange?: DataRangeModel,
+    pagination: PaginationModel,
+    dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    return this.transferRepository.findOutcomeByAccountIdAndPagination(
+      accountId,
+      pagination.limit,
+      pagination.offset,
+      dataRange,
+    );
   }
 
   /**
@@ -56,10 +61,15 @@ export class TransferService {
    */
   getHistoryIn(
     accountId: string,
-    //pagination: PaginationModel,
-    //dataRange?: DataRangeModel,
+    pagination: PaginationModel,
+    dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    return this.transferRepository.findIncomeByAccountIdAndPagination(
+      accountId,
+      pagination.limit,
+      pagination.offset,
+      dataRange,
+    );
   }
 
   /**
@@ -73,10 +83,15 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
+    pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    return this.transferRepository.findTransferByAccountIdAndPagination(
+      accountId,
+      pagination?.limit,
+      pagination?.offset,
+      dataRange,
+    );
   }
 
   /**

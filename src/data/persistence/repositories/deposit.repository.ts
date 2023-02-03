@@ -93,17 +93,4 @@ export class DepositRepository
     return res.filter((item) => item.account.id === accountId);
     //return deposits;
   }
-  /*
-    console.log('item ', item);
-          console.log('accountId', accountId);
-          console.log('accountId', typeof accountId);
-          console.log('item.account.id ', typeof item.account.id);
-          console.log('item.account.id ', item.account.id === accountId);
-    
-    const startIndex = (offset - 1) * limit;
-    const endIndex = startIndex + limit;
-    const accounts = this.database.filter(
-      (item) => item.account.id === accountId,
-    );
-    return accounts.slice(startIndex, endIndex);*/
 }

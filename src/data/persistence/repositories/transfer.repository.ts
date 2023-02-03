@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { DataRangeModel } from 'src/data/models/dataRange.model';
+import { PaginationModel } from 'src/data/models/pagination.model';
 import { TransferEntity } from '../entities/transfer.entity';
 import { BaseRepository } from './base';
 import { TransferRepositoryInterface } from './interfaces';
@@ -79,6 +81,101 @@ export class TransferRepository
     );
     return transfers;
   }
+
+  //Obtener historial de transacciones de entrada en una cuenta
+  findIncomeByAccountIdAndPagination(
+    accountId: string,
+    limit: number,
+    offset: number,
+    dataRange?: DataRangeModel,
+  ): TransferEntity[] {
+    let transfers = [];
+    const inicio = limit * offset;
+    transfers = this.database.slice(inicio, inicio + limit);
+
+    if (dataRange) {
+      transfers = this.database.filter(
+        (item: TransferEntity) =>
+          dataRange.startDate >= item.dateTime &&
+          dataRange.endDate <= item.dateTime,
+      );
+    }
+    transfers = transfers.filter((item) => item.income.id === accountId);
+    return transfers;
+  }
+
+  //Obtener historial de transacciones de salida de una cuenta
+  findOutcomeByAccountIdAndPagination(
+    accountId: string,
+    limit: number,
+    offset: number,
+    dataRange?: DataRangeModel,
+  ): TransferEntity[] {
+    let transfers = [];
+    const inicio = limit * offset;
+    transfers = this.database.slice(inicio, inicio + limit);
+
+    if (dataRange) {
+      transfers = this.database.filter(
+        (item: TransferEntity) =>
+          dataRange.startDate >= item.dateTime &&
+          dataRange.endDate <= item.dateTime,
+      );
+    }
+    transfers = transfers.filter((item) => item.outcome.id === accountId);
+    return transfers;
+  }
+
+  //Obtener historial de transacciones de entrada en una cuenta
+  findTransferByAccountIdAndPagination(
+    accountId: string,
+    limit?: number,
+    offset?: number,
+    dataRange?: DataRangeModel,
+  ): TransferEntity[] {
+    let transfers: TransferEntity[] = [];
+    if (limit && offset) {
+      const inicio = limit * offset;
+      transfers = this.database.slice(inicio, inicio + limit);
+    }
+
+    if (dataRange) {
+      transfers = this.database.filter(
+        (item: TransferEntity) =>
+          dataRange.startDate >= item.dateTime &&
+          dataRange.endDate <= item.dateTime,
+      );
+    }
+    transfers = transfers.filter(
+      (item) => item.outcome.id === accountId && item.income.id === accountId,
+    );
+    return transfers;
+  }
+  /*findByAccountIdAndPagination(
+    accountId: string,
+    limit?: number,
+    offset?: number,
+    dataRange?: DataRangeModel,
+  ): TransferEntity[] {
+    const transfers = this.findAll();
+    let res = [];
+    if (limit && offset) {
+      const inicio = limit * offset;
+      res = transfers.slice(inicio, inicio + limit);
+    } else {
+      res = transfers;
+    }
+    if(dataRange){
+      return res
+        .filter((item) => item.income.id === accountId)
+        .filter((item: TransferEntity) =>
+            dateInit >= item.dateTime &&
+            dateEnd <= item.dateTime &&
+            item.income.id === accountId,
+      )
+    }
+    return res.filter((item) => item.income.id === accountId);
+  }*/
 
   private hardDelete(id: string): void {
     const index = this.database.findIndex(
