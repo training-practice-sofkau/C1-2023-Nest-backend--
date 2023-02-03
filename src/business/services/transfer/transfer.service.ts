@@ -31,6 +31,7 @@ export class TransferService {
     );
     newTransfer.amount = Number(transfer.amount);
     newTransfer.reason = transfer.reason;
+    newTransfer.dateTime = Number(transfer.dateTime);
 
     return this.transferRepository.register(newTransfer);
   }
@@ -50,21 +51,24 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     if (dataRange) {
-      const array = this.transferRepository.findOutcomeByDataRange(
-        accountId,
-        dataRange.start,
-        dataRange.end,
+      const array = this.transferRepository
+        .findOutcomeByDataRange(
+          accountId,
+          dataRange.startDate ?? 0,
+          dataRange.endDate ?? Date.now(),
+        )
+        .filter(
+          (item) =>
+            item.outCome.id === accountId &&
+            item.amount > (dataRange.startAmount ?? 0) &&
+            item.amount < (dataRange.endAmount ?? Number.MAX_SAFE_INTEGER),
+        );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
       );
-      const arrayReturn = [];
-      for (let i = 0; i < array.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
     }
-    const array = this.transferRepository
-      .findAll()
-      .filter((item) => item.outCome.id === accountId);
-    return array;
+    return [];
   }
 
   /**
@@ -82,21 +86,24 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     if (dataRange) {
-      const array = this.transferRepository.findIncomeByDataRange(
-        accountId,
-        dataRange.start,
-        dataRange.end,
+      const array = this.transferRepository
+        .findIncomeByDataRange(
+          accountId,
+          dataRange.startDate ?? 0,
+          dataRange.endDate ?? Date.now(),
+        )
+        .filter(
+          (item) =>
+            item.inCome.id === accountId &&
+            item.amount > (dataRange.startAmount ?? 0) &&
+            item.amount < (dataRange.endAmount ?? Number.MAX_SAFE_INTEGER),
+        );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
       );
-      const arrayReturn = [];
-      for (let i = 0; i < array.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
     }
-    const array = this.transferRepository
-      .findAll()
-      .filter((item) => item.outCome.id === accountId);
-    return array;
+    return [];
   }
 
   /**
@@ -114,16 +121,29 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     if (dataRange) {
-      const array = this.transferRepository.findAll();
-      const arrayReturn = [];
-      for (let i = 0; i < array.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
+      const newArray = this.transferRepository.findByDataRange(
+        dataRange.startDate ?? 0,
+        dataRange.endDate ?? Date.now(),
+      );
+      const array = newArray.filter(
+        (item) =>
+          (item.inCome.id === accountId || item.outCome.id === accountId) &&
+          (item.amount >= Number(dataRange.startAmount) ?? 0) &&
+          (item.amount <= Number(dataRange.endAmount) ?? Number.MAX_VALUE),
+      );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
+      );
     }
+    const start = pagination.length * pagination.page;
+    const end = start + Number(pagination.length);
     const array = this.transferRepository
       .findAll()
-      .filter((item) => item.outCome.id === accountId);
+      .filter(
+        (item) => item.inCome.id === accountId || item.outCome.id === accountId,
+      )
+      .slice(start, end);
     return array;
   }
 
@@ -135,5 +155,9 @@ export class TransferService {
    */
   deleteTransfer(transferId: string): void {
     this.transferRepository.delete(transferId);
+  }
+
+  selectTransfer(transferId: string): TransferEntity {
+    return this.transferRepository.findOneById(transferId);
   }
 }

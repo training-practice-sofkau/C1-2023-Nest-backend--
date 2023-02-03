@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerDTO } from 'src/business/dtos';
+import { CustomerUpdateDTO } from 'src/business/dtos/update-customer.dto';
 import {
   CustomerEntity,
   DocumentTypeEntity,
@@ -23,7 +24,22 @@ export class CustomerService {
   }
 
   findAll(): CustomerEntity[] {
-    return this.customerRepository.findAll();
+    return this.customerRepository
+      .findAll()
+      .filter((item) => (item.deletedAt ?? true) === true);
+  }
+
+  transform(customer: CustomerDTO): CustomerEntity {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = customer.documentTypeId;
+    const newCustomer = new CustomerEntity();
+    newCustomer.documentType = documentType;
+    newCustomer.document = customer.document;
+    newCustomer.fullName = customer.fullName;
+    newCustomer.email = customer.email;
+    newCustomer.phone = customer.phone;
+    newCustomer.password = customer.password;
+    return newCustomer;
   }
 
   newCustomer(customer: CustomerDTO): CustomerEntity {
@@ -49,17 +65,13 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerDTO): CustomerEntity {
+  updatedCustomer(id: string, customer: CustomerUpdateDTO): CustomerEntity {
     if (this.customerRepository.findOneById(id)) {
-      const documentType = new DocumentTypeEntity();
-      documentType.id = customer.documentTypeId;
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = documentType;
       newCustomer.document = customer.document;
       newCustomer.fullName = customer.fullName;
       newCustomer.email = customer.email;
       newCustomer.phone = customer.phone;
-      newCustomer.password = customer.password;
       return this.customerRepository.update(id, newCustomer);
     }
     return new CustomerEntity();
@@ -72,7 +84,17 @@ export class CustomerService {
    * @return {*}  {boolean}
    * @memberof CustomerService
    */
-  unsubscribe(id: string): boolean {
+  unsuscribe(id: string): boolean {
+    if (this.customerRepository.findOneById(id).deletedAt === undefined) {
+      const customer = this.customerRepository.findOneById(id);
+      customer.state = false;
+      this.customerRepository.update(id, customer);
+      return true;
+    }
+    return false;
+  }
+
+  deleteCustomer(id: string): boolean {
     if (this.customerRepository.findOneById(id).deletedAt === undefined) {
       this.customerRepository.delete(id, true);
       return true;
