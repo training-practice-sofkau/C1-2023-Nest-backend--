@@ -1,10 +1,9 @@
-import { DepositModel } from 'src/models';
-
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
-import { DataRangeModel } from 'src/models/data-range.model';
-import { PaginationModel } from 'src/models/pagination.model';
-import { DepositEntity } from 'src/persistence/entities/deposite.entity';
-import { DepositService } from 'src/services/deposit/deposit.service';
+import { DepositModel } from 'src/data/models';
+import { DataRangeModel } from 'src/data/models/data-range.model';
+import { PaginationModel } from 'src/data/models/pagination.model';
+import { DepositEntity } from 'src/data/persistence/entities/deposite.entity';
+import { DepositService } from 'src/business/services/deposit/deposit.service';
 
 @Controller('deposit')
 export class DepositController {
@@ -17,8 +16,7 @@ export class DepositController {
      * @return {*}  {DepositEntity}
      * @memberof DepositController
      */
-    
-    @Post()
+    @Post('register')
     async createDeposit(@Body() deposit: DepositModel): Promise<DepositEntity> {
         try {
             return await this.depositService.createDeposit(deposit);
@@ -50,8 +48,8 @@ export class DepositController {
     @Get('/history/:accountId')
     async getHistory(
         @Param('accountId') accountId: string,
-        pagination: PaginationModel,
-        dataRange?: DataRangeModel,
+        @Body() pagination: PaginationModel,
+        @Body() dataRange?: DataRangeModel,
     ): Promise<DepositEntity[]> {
         return await this.depositService.getHistory(accountId, pagination, dataRange);
     }
