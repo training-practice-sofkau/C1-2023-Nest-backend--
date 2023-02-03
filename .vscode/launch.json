@@ -5,11 +5,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "command": "npm run start:dev",
+      "name": "Run npm start",
+      "request": "launch",
+      "type": "node-terminal"
+    },{
       "name": "Launch via NPM",
       "request": "launch",
       "runtimeArgs": [
-        "run",
-        "start:dev"
+        "run-script",
+        "debug"
       ],
       "runtimeExecutable": "npm",
       "skipFiles": [
