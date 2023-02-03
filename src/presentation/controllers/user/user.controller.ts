@@ -10,6 +10,7 @@ import {
 import { CustomerEntity } from '../../../data/persistence/entities/customer.entity';
 import { CustomerService } from '../../../business/services/customer/customer.service';
 import { CustomerDTO } from '../../../business/dtos';
+import { CustomerUpdateDTO } from 'src/business/dtos/update-customer.dto';
 
 @Controller('user')
 export class UserController {
@@ -30,13 +31,21 @@ export class UserController {
     return this.customerService.newCustomer(customer);
   }
 
-  @Put()
-  updateUser(@Body() customer: CustomerDTO): CustomerEntity {
-    return this.customerService.newCustomer(customer);
+  @Put(':id')
+  updateUser(
+    @Param('id') id: string,
+    @Body() customer: CustomerUpdateDTO,
+  ): CustomerEntity {
+    return this.customerService.updatedCustomer(id, customer);
   }
 
-  @Delete()
-  deleteUser(@Body() customerId: string): boolean {
-    return this.customerService.unsubscribe(customerId);
+  @Delete(':id')
+  deleteUser(@Param('id') id: string): boolean {
+    return this.customerService.deleteCustomer(id);
+  }
+
+  @Put('unsuscribe/:id')
+  unsuscribeUser(@Param('id') id: string): boolean {
+    return this.customerService.unsuscribe(id);
   }
 }
