@@ -21,14 +21,6 @@ export class UpdateAccountDto {
   @IsString()
   @IsUUID()
   readonly accountTypeId?: string;
-  @IsOptional()
-  @IsPositive()
-  @IsInt()
-  readonly balance?: number;
-  @IsOptional()
   @IsBoolean()
-  readonly state?: boolean;
-  @IsOptional()
-  @IsNumber()
-  readonly deletedAt?: Date | number;
+  readonly state: boolean;
 }

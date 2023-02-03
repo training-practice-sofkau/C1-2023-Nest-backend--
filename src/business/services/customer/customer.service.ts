@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateCustomerDto } from 'src/business/dtos';
+import { PaginationModel } from 'src/data';
 import { CustomerEntity } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account';
@@ -12,8 +13,9 @@ export class CustomerService {
   ) {}
 
   //Retorna todos los clientes
-  getAll(): CustomerEntity[] {
-    return this.customerRepository.findAll();
+  getAll(paginationModel: PaginationModel): CustomerEntity[] {
+    const customers = this.customerRepository.findAll();
+    return this.historyPagination(customers, paginationModel);
   }
 
   //Retorna la informacion del cliente solicitado
@@ -55,5 +57,20 @@ export class CustomerService {
     );
     if (updatedCustomer) return true;
     return false;
+  }
+
+  private historyPagination(
+    customersList: CustomerEntity[],
+    pagination: PaginationModel,
+  ): CustomerEntity[] {
+    const currentPage = pagination?.currentPage ?? 1;
+    const range = pagination?.range ?? 10;
+    const customers: CustomerEntity[] = [];
+    const start = currentPage * range - range;
+    const end = start + range;
+    for (let i = start; i < end; i++) {
+      customersList[i] ? customers.push(customersList[i]) : (i = end);
+    }
+    return customers;
   }
 }

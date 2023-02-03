@@ -8,16 +8,21 @@ import {
   Put,
   Patch,
 } from '@nestjs/common';
-import { UpdateCustomerDto } from 'src/business/dtos';
+import { PaginationDto, UpdateCustomerDto } from 'src/business/dtos';
 import { CustomerService } from 'src/business/services';
+import { PaginationModel } from 'src/data/models';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Get()
-  findAllUsers(): JSON {
-    return JSON.parse(JSON.stringify(this.customerService.getAll()));
+  findAllUsers(@Body() paginationDto: PaginationDto): JSON {
+    return JSON.parse(
+      JSON.stringify(
+        this.customerService.getAll(<PaginationModel>paginationDto),
+      ),
+    );
   }
 
   @Delete(':id')

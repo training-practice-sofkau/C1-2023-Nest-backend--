@@ -12,8 +12,9 @@ export class DepositService {
   ) {}
 
   //Retorna todos los depositos registrados a la fecha
-  getAll(): DepositEntity[] {
-    return this.depositRepository.findAll();
+  getAll(paginationModel: PaginationModel): DepositEntity[] {
+    const deposits = this.depositRepository.findAll();
+    return this.historyPagination(deposits, paginationModel);
   }
 
   //Creacion de un deposito y actualiza el balance de la cuenta afectada
@@ -52,18 +53,20 @@ export class DepositService {
     } else {
       currentDeposits = this.depositRepository.findByAccountId(accountId);
     }
-    const currentPage = pagination.currentPage ?? 1;
+    return this.historyPagination(currentDeposits, pagination);
+  }
+
+  private historyPagination(
+    depositsList: DepositEntity[],
+    pagination: PaginationModel,
+  ): DepositEntity[] {
+    const currentPage = pagination?.currentPage ?? 1;
     const range = pagination?.range ?? 10;
     const deposits: DepositEntity[] = [];
     const start = currentPage * range - range;
     const end = start + range;
     for (let i = start; i < end; i++) {
-      currentDeposits[i] ? deposits.push(currentDeposits[i]) : (i = end);
-    }
-    if (Math.ceil(Math.round(currentDeposits.length / range)) < currentPage) {
-      throw new BadRequestException(
-        `La pagina ${currentPage} no existe o está vacía`,
-      );
+      depositsList[i] ? deposits.push(depositsList[i]) : (i = end);
     }
     return deposits;
   }
