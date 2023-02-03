@@ -30,7 +30,7 @@ export class SecurityService {
   signIn(securityDto: SecurityDto): string {
     const { password, email, fullName, id, document, phone, state, ...answer } =
       this.customerRepository.findOneByEmail(securityDto.email);
-    if (state) throw new UnauthorizedException('Usuario inactivo');
+    if (!state) throw new UnauthorizedException('Usuario inactivo');
     if (answer)
       if (compareSync(securityDto.password, password)) {
         return JSON.stringify({

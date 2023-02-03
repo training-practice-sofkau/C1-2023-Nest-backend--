@@ -89,7 +89,9 @@ export class TransferRepository
   private softDelete(index: number): void {
     const currentAccount = this.database[index];
     currentAccount.deletedAt = Date.now();
-    this.upate(currentAccount.id, currentAccount);
+    this.database[index] = {
+      ...currentAccount,
+    };
   }
 
   findAll(): TransferEntity[] {
