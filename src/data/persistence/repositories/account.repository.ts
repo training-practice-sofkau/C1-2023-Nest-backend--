@@ -47,9 +47,15 @@ export class AccountRepository
   }
 
   private softDelete(index: number): void {
+    let newAccount = new AccountEntity();
     const account = this.database[index];
-    account.deletedAt = Date.now();
-    this.update(account.id, account);
+    newAccount = {
+      ...newAccount,
+      ...account,
+      id: account.id,
+    };
+    newAccount.deletedAt = Date.now();
+    this.update(account.id, newAccount);
   }
 
   findAll(): AccountEntity[] {

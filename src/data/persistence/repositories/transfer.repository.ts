@@ -47,9 +47,15 @@ export class TransferRepository
   }
 
   private softDelete(index: number): void {
-    const account = this.database[index];
-    account.deletedAt = Date.now();
-    this.update(account.id, account);
+    let newTransfer = new TransferEntity();
+    const transfer = this.database[index];
+    newTransfer = {
+      ...newTransfer,
+      ...transfer,
+      id: transfer.id,
+    };
+    newTransfer.deletedAt = Date.now();
+    this.update(transfer.id, newTransfer);
   }
 
   findAll(): TransferEntity[] {
@@ -87,6 +93,16 @@ export class TransferRepository
         item.dateTime >= dateInit &&
         item.dateTime <= dateEnd &&
         item.inCome.id === accountId,
+    );
+  }
+
+  findByDataRange(
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[] {
+    return this.findAll().filter(
+      (item) =>
+        item.dateTime >= Number(dateInit) && item.dateTime <= Number(dateEnd),
     );
   }
 }

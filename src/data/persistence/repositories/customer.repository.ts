@@ -30,16 +30,32 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const customer = this.findOneById(id);
+    this.findOneById(id);
     if (soft || soft === undefined) {
-      customer.deletedAt = Date.now();
-      this.update(id, customer);
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
     } else {
       const index = this.database.findIndex(
         (item) => item.id === id && (item.deletedAt ?? true) === true,
       );
-      this.database.splice(index, 1);
+      this.hardDelete(index);
     }
+  }
+
+  private hardDelete(index: number): void {
+    this.database.splice(index, 1);
+  }
+
+  private softDelete(index: number): void {
+    let newCustomer = new CustomerEntity();
+    const customer = this.database[index];
+    newCustomer = {
+      ...newCustomer,
+      ...customer,
+      id: customer.id,
+    };
+    newCustomer.deletedAt = Date.now();
+    this.update(customer.id, newCustomer);
   }
 
   findAll(): CustomerEntity[] {
@@ -85,7 +101,7 @@ export class CustomerRepository
     const index = this.database.findIndex(
       (item) => item.email === email && typeof item.deletedAt === 'undefined',
     );
-    if (index >= 0) {
+    if (index < 0) {
       throw new NotFoundException(`no existe en base de datos`);
     }
     const customer = this.database[index];
