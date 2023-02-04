@@ -18,6 +18,9 @@ export class AccountService {
     private readonly customerRepository: CustomerRepository,
   ) {}
 
+  findOneById(id: string): AccountEntity {
+    return this.accountRepository.findOneById(id);
+  }
   newmap(account: NewAccountDto): AccountEntity {
     const account1 = new AccountEntity();
     account1.customer = this.customerRepository.findOneById(

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { NewDepositDTO } from 'src/business/dtos';
 import { DepositEntity } from 'src/data/persistence/entities';
 import { DepositService } from 'src/business/service';
@@ -6,6 +14,16 @@ import { DepositService } from 'src/business/service';
 @Controller('deposit')
 export class DepositController {
   constructor(private readonly depositService: DepositService) {}
+
+  @Get()
+  findAll(): DepositEntity[] {
+    return this.depositService.findAll();
+  }
+
+  @Get(':id')
+  getDeposit(@Param('id', new ParseUUIDPipe()) id: string): DepositEntity {
+    return this.depositService.findOneById(id);
+  }
 
   @Post('newRepo')
   createDeposit(@Body() deposit: NewDepositDTO): DepositEntity {

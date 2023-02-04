@@ -5,11 +5,13 @@ import {
   AccountRepository,
 } from 'src/data/persistence/repository';
 import { NewDepositDTO } from '../../dtos/new-deposit.dto';
+import { AccountService } from '../account';
 @Injectable()
 export class DepositService {
   constructor(
     private readonly depositRepository: DepositRepository,
     private readonly accountRepository: AccountRepository,
+    private readonly accountService: AccountService,
   ) {}
 
   mapDeposit(deposit: NewDepositDTO): DepositEntity {
@@ -27,10 +29,26 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: NewDepositDTO): DepositEntity {
-    const depositNew = this.mapDeposit(deposit);
-    return this.depositRepository.register(depositNew);
+    const newDeposit = new DepositEntity();
+    const newAccount = this.accountService.findOneById(deposit.accountId);
+    if (this.accountService.getState(deposit.accountId)) {
+      newDeposit.amount = deposit.amount;
+      newDeposit.dateTime = Date.now();
+      newAccount.id = deposit.accountId;
+      newDeposit.account = newAccount;
+      this.accountService.addBalance(deposit.accountId, deposit.amount);
+      return this.depositRepository.register(newDeposit);
+    } else {
+      throw new NotFoundException('La cuenta no se encuentra activa');
+    }
+  }
+  findAll(): DepositEntity[] {
+    return this.depositRepository.findAll();
   }
 
+  findOneById(id: string): DepositEntity {
+    return this.depositRepository.findOneById(id);
+  }
   /**
    * Borrar un deposito
    *
