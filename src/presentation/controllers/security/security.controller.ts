@@ -1,13 +1,15 @@
 // Libraries
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { newCustomerDTO, NewSecurityDTO } from 'src/business/dtos';
 import { SecurityService } from 'src/business/services';
+import { JwtGuard } from 'src/presentation/guards/guard-jwt';
 
 @Controller('security')
 export class SecurityController {
     constructor(private readonly securityService: SecurityService) { }
 
     @Post("/login")
+    @UseGuards(JwtGuard)
     login(@Body() security: NewSecurityDTO) {
         return this.securityService.signIn(security)
     }
