@@ -102,32 +102,23 @@ export class DepositRepository
     endDate?: number | Date,
   ): DepositEntity[] {
     let transfers: DepositEntity[] = [];
-    console.log('database ', this.database);
     if (limit && offset) {
-      console.log('entra en if');
-      console.log('limit ', typeof limit);
-      console.log('limit ', typeof offset);
       const inicio = Number(limit) * Number(offset);
-      console.log('inicio ', inicio);
       transfers = this.database.slice(inicio, inicio + limit);
       console.log('transfers ', transfers);
     }
 
     if (startDate && endDate) {
-      console.log('ENTRA EN DATE');
       transfers = this.database.filter(
         (item: DepositEntity) =>
-          startDate >= item.dateTime && endDate <= item.dateTime,
+          item.dateTime >= startDate && item.dateTime <= endDate,
       );
     }
-    //console.log(transfers[0].account.id);
     transfers = transfers.filter((item) => {
-      console.log('entra filter');
       console.log(item.account.id);
       console.log(accountId);
       return item.account.id === accountId;
     });
-    console.log('TRANSFER FIN ', transfers);
     return transfers;
   }
 }
