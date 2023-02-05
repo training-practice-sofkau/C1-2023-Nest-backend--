@@ -10,6 +10,8 @@ import {
 import { NewDepositDTO } from 'src/business/dtos';
 import { DepositEntity } from 'src/data/persistence/entities';
 import { DepositService } from 'src/business/service';
+import { PaginationEntity } from 'src/data/persistence/entities/pagination.entity';
+import { DataRangeEntity } from 'src/data/persistence/entities/data-range.entity';
 
 @Controller('deposit')
 export class DepositController {
@@ -25,7 +27,7 @@ export class DepositController {
     return this.depositService.findOneById(id);
   }
 
-  @Post('newRepo')
+  @Post('create')
   createDeposit(@Body() deposit: NewDepositDTO): DepositEntity {
     return this.depositService.createDeposit(deposit);
   }
@@ -35,8 +37,15 @@ export class DepositController {
     this.depositService.deleteDeposit(depositId);
   }
 
-  //   @Get("/:id")
-  //   getHistory(@Param('id', ParseUUIDPipe): depositId: string): DepositEntity[] {
-  //     return this.depositService.getHistory(depositId);
-  //   }
+  @Post('/getHistory/:id')
+  getHistory(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ): DepositEntity[] {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    return this.depositService.getHistory(id, newPagination, newDataRange);
+  }
 }

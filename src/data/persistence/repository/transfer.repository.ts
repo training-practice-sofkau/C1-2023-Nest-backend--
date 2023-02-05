@@ -8,6 +8,14 @@ export class TransferRepository
   extends BaseRepository<TransferEntity>
   implements TransferRepositoryInterface
 {
+  public static instance: TransferRepository;
+
+  public static getInstance(): TransferRepository {
+    if (!TransferRepository.instance) {
+      TransferRepository.instance = new TransferRepository();
+    }
+    return TransferRepository.instance;
+  }
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -57,6 +65,36 @@ export class TransferRepository
     if (transfer) return transfer;
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
+  findByIncomeCustomerId(id: string): TransferEntity {
+    const transferIndex = this.database.findIndex(
+      (transfer) => transfer.income.customer.id === id,
+    );
+    if (transferIndex >= 0) {
+      return this.database[transferIndex];
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+  findByIncomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
+      (transfer) => transfer.income.id === id,
+    );
+    if (transferArray.length > 0) {
+      return transferArray;
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+  findByOutcomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
+      (transfer) => transfer.outcome.id === id,
+    );
+    if (transferArray.length > 0) {
+      return transferArray;
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
 
   findOutcomeByDataRange(
     accountId: string,
@@ -89,4 +127,23 @@ export class TransferRepository
     if (incomeR === undefined) throw new NotFoundException();
     return incomeR;
   }
+
+  findByDateRange(
+    id: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[] {
+    const arrayTransfers = this.findAll();
+    return arrayTransfers.filter(
+      (transfer) =>
+        transfer.id === id &&
+        transfer.dateTime >= dateInit &&
+        transfer.dateTime <= dateEnd,
+    );
+  }
+  // findSoftDeletedTransfers(): TransferEntity[] {
+  //   let finded = this.database.filter((item) => item.deletedAt !== undefined);
+  //   if (finded == undefined) throw new NotFoundException();
+  //   return finded;
+  // }
 }

@@ -65,17 +65,17 @@ export class DepositRepository
     return bill;
   }
 
-  findByDataRange(
+  findByDateRange(
+    id: string,
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[] {
-    const dataR = this.database.filter(
-      (item) =>
-        typeof item.deletedAt === 'undefined' &&
-        item.dateTime >= dateInit &&
-        item.dateTime <= dateEnd,
+    const arrayDeposites = this.findAll();
+    return arrayDeposites.filter(
+      (deposit) =>
+        deposit.account.id === id &&
+        deposit.dateTime >= dateInit &&
+        deposit.dateTime <= dateEnd,
     );
-    if (dataR === undefined) throw new NotFoundException();
-    return dataR;
   }
 }

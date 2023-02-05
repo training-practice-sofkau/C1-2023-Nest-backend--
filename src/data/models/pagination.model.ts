@@ -1,4 +1,5 @@
 export interface PaginationModel {
-  offset: number;
-  limit?: number;
+  size?: number;
+  numberPages?: number;
+  actualPage: number;
 }

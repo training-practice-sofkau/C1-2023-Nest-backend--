@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { DataRangeModel } from 'src/data/models/data-range.model';
+import { PaginationModel } from 'src/data/models/pagination.model';
 import { DepositEntity } from 'src/data/persistence/entities';
 import {
   DepositRepository,
@@ -72,18 +74,32 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  // getHistory(
-  //   accountId: string,
-  //   pagination?: Pagination,
-  //   dataRange?: DateRange,
-  // ): DepositEntity[] {
-  //   if (dataRange) {
-  //     return this.depositRepository.findByDataRange(
-  //       accountId,
-  //       dataRange?.dateInit,
-  //       dataRange?.dateEnd,
-  //       pagination,
-  //     );
-  //   } else return this.depositRepository.findByAccountId(accountId, pagination);
-  // }
+  getHistory(
+    accountId: string,
+    pagination: PaginationModel,
+    dataRange?: DataRangeModel,
+  ): DepositEntity[] {
+    const arrayTransfer = this.depositRepository.findByDateRange(
+      accountId,
+      0,
+      Date.now(),
+    );
+    const arrayTransferReturn: DepositEntity[] = [];
+    let range = 0;
+    pagination.size = arrayTransfer.length;
+    if (dataRange?.range === undefined) {
+      range = 10;
+    } else {
+      range = dataRange.range;
+    }
+    pagination.numberPages = Math.round(pagination.size / range);
+    for (
+      let x = 1 + range * (pagination.actualPage - 1);
+      x < 1 + range + range * (pagination.actualPage - 1);
+      x++
+    ) {
+      arrayTransferReturn.push(arrayTransfer[x - 1]);
+    }
+    return arrayTransferReturn;
+  }
 }
