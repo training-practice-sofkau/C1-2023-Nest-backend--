@@ -13,6 +13,8 @@ export class CustomerRepository
     return this.database.at(-1) ?? entity;
   }
 
+  //inico sesion
+
   update(id: string, entity: CustomerEntity): CustomerEntity {
     console.log('data ', this.database);
     const index = this.database.findIndex(

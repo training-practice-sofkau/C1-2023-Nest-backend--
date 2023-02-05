@@ -105,7 +105,6 @@ export class DepositRepository
     if (limit && offset) {
       const inicio = Number(limit) * Number(offset);
       transfers = this.database.slice(inicio, inicio + limit);
-      console.log('transfers ', transfers);
     }
 
     if (startDate && endDate) {
@@ -115,8 +114,6 @@ export class DepositRepository
       );
     }
     transfers = transfers.filter((item) => {
-      console.log(item.account.id);
-      console.log(accountId);
       return item.account.id === accountId;
     });
     return transfers;

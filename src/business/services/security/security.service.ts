@@ -13,6 +13,7 @@ import {
   DocumentTypeEntity,
 } from 'src/data/persistence';
 import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
+import { NewSignInDTO } from 'src/presentation/dtos/new-signIn.dto';
 import { AccountService } from '../account/account.service';
 
 @Injectable()
@@ -30,13 +31,17 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: CustomerModel): string {
+  signIn(user: NewSignInDTO): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
     );
-    if (answer) return 'Falta retornar un JWT';
-    else throw new UnauthorizedException('Datos de identificación inválidos');
+
+    if (answer) {
+      const payload = { email: user.email };
+      const token = this.jwtService.sign(payload);
+      return token;
+    } else throw new UnauthorizedException('Datos de identificación inválidos');
   }
 
   /**
@@ -79,19 +84,6 @@ export class SecurityService {
       else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();
   }
-
-  /**
-   *  //Crear cuenta
-    const acco = {
-      customer: newCustomer.id,
-      accountType: documentType.id,
-      balance: 0,
-    };
-    const account = this.accountService.createAccount(acco);
-    account.customer = newCustomer;
-
-    return this.customerRepository.register(newCustomer);
-   */
 
   /**
    * Salir del sistema
