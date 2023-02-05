@@ -83,6 +83,11 @@ export class AccountService {
     }
     return true;
 }
+  getAccount(accountId: string): AccountTypeEntity {
+    let newAccount = new AccountTypeEntity();
+    newAccount = this.accountRepository.findOneById(accountId).accountType;
+    return newAccount;
+  }
     
   /**
    * Obtener el estado de una cuenta

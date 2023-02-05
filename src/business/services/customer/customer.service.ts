@@ -4,6 +4,7 @@ import { CustomerEntity } from 'src/data/persistence/entities';
 import { AccountRepository, CustomerRepository } from 'src/data/persistence/repositories';
 import { NewCustomerDTO } from 'src/business/dtos/new-customer.dto';
 import { DocumentTypeEntity } from 'src/data/persistence/entities';
+import { AccountEntity } from 'src/data/persistence/entities/account.entity';
 @Injectable()
 export class CustomerService {
   constructor(private readonly customerRepository : CustomerRepository,
@@ -24,9 +25,14 @@ export class CustomerService {
       newCustomer.email = customer.email;
       newCustomer.phone = customer.phone;
       newCustomer.password = customer.password;
-  
+
+      let newAccount = new AccountEntity();
+      newAccount.balance = 0;
+      newAccount.customer = newCustomer;
+      this.accountRepository.register(newAccount)
       return this.customerRepository.register(newCustomer);
-    }
+
+      }
     
   /**
    * Obtener información de un cliente

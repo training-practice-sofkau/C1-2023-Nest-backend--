@@ -33,6 +33,10 @@ export class AccountController {
     getState(@Param('id') accountId: string): boolean {
       return this.accountService.getState(accountId);
     }
+    @Get('type/:accountId')
+    getAccount(@Param('accountId') accountId: string): AccountTypeEntity {
+    return this.accountService.getAccount(accountId);
+  }
   
     @Put('changestate/:id')
     changeState(@Param('id') accountId: string, @Body('state') state: boolean): void {
