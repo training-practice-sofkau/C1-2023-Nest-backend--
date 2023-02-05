@@ -133,7 +133,9 @@ export class AccountRepository
     const accountIndex = this.database.findIndex(
       (account) => account.id === id,
     );
-    return this.database[accountIndex].state;
+    if (accountIndex >= 0) return this.database[accountIndex].state;
+    else throw new NotFoundException("No se encontro la cuenta")
+
   }
   changeStateId(id: string, state: boolean): void {
     const accountIndex = this.database.findIndex(

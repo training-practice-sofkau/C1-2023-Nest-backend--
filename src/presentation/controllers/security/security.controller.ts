@@ -9,7 +9,6 @@ export class SecurityController {
     constructor(private readonly securityService: SecurityService) { }
 
     @Post("/login")
-    @UseGuards(JwtGuard)
     login(@Body() security: NewSecurityDTO) {
         return this.securityService.signIn(security)
     }
