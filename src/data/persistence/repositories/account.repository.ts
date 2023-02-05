@@ -77,6 +77,55 @@ export class AccountRepository
     return accounts;
   }
 
+  removeBalance(accountId: string, amount: number): void {
+    const account = this.findOneById(accountId);
+    if (!account) {
+      throw new NotFoundException(
+        `La cuenta ${account} no existe en base de datos`,
+      );
+    }
+    if (!account.state) {
+      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
+    }
+    const newBalance = (account.balance -= Number(amount));
+    const acc = {
+      ...account,
+      balance: newBalance,
+    };
+    this.update(accountId, acc);
+  }
+
+  getBalance(accountId: string): number {
+    const account = this.findOneById(accountId);
+    if (!account) {
+      throw new NotFoundException(
+        `La cuenta ${account} no existe en base de datos`,
+      );
+    }
+    if (!account.state) {
+      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
+    }
+    return account.balance;
+  }
+
+  addBalance(accountId: string, amount: number): void {
+    const account = this.findOneById(accountId);
+    if (!account) {
+      throw new NotFoundException(
+        `La cuenta ${account} no existe en base de datos`,
+      );
+    }
+    if (!account.state) {
+      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
+    }
+    const newBalance = (account.balance += Number(amount));
+    const acc = {
+      ...account,
+      balance: newBalance,
+    };
+    this.update(accountId, acc);
+  }
+
   private hardDelete(id: string): void {
     const index = this.database.findIndex(
       (item) => item.id === id && (item.deletedAt ?? true) === true,

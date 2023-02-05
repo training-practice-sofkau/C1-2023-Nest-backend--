@@ -33,12 +33,6 @@ export class DepositController {
     @Query() paginationDTO: PaginationDTO,
     @Query() dateTimeDTO?: DateTimeRangeDTO,
   ): DepositEntity[] {
-    /*const startDate = dateTimeDTO?.startDate
-      ? Number(dateTimeDTO.startDate)
-      : undefined;
-    const endDate = dateTimeDTO?.endDate
-      ? Number(dateTimeDTO.endDate)
-      : undefined;*/
     return this.depositService.getHistory(id, paginationDTO, dateTimeDTO);
   }
 }

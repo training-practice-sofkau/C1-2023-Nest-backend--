@@ -68,16 +68,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    const account = this.accountRepository.findOneById(accountId);
-    if (!account) {
-      throw new NotFoundException(
-        `La cuenta ${account} no existe en base de datos`,
-      );
-    }
-    if (!account.state) {
-      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
-    }
-    return account.balance;
+    return this.accountRepository.getBalance(accountId);
   }
 
   /**
@@ -88,17 +79,7 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    const account = this.accountRepository.findOneById(accountId);
-    if (!account) {
-      throw new NotFoundException(
-        `La cuenta ${account} no existe en base de datos`,
-      );
-    }
-    if (!account.state) {
-      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
-    }
-    account.balance += Number(amount);
-    console.log('service ', account.balance);
+    this.accountRepository.addBalance(accountId, amount);
   }
 
   /**
@@ -109,16 +90,7 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    const account = this.accountRepository.findOneById(accountId);
-    if (!account) {
-      throw new NotFoundException(
-        `La cuenta ${account} no existe en base de datos`,
-      );
-    }
-    if (!account.state) {
-      throw new NotFoundException(`La cuenta ${account} esta desactivada`);
-    }
-    account.balance -= Number(amount);
+    this.accountRepository.removeBalance(accountId, amount);
   }
 
   /**
