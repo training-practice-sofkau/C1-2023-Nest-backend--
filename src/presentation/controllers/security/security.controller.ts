@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { SecurityService } from 'src/business/services/security/security.service';
 import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
-import { NewSignInDTO } from 'src/presentation/dtos/new-signIn.dto';
+import { SignInDTO } from 'src/presentation/dtos/sign-in.dto';
 
 @Controller('security')
 export class SecurityController {
@@ -19,7 +19,7 @@ export class SecurityController {
   }
 
   @Post('signIn')
-  signIn(@Body() user: NewSignInDTO): string {
+  signIn(@Body() user: SignInDTO): string {
     return this.securityService.signIn(user);
   }
 }

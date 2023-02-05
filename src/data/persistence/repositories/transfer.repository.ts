@@ -1,6 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DataRangeModel } from 'src/data/models/dataRange.model';
-import { PaginationModel } from 'src/data/models/pagination.model';
 import { TransferEntity } from '../entities/transfer.entity';
 import { BaseRepository } from './base';
 import { TransferRepositoryInterface } from './interfaces';
@@ -85,19 +83,21 @@ export class TransferRepository
   //Obtener historial de transacciones de entrada en una cuenta
   findIncomeByAccountIdAndPagination(
     accountId: string,
-    limit: number,
-    offset: number,
-    dataRange?: DataRangeModel,
+    limit?: number,
+    offset?: number,
+    startDate?: number | Date,
+    endDate?: number | Date,
   ): TransferEntity[] {
-    let transfers = [];
-    const inicio = limit * offset;
-    transfers = this.database.slice(inicio, inicio + limit);
+    let transfers: TransferEntity[] = [];
+    if (limit && offset) {
+      const inicio = limit * offset;
+      transfers = this.database.slice(inicio, inicio + limit);
+    }
 
-    if (dataRange) {
+    if (startDate && endDate) {
       transfers = this.database.filter(
         (item: TransferEntity) =>
-          dataRange.startDate >= item.dateTime &&
-          dataRange.endDate <= item.dateTime,
+          item.dateTime >= startDate && item.dateTime <= endDate,
       );
     }
     transfers = transfers.filter((item) => item.income.id === accountId);
@@ -109,19 +109,22 @@ export class TransferRepository
     accountId: string,
     limit: number,
     offset: number,
-    dataRange?: DataRangeModel,
+    startDate?: number | Date,
+    endDate?: number | Date,
   ): TransferEntity[] {
-    let transfers = [];
-    const inicio = limit * offset;
-    transfers = this.database.slice(inicio, inicio + limit);
+    let transfers: TransferEntity[] = [];
+    if (limit && offset) {
+      const inicio = limit * offset;
+      transfers = this.database.slice(inicio, inicio + limit);
+    }
 
-    if (dataRange) {
+    if (startDate && endDate) {
       transfers = this.database.filter(
         (item: TransferEntity) =>
-          dataRange.startDate >= item.dateTime &&
-          dataRange.endDate <= item.dateTime,
+          item.dateTime >= startDate && item.dateTime <= endDate,
       );
     }
+    console.log('transfer ', transfers);
     transfers = transfers.filter((item) => item.outcome.id === accountId);
     return transfers;
   }
@@ -131,7 +134,8 @@ export class TransferRepository
     accountId: string,
     limit?: number,
     offset?: number,
-    dataRange?: DataRangeModel,
+    startDate?: number | Date,
+    endDate?: number | Date,
   ): TransferEntity[] {
     let transfers: TransferEntity[] = [];
     if (limit && offset) {
@@ -139,11 +143,10 @@ export class TransferRepository
       transfers = this.database.slice(inicio, inicio + limit);
     }
 
-    if (dataRange) {
+    if (startDate && endDate) {
       transfers = this.database.filter(
         (item: TransferEntity) =>
-          dataRange.startDate >= item.dateTime &&
-          dataRange.endDate <= item.dateTime,
+          item.dateTime >= startDate && item.dateTime <= endDate,
       );
     }
     transfers = transfers.filter(
@@ -151,31 +154,6 @@ export class TransferRepository
     );
     return transfers;
   }
-  /*findByAccountIdAndPagination(
-    accountId: string,
-    limit?: number,
-    offset?: number,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    const transfers = this.findAll();
-    let res = [];
-    if (limit && offset) {
-      const inicio = limit * offset;
-      res = transfers.slice(inicio, inicio + limit);
-    } else {
-      res = transfers;
-    }
-    if(dataRange){
-      return res
-        .filter((item) => item.income.id === accountId)
-        .filter((item: TransferEntity) =>
-            dateInit >= item.dateTime &&
-            dateEnd <= item.dateTime &&
-            item.income.id === accountId,
-      )
-    }
-    return res.filter((item) => item.income.id === accountId);
-  }*/
 
   private hardDelete(id: string): void {
     const index = this.database.findIndex(

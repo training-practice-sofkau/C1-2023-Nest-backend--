@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { PaginationModel } from 'src/data/models/pagination.model';
 import { AccountEntity, TransferEntity } from 'src/data/persistence';
+import { AccountRepository } from 'src/data/persistence/repositories/account.repository';
 import { TransferRepository } from 'src/data/persistence/repositories/transfer.repository';
 import { NewTransferDTO } from 'src/presentation/dtos/new-transfer.dto';
 
 @Injectable()
 export class TransferService {
-  constructor(private readonly transferRepository: TransferRepository) {}
+  constructor(
+    private readonly transferRepository: TransferRepository,
+    private readonly accountRepository: AccountRepository,
+  ) {}
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -16,15 +20,23 @@ export class TransferService {
    * @memberof TransferService
    */
   createTransfer(transfer: NewTransferDTO): TransferEntity {
-    const newAccountIncome = new AccountEntity();
+    const getAccountIncome = this.accountRepository.findOneById(
+      transfer.income,
+    );
+    const getAccountOutcome = this.accountRepository.findOneById(
+      transfer.outcome,
+    );
+    /*const newAccountIncome = new AccountEntity();
     newAccountIncome.id = transfer.income;
     const newAccountOutcome = new AccountEntity();
-    newAccountOutcome.id = transfer.outcome;
+    newAccountOutcome.id = transfer.outcome;*/
 
     const newTransfer = new TransferEntity();
     newTransfer.amount = transfer.amount;
     newTransfer.dateTime = transfer.dateTime;
     newTransfer.reason = transfer.reason;
+    newTransfer.income = getAccountIncome;
+    newTransfer.outcome = getAccountOutcome;
     return this.transferRepository.register(newTransfer);
   }
 
@@ -46,7 +58,8 @@ export class TransferService {
       accountId,
       pagination.limit,
       pagination.offset,
-      dataRange,
+      dataRange?.startDate,
+      dataRange?.endDate,
     );
   }
 
@@ -68,7 +81,8 @@ export class TransferService {
       accountId,
       pagination.limit,
       pagination.offset,
-      dataRange,
+      dataRange?.startDate,
+      dataRange?.endDate,
     );
   }
 
@@ -83,14 +97,15 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    pagination?: PaginationModel,
+    pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     return this.transferRepository.findTransferByAccountIdAndPagination(
       accountId,
-      pagination?.limit,
-      pagination?.offset,
-      dataRange,
+      pagination.limit,
+      pagination.offset,
+      dataRange?.startDate,
+      dataRange?.endDate,
     );
   }
 

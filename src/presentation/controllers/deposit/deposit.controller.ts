@@ -10,6 +10,8 @@ import {
 import { NewDepositDTO } from 'src/presentation/dtos/new-deposit-dto';
 import { DepositEntity } from 'src/data/persistence';
 import { DepositService } from 'src/business/services/deposit/deposit.service';
+import { PaginationDTO } from 'src/presentation/dtos/pagination.dto';
+import { DateTimeRangeDTO } from 'src/presentation/dtos/date-time-range.dto';
 
 @Controller('deposit')
 export class DepositController {
@@ -28,15 +30,18 @@ export class DepositController {
   @Get('/:id')
   getHistory(
     @Param('id') id: string,
-    @Query('limit') limit: number,
-    @Query('offset') offset: number,
-    @Query('startDate') startDate: number,
-    @Query('endDate') endDate: number,
+    @Query() paginationDTO: PaginationDTO,
+    @Query() dateTimeDTO?: DateTimeRangeDTO,
   ): DepositEntity[] {
-    return this.depositService.getHistory(
-      id,
-      { limit, offset },
-      { startDate, endDate },
-    );
+    /*const startDate = dateTimeDTO?.startDate
+      ? Number(dateTimeDTO.startDate)
+      : undefined;
+    const endDate = dateTimeDTO?.endDate
+      ? Number(dateTimeDTO.endDate)
+      : undefined;*/
+    return this.depositService.getHistory(id, paginationDTO, dateTimeDTO);
   }
 }
+
+//@Query('limit') limit: number,
+//@Query('offset') offset: number,

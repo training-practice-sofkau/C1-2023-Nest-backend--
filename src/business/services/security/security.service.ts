@@ -13,7 +13,7 @@ import {
   DocumentTypeEntity,
 } from 'src/data/persistence';
 import { NewCustomerDTO } from 'src/presentation/dtos/new-customer.dto';
-import { NewSignInDTO } from 'src/presentation/dtos/new-signIn.dto';
+import { SignInDTO } from 'src/presentation/dtos/sign-in.dto';
 import { AccountService } from '../account/account.service';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: NewSignInDTO): string {
+  signIn(user: SignInDTO): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,

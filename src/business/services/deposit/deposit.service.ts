@@ -52,13 +52,14 @@ export class DepositService {
    */
   getHistory(
     accountId: string,
-    pagination?: PaginationModel,
+    pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
+    console.log('pagination ', pagination, 'dataRange ', dataRange);
     return this.depositRepository.findByAccountIdAndPagination(
       accountId,
-      pagination?.limit,
-      pagination?.offset,
+      pagination.limit,
+      pagination.offset,
       dataRange?.startDate,
       dataRange?.endDate,
     );

@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { DepositEntity } from '../entities/deposit.entity';
 import { AccountRepository } from './account.repository';
 import { BaseRepository } from './base';
@@ -96,8 +95,8 @@ export class DepositRepository
   }*/
   findByAccountIdAndPagination(
     accountId: string,
-    limit?: number,
-    offset?: number,
+    limit: number,
+    offset: number,
     startDate?: number | Date,
     endDate?: number | Date,
   ): DepositEntity[] {
