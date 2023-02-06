@@ -1,5 +1,5 @@
 import {
-    BadRequestException,
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -10,15 +10,19 @@ import {
   AccountEntity,
   AccountTypeEntity,
   CustomerEntity,
+  DocumentTypeEntity,
 } from '../../persistence/entities';
 import { CustomerRepository } from 'src/persistence/repositories/customer.repository';
+import { NewAccountDTO } from 'src/dtos/account/new-account.dto';
+import { NewSecurityDTO } from 'src/dtos/security/new-security.dto';
+import { newCustomerDTO } from 'src/dtos/customer/new-customer.dto';
 
 @Injectable()
 export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
-  ) {}
+  ) { }
 
   /**
    * Identificarse en el sistema
@@ -27,7 +31,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: CustomerModel): string {
+  signIn(user: NewSecurityDTO): string {
     const answer = this.customerRepository.findEmailAndPassword(
       user.email,
       user.password,
@@ -43,13 +47,15 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: CustomerModel): string {
+  signUp(user: newCustomerDTO): string {
     const newCustomer = new CustomerEntity();
+    const newDocumentType = new DocumentTypeEntity()
+    newDocumentType.id = user.documentTypeId;
     const findCustomer = this.customerRepository.findByEmail(user.email);
     if (findCustomer) {
       throw new BadRequestException();
     } else {
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = newDocumentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
@@ -61,13 +67,13 @@ export class SecurityService {
       if (customer) {
         const accountType = new AccountTypeEntity();
         accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = new AccountEntity();
-        newAccount.customer = customer;
-        newAccount.accountType = accountType;
+        const newAccount = new NewAccountDTO();
+        newAccount.customer = customer.id;
+        newAccount.accountType = accountType.id;
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return 'Falta retornar un JWT';
+        if (account) return 'Falta retornar un JWT, se creo una cuenta con ID: ' + account.id;
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }

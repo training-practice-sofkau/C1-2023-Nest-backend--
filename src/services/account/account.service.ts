@@ -4,16 +4,22 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AccountModel } from 'src/models';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import { AccountEntity, AccountTypeEntity, CustomerEntity } from 'src/persistence/entities';
 import { AccountRepository } from 'src/persistence/repositories/account.repository';
 import { AccountTypeRepository } from 'src/persistence/repositories/account-type.repository';
+import { NewAccountDTO } from 'src/dtos/account/new-account.dto';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
-  ) {}
+  ) { }
+
+  findAll(): AccountEntity[] {
+    return this.accountRepository.findAll()
+  }
+
   /**
    * Crear una cuenta
    *
@@ -21,17 +27,21 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: NewAccountDTO): AccountEntity {
     const newAccount = new AccountEntity();
+    const newCustomer = new CustomerEntity()
+    newCustomer.id = account.customer;
+    const newAccountType = new AccountTypeEntity()
+    newAccountType.id = account.accountType
     const findAccount = this.accountRepository.findByCustomerId(
-      account.customer.id,
+      account.customer
     );
     if (findAccount) {
       throw new BadRequestException();
     } else {
-      newAccount.customer = account.customer;
-      newAccount.accountType = account.accountType;
-      return this.accountRepository.register(newAccount); 
+      newAccount.customer = newCustomer;
+      newAccount.accountType = newAccountType;
+      return this.accountRepository.register(newAccount);
     }
   }
 
@@ -143,7 +153,7 @@ export class AccountService {
       } else {
         throw new NotFoundException(
           'No se puede cambiar de estado, ya que el tipo de cuenta esta en ' +
-            accountTypeState,
+          accountTypeState,
         );
       }
     }
@@ -204,6 +214,26 @@ export class AccountService {
       } else {
         this.accountRepository.delete(accountId);
       }
+    }
+  }
+  findOneById(id: string): AccountEntity {
+    return this.accountRepository.findOneById(id)
+  }
+  updateAccount(id: string, account: NewAccountDTO): AccountEntity {
+    const findAccount = this.accountRepository.findOneById(id)
+    const newAccount = new AccountEntity()
+    const newCustomer = new CustomerEntity()
+    newCustomer.id=account.customer
+    const newAccounType = new AccountTypeEntity()
+    newAccounType.id=account.accountType
+    if (findAccount) {
+      newAccount.balance = account.balance
+      newAccount.accountType = newAccounType
+      newAccount.customer = newCustomer
+      return this.accountRepository.update(id, newAccount)
+    }
+    else {
+      throw new NotFoundException("No se encontro la cuenta")
     }
   }
 }

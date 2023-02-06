@@ -1,29 +1,34 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from "@nestjs/common";
+import { NewAccountDTO } from "src/dtos/account/new-account.dto";
+import { AccountEntity } from "src/persistence/entities";
+import { AccountService } from "src/services";
 
 @Controller("account")
 export class AccountController {
+
+    constructor(private readonly accountServices: AccountService) { }
     @Get()
-    getAccounts(): string {
-        return "Se devuelve todas las cuentas"
+    getAccounts(): AccountEntity[] {
+        return this.accountServices.findAll()
     }
 
     @Get(":id")
-    getAccount(@Param("id") id: string): string {
-        return "Devuelve la cuenta con id :" + id;
+    getAccount(@Param("id", new ParseUUIDPipe()) id: string): AccountEntity {
+        return this.accountServices.findOneById(id)
     }
 
-    @Post(":id")
-    createAccount(@Param("id") id: string, @Body() account: {}): string {
-        return "Se crea cuenta con user id: " + id;
+    @Post()
+    createAccount(@Body() account: NewAccountDTO): AccountEntity {
+        return this.accountServices.createAccount(account)
     }
 
     @Put(":id")
-    modifyAccount(@Param("id") id: string, @Body() account: {}): string {
-        return "Se modifica la cuenta con user id: " + id;
+    modifyAccount(@Param("id", new ParseUUIDPipe()) id: string, @Body() account: NewAccountDTO): AccountEntity {
+        return this.accountServices.updateAccount(id, account)
     }
 
     @Delete(":id")
-    deleteAccount(@Param("id") id: string): string {
-        return "Se elimina la cuenta con userID: " + id
+    deleteAccount(@Param("id", new ParseUUIDPipe()) id: string): void {
+        return this.accountServices.deleteAccount(id)
     }
 }

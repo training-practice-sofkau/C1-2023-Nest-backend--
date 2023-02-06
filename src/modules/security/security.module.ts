@@ -1,13 +1,12 @@
 import { Module } from "@nestjs/common/decorators/modules/module.decorator";
-import { CustomerController } from "src/controllers/customer/customer.controller";
+import { SecurityController } from "src/controllers";
 import { AccountTypeRepository } from "src/persistence/repositories/account-type.repository";
 import { AccountRepository } from "src/persistence/repositories/account.repository";
 import { CustomerRepository } from "src/persistence/repositories/customer.repository";
 import { AccountService, CustomerService, SecurityService } from "src/services";
-import { SecurityModule } from "../security/security.module";
 
 @Module({
-    controllers: [CustomerController],
-    providers: [CustomerRepository, CustomerService, AccountRepository, SecurityService, AccountService, AccountTypeRepository]
+    controllers: [SecurityController],
+    providers: [SecurityService, AccountService, CustomerRepository, AccountRepository, AccountTypeRepository]
 })
-export class CustomerModule { }
+export class SecurityModule { }

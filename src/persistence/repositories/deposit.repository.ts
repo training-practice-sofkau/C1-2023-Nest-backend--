@@ -15,18 +15,13 @@ export class DepositRepository
     const depositIndex = this.database.findIndex(
       (deposit) => deposit.id === id,
     );
-    if (depositIndex >= 0) {
-      const data = this.database[depositIndex];
-      this.database[depositIndex] = {
-        ...data,
-        ...entity,
-        id: id,
-      };
-      return this.database[depositIndex];
-    }
-    else {
-      throw new NotFoundException("No se encontro la informacion")
-    }
+    const data = this.database[depositIndex];
+    this.database[depositIndex] = {
+      ...data,
+      ...entity,
+      id: id,
+    };
+    return this.database[depositIndex];
   }
   delete(id: string, soft?: boolean | undefined): void {
     const deposit = this.findOneById(id)

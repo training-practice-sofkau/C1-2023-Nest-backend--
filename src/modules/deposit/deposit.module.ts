@@ -1,10 +1,12 @@
-import { Module } from "@nestjs/common";
+import { Module } from "@nestjs/common/decorators/modules/module.decorator";
 import { DepositController } from "src/controllers/deposit/deposit.controller";
-import { DepositService } from "src/services/deposit/deposit.service";
+import { AccountTypeRepository } from "src/persistence/repositories/account-type.repository";
+import { AccountRepository } from "src/persistence/repositories/account.repository";
+import { DepositRepository } from "src/persistence/repositories/deposit.repository";
+import { AccountService, DepositService } from "src/services";
 
 @Module({
-    imports:[DepositModule],
-    controllers: [DepositController],
-    providers: [DepositService]
+    controllers:[DepositController],
+    providers:[DepositService,AccountService,DepositRepository,AccountRepository, AccountTypeRepository]
 })
-export class DepositModule { }
+export class DepositModule{}

@@ -1,15 +1,24 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { TransferDTO } from "src/dtos/transfer/transfer.dto";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { NewTransferDTO } from "src/dtos/transfer/new-transfer.dto";
+import { TransferEntity } from "src/persistence/entities";
+import { TransferService } from "src/services";
 
 @Controller("transfer")
 export class TransferController {
+    constructor(private readonly transferService: TransferService) { }
+
     @Get()
-    getTransfers(): string {
-        return "Devuelve todas las transferencias"
+    findAll(){
+        return this.transferService.findAll()
+    }
+
+    @Get(":id")
+    findOneById(@Param("id", new ParseUUIDPipe()) id:string){
+        return this.transferService.findOneById(id)
     }
 
     @Post()
-    createTransfer(@Body() transfer: TransferDTO): string {
-        return "Se crea un transferencia de: " + transfer.trf_outcome + "a :" + transfer.trf_income + "";
+    createTransfer(@Body() transfer: NewTransferDTO): TransferEntity {
+        return this.transferService.createTransfer(transfer)
     }
 }

@@ -7,8 +7,7 @@ import { CustomerRepositoryInterface } from './interface/customer/customer-repos
 @Injectable()
 export class CustomerRepository
   extends BodyRepositoryAbstract<CustomerEntity>
-  implements CustomerRepositoryInterface
-{
+  implements CustomerRepositoryInterface {
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
     const customerIndex = this.database.findIndex(
@@ -33,21 +32,20 @@ export class CustomerRepository
     }
   }
   delete(id: string, soft?: boolean | undefined): void {
-    const customer = this.findOneById(id);
     if (soft || soft === undefined) {
       this.softDelete(id);
     } else {
       this.hardDelete(id);
     }
+
   }
   findAll(): CustomerEntity[] {
-    return this.database.filter((customer) => {
-      customer.deletedAt === undefined;
-    });
+    const allUsers = this.database.filter(customer => customer.deletedAt === undefined)
+    return allUsers
   }
   findOneById(id: string): CustomerEntity {
     const customerIndex = this.database.findIndex(
-      (customer) => customer.id === id,
+      (customer) => customer.id === id && customer.deletedAt === undefined,
     );
     if (customerIndex >= 0) {
       return this.database[customerIndex];
@@ -69,11 +67,7 @@ export class CustomerRepository
     const customerIndex = this.database.findIndex(
       (customer) => customer.email === email,
     );
-    if (customerIndex >= 0) {
-      return this.database[customerIndex];
-    } else {
-      throw new NotFoundException('No se encontro la informacion');
-    }
+    return this.database[customerIndex];
   }
   findByState(state: boolean): CustomerEntity[] {
     let arrayState: CustomerEntity[] = [];
