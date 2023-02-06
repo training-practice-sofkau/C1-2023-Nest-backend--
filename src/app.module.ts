@@ -1,3 +1,5 @@
+import { AccountTypeEntity } from './data/persistence/entities/account-type.entity';
+import { AccountTypeRepository } from './data/persistence/repositories/account-type.repository';
 import { AccountRepository, CustomerRepository } from './data/persistence/repositories';
 import { DepositRepository } from './data/persistence/repositories/deposit.repository';
 import { DepositService } from './business/services/deposit/deposit.service';
@@ -15,6 +17,6 @@ import { TransferService } from './business/services/transfer/transfer.service';
 @Module({
   imports: [],
   controllers: [UserController, AccountController, TransferController, DepositController],
-  providers: [AccountService, AccountRepository, CustomerService, CustomerRepository, TransferService, TransferReoisitory, DepositService, DepositRepository],
+  providers: [AccountService, AccountRepository, CustomerService, CustomerRepository, TransferService, TransferReoisitory, DepositService, DepositRepository, AccountTypeRepository, AccountTypeEntity],
 })
 export class AppModule { }

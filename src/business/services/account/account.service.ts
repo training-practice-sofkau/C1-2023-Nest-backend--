@@ -88,7 +88,13 @@ export class AccountService {
     newAccount = this.accountRepository.findOneById(accountId).accountType;
     return newAccount;
   }
-    
+  
+  // encontrar los datos de la cuenta por el id del usuario
+  getAccountId(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+
+
   /**
    * Obtener el estado de una cuenta
    *
@@ -103,7 +109,8 @@ export class AccountService {
     }
     return false;
   }
-
+  
+  
   /**
    * Cambiar el estado de una cuenta
    *
@@ -125,6 +132,7 @@ export class AccountService {
    */
   getAccountType(accountId: string): AccountTypeEntity {
     const account = this.accountRepository.findOneById(accountId);
+    
     return account.accountType
   }
 

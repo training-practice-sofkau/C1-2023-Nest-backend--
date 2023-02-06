@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { AccountModel } from 'src/data/models';
 import { AccountTypeEntity } from 'src/data/persistence/entities/account-type.entity';
 import { AccountEntity } from 'src/data/persistence/entities/account.entity';
@@ -27,6 +27,13 @@ export class AccountController {
     @Put(':id')
     removeBalance(@Param('id') accountId: string, @Body('amount') amount: number): void {
       return this.accountService.removeBalance(accountId, amount);
+    }
+
+    @Get('getAccount/:customerId')
+    getAccountByCustomer(
+      @Param('customerId', ParseUUIDPipe) customerId: string,
+    ): AccountEntity[] {
+      return this.accountService.getAccountId(customerId);
     }
   
     @Get('state/:id')

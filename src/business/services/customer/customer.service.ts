@@ -1,3 +1,4 @@
+import { AccountTypeRepository } from './../../../data/persistence/repositories/account-type.repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CustomerModel } from 'src/data/models';
 import { CustomerEntity } from 'src/data/persistence/entities';
@@ -9,6 +10,7 @@ import { AccountEntity } from 'src/data/persistence/entities/account.entity';
 export class CustomerService {
   constructor(private readonly customerRepository : CustomerRepository,
     private readonly accountRepository: AccountRepository,
+    private readonly accounTypeRepository: AccountTypeRepository,
     ) {}
 
     findAll(): CustomerEntity[] {
@@ -29,7 +31,8 @@ export class CustomerService {
       let newAccount = new AccountEntity();
       newAccount.balance = 0;
       newAccount.customer = newCustomer;
-      this.accountRepository.register(newAccount)
+      newAccount.accountType = this.accounTypeRepository.findOneById("d8d0be69-27ae-4898-8fcd-37669ff45a13");
+      this.accountRepository.register(newAccount);
       return this.customerRepository.register(newCustomer);
 
       }

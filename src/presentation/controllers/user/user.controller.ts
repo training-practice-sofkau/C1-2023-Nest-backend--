@@ -1,11 +1,14 @@
+import { AccountController } from './../account/account.controller';
+import { AccountRepository } from 'src/data/persistence/repositories';
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { NewCustomerDTO } from 'src/business/dtos/new-customer.dto';
 import { CustomerEntity } from 'src/data/persistence/entities';
 import { CustomerService } from 'src/business/services/customer';
+import { AccountService } from 'src/business/services/account/account.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly customerService: CustomerService) {}
+  constructor(private readonly customerService: CustomerService, private readonly accountService: AccountService ) {}
 
   @Get()
   findAllUsers(): CustomerEntity[] {
@@ -22,6 +25,7 @@ export class UserController {
      return this.customerService.getCustomerInfo(customerId);
      
    }
+
  
    //Desactivar cuenta
    @Post('desactivar/:id')
