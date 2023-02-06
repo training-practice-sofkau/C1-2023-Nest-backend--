@@ -9,6 +9,8 @@ import {
 import { NewTransferDTO } from 'src/business/dtos';
 import { TransferEntity } from 'src/data/persistence/entities';
 import { TransferService } from 'src/business/service/transfer';
+import { PaginationEntity } from 'src/data/persistence/entities/pagination.entity';
+import { DataRangeEntity } from 'src/data/persistence/entities/data-range.entity';
 
 @Controller('transfer')
 export class TransferController {
@@ -23,8 +25,32 @@ export class TransferController {
     return this.transferService.findOneById(id);
   }
 
-  @Post()
+  @Post('create')
   createTransfer(@Body() transfer: NewTransferDTO): TransferEntity {
     return this.transferService.createTransfer(transfer);
+  }
+
+  @Post('/hOut/:id')
+  getHistoryOut(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ) {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    return this.transferService.getHistoryOut(id, newPagination, newDataRange);
+  }
+
+  @Post('/hIncome/:id')
+  getHistoryIncome(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ) {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    return this.transferService.getHistoryIn(id, newPagination, newDataRange);
   }
 }
