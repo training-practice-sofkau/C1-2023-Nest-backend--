@@ -3,5 +3,18 @@ import { CustomerEntity } from '../../entities';
 
 export interface CustomerRepositoryInterface
   extends BaseRepositoryInterface<CustomerEntity> {
-  fun(accountId: string): void; // una funcion unica para la cuenta
+  findOneByEmailAndPassword(email: string, password: string): boolean;
+
+  findOneByDocumentTypeAndDocument(
+    documentTypeId: string,
+    document: string,
+  ): CustomerEntity;
+
+  findOneByEmail(email: string): CustomerEntity;
+
+  findOneByPhone(phone: string): CustomerEntity;
+
+  findByState(state: boolean): CustomerEntity[];
+
+  findByFullName(fullName: string): CustomerEntity[];
 }

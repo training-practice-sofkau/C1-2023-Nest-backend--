@@ -3,5 +3,7 @@ import { AccountTypeEntity } from '../../entities';
 
 export interface AccountTypeRepositoryInterface
   extends BaseRepositoryInterface<AccountTypeEntity> {
-  fun(accountId: string): void; // una funcion unica para la cuenta
+  findByState(state: boolean): AccountTypeEntity[];
+
+  findByName(name: string): AccountTypeEntity[];
 }
