@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
@@ -29,7 +30,11 @@ export class DepositController {
 
   @Post('create')
   createDeposit(@Body() deposit: NewDepositDTO): DepositEntity {
-    return this.depositService.createDeposit(deposit);
+    if (deposit.amount > 0) {
+      return this.depositService.createDeposit(deposit);
+    } else {
+      throw new NotFoundException(`El Deposito debe ser un valor mayor a 0`);
+    }
   }
 
   @Put('delete/:depositId')
@@ -37,7 +42,7 @@ export class DepositController {
     this.depositService.deleteDeposit(depositId);
   }
 
-  @Post('/getHistory/:id')
+  @Post('/gethistory/:id')
   getHistory(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: { actualPage: number; range: number },
