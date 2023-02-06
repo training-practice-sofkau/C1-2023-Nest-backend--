@@ -20,7 +20,7 @@ export class SecurityService {
   ) {}
 
   //Logueo en el sistema
-  async signIn(user: CustomerModel): Promise<string> {
+  signIn(user: CustomerModel): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
@@ -30,7 +30,7 @@ export class SecurityService {
   }
 
   //Creacion de una cuenta de ciente con su cuenta bancaria
-  async signUp(user: CustomerModel): Promise<string> {
+  signUp(user: CustomerModel): string {
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = user.documentType;
     newCustomer.document = user.document;
@@ -41,19 +41,19 @@ export class SecurityService {
     const customer = this.customerRepository.register(newCustomer);
     if (customer) {
       const accountType = new AccountTypeEntity();
-      accountType.id = '40ef7565-ea87-4560-b9a3-e2b70540355e';
+      accountType.id = '4edf3a27-98ef-43ac-b1b9-21976ae00183';
       const newAccount = new AccountEntity();
-      newAccount.acountType = accountType;
+      newAccount.accountType = accountType;
       newAccount.balance = 0;
       newAccount.customer = newCustomer;
       this.accountService.createAccount(newAccount);
-      return 'Falta retornar un JWT';
+      return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
     } else throw new InternalServerErrorException('Error al registrar cliente');
   }
 
   //Cierre de sesión
   signOut(JWToken: string): void {
-    if (JWToken)
-      throw new InternalServerErrorException('Error al registrar cliente');
+    if (!JWToken)
+      throw new InternalServerErrorException('Error al cerrar sesión');
   }
 }

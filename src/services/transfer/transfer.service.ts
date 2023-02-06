@@ -26,22 +26,22 @@ export class TransferService {
   }
 
   //Devuelve historial de transferencias con cuenta de entrada enviada junto a paginacion y rangos
-  async getHistoryOut(
+  getHistoryOut(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): Promise<TransferEntity[]> {
+  ): TransferEntity[] {
     const currentTransfers =
       this.transferRepository.findByOutcomeAccount(accountId);
     return this.historyPagination(currentTransfers, pagination, dataRange);
   }
 
   //Devuelve historial de transferencias con cuenta de salida enviada junto a paginacion y rangos
-  async getHistoryIn(
+  getHistoryIn(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): Promise<TransferEntity[]> {
+  ): TransferEntity[] {
     const currentTransfers =
       this.transferRepository.findByIncomeAccount(accountId);
     return this.historyPagination(currentTransfers, pagination, dataRange);
@@ -89,5 +89,10 @@ export class TransferService {
       transfers.push(transfersList[i + 1]);
     }
     return transfers;
+  }
+
+  //Retorna todas las transferencias registradas en el sistema
+  getAll(): TransferEntity[] {
+    return this.transferRepository.findAll();
   }
 }

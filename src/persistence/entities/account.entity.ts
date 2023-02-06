@@ -5,7 +5,7 @@ import { AccountModel } from 'src/models';
 export class AccountEntity implements AccountModel {
   id = uuid();
   customer: CustomerEntity;
-  acountType: AccountTypeEntity;
+  accountType: AccountTypeEntity;
   balance: number;
   state = true;
   deletedAt?: Date | number;

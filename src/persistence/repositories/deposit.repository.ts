@@ -19,7 +19,7 @@ export class DepositRepository
     return currentDeposits;
   }
 
-  findByDataRange(
+  findByDateRange(
     dateInit: number | Date,
     dateEnd: number | Date,
   ): DepositEntity[] {

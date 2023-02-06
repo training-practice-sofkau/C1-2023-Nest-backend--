@@ -15,6 +15,11 @@ export class CustomerService {
     private readonly accountService: AccountService,
   ) {}
 
+  //Retorna todos los clientes
+  getAll(): CustomerEntity[] {
+    return this.customerRepository.findAll();
+  }
+
   //Retorna la informacion del cliente solicitado
   getCustomerInfo(customerId: string): CustomerEntity {
     const currentCustomer = this.customerRepository.findOneById(customerId);
@@ -22,7 +27,7 @@ export class CustomerService {
   }
 
   //Actualiza informacion del ususario solicitado
-  updatedCustomer(customerId: string, customer: CustomerModel): CustomerEntity {
+  updateCustomer(customerId: string, customer: CustomerModel): CustomerEntity {
     return this.customerRepository.upate(customerId, customer);
   }
 
@@ -30,7 +35,19 @@ export class CustomerService {
   unsubscribe(customerId: string): boolean {
     const currentAccounts = this.accountRepository.findByCustomer(customerId);
     currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));
-    const ok = this.customerRepository.findOneById(customerId);
-    return ok ? true : false;
+    this.customerRepository.delete(customerId, true);
+    return true;
+  }
+
+  //Cambiar estado de Cliente si está inactivo lo activa o viceversa
+  changeState(customerId: string): boolean {
+    const currentCustomer = this.getCustomerInfo(customerId);
+    currentCustomer.state = !currentCustomer.state;
+    const updatedCustomer = this.customerRepository.upate(
+      customerId,
+      currentCustomer,
+    );
+    if (updatedCustomer) return true;
+    else return false;
   }
 }

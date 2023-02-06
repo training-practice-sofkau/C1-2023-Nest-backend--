@@ -26,7 +26,7 @@ export class AccountRepository
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
     const currentAccounts = this.findAll().filter(
-      (c) => c.acountType.id === accountTypeId,
+      (c) => c.accountType.id === accountTypeId,
     );
     return currentAccounts;
   }
@@ -73,7 +73,9 @@ export class AccountRepository
   private softDelete(index: number): void {
     const currentAccount = this.database[index];
     currentAccount.deletedAt = Date.now();
-    this.upate(currentAccount.id, currentAccount);
+    this.database[index] = {
+      ...currentAccount,
+    };
   }
 
   findAll(): AccountEntity[] {
@@ -86,7 +88,7 @@ export class AccountRepository
       return currentAccount;
     } else {
       throw new NotFoundException(
-        `La cuenta con el Id ${id} no existe en la base de datos`,
+        `La cuenta con el Id ${id} no existe en la base de datos!`,
       );
     }
   }
