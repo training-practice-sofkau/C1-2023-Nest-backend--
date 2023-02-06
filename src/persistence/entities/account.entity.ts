@@ -15,4 +15,5 @@ export class AccountEntity implements AccountModel {
   state = true;
 
   deletedAt?: Date | number;
+
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common/exceptions';
-import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import { AccountDTO } from 'src/dtos';
 import {
   AccountRepository,
   AccountTypeRepository,
+  CustomerRepository,
 } from '../../persistence/repositories';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository,
   ) {}
 
   /**
@@ -21,10 +23,14 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: AccountDTO): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+    newAccount.customer = this.customerRepository.findOneById(
+      account.customerId,
+    );
+    newAccount.accountType = this.accountTypeRepository.findOneById(
+      account.accountTypeId,
+    );
     return this.accountRepository.register(newAccount);
   }
 

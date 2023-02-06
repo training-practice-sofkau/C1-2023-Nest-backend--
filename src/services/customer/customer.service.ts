@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerModel } from '../../models';
-import { CustomerEntity } from '../../persistence/entities';
+import { CustomerDTO } from 'src/dtos';
+import { CustomerEntity, DocumentTypeEntity } from '../../persistence/entities';
 import { CustomerRepository } from '../../persistence/repositories';
 
 @Injectable()
@@ -19,6 +19,25 @@ export class CustomerService {
     return newCustomer;
   }
 
+  findAll(): CustomerEntity[] {
+    return this.customerRepository.findAll();
+  }
+
+  newCustomer(customer: CustomerDTO): CustomerEntity {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = customer.documentTypeId;
+
+    const newCustomer = new CustomerEntity();
+    newCustomer.documentType = documentType;
+    newCustomer.document = customer.document;
+    newCustomer.fullName = customer.fullName;
+    newCustomer.email = customer.email;
+    newCustomer.phone = customer.phone;
+    newCustomer.password = customer.password;
+
+    return this.customerRepository.register(newCustomer);
+  }
+
   /**
    * Actualizar información de un cliente
    *
@@ -27,9 +46,20 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    const newCustomer = this.customerRepository.update(id, customer);
-    return newCustomer;
+  updatedCustomer(id: string, customer: CustomerDTO): CustomerEntity {
+    if (this.customerRepository.findOneById(id)) {
+      const documentType = new DocumentTypeEntity();
+      documentType.id = customer.documentTypeId;
+      const newCustomer = new CustomerEntity();
+      newCustomer.documentType = documentType;
+      newCustomer.document = customer.document;
+      newCustomer.fullName = customer.fullName;
+      newCustomer.email = customer.email;
+      newCustomer.phone = customer.phone;
+      newCustomer.password = customer.password;
+      return this.customerRepository.update(id, newCustomer);
+    }
+    return new CustomerEntity();
   }
 
   /**

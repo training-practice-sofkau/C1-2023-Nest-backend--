@@ -43,7 +43,7 @@ export class CustomerRepository
   }
 
   findAll(): CustomerEntity[] {
-    return this.database.filter((item) => item.deletedAt === undefined);
+    return this.database.filter((item) => (item.deletedAt ?? true) === true);
   }
 
   findOneById(id: string): CustomerEntity {

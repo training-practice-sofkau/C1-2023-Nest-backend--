@@ -65,16 +65,16 @@ export class AccountRepository
   }
 
   findByState(state: boolean): AccountEntity[] {
-    return this.database.filter((item) => item.state === state);
+    return this.database.filter((item) => item.state === state && (item.deletedAt ?? true) === true);
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
-    return this.database.filter((item) => item.customer.id === customerId);
+    return this.database.filter((item) => item.customer.id === customerId && (item.deletedAt ?? true) === true);
   }
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
     return this.database.filter(
-      (item) => item.accountType.id === accountTypeId,
+      (item) => item.accountType.id === accountTypeId && (item.deletedAt ?? true) === true,
     );
   }
 }
