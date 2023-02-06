@@ -29,7 +29,7 @@ export class DepositService {
       deposit.accountId,
     );
     depositEntity.amount = Number(deposit.amount);
-    depositEntity.dateTime = Number(deposit.dateTime);
+    depositEntity.dateTime = Date.now();
     let newAccount = new AccountEntity();
     newAccount = this.accountRepository.findOneById(deposit.accountId);
     newAccount.balance += Number(deposit.amount);

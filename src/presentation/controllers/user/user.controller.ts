@@ -11,6 +11,7 @@ import { CustomerEntity } from '../../../data/persistence/entities/customer.enti
 import { CustomerService } from '../../../business/services/customer/customer.service';
 import { CustomerDTO } from '../../../business/dtos';
 import { CustomerUpdateDTO } from 'src/business/dtos/update-customer.dto';
+import { AccountEntity } from '../../../data/persistence/entities/account.entity';
 
 @Controller('user')
 export class UserController {
@@ -27,7 +28,10 @@ export class UserController {
   }
 
   @Post()
-  registerUser(@Body() customer: CustomerDTO): CustomerEntity {
+  registerUser(@Body() customer: CustomerDTO): {
+    customer: CustomerEntity;
+    account: AccountEntity;
+  } {
     return this.customerService.newCustomer(customer);
   }
 

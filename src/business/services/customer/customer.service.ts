@@ -2,14 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { CustomerDTO } from 'src/business/dtos';
 import { CustomerUpdateDTO } from 'src/business/dtos/update-customer.dto';
 import {
+  AccountEntity,
   CustomerEntity,
   DocumentTypeEntity,
 } from '../../../data/persistence/entities';
-import { CustomerRepository } from '../../../data/persistence/repositories';
+import {
+  AccountRepository,
+  AccountTypeRepository,
+  CustomerRepository,
+} from '../../../data/persistence/repositories';
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly accountRepository: AccountRepository,
+    private readonly accountTypeRepository: AccountTypeRepository,
+  ) {}
 
   /**
    * Obtener información de un cliente
@@ -42,7 +51,10 @@ export class CustomerService {
     return newCustomer;
   }
 
-  newCustomer(customer: CustomerDTO): CustomerEntity {
+  newCustomer(customer: CustomerDTO): {
+    customer: CustomerEntity;
+    account: AccountEntity;
+  } {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentTypeId;
 
@@ -53,8 +65,14 @@ export class CustomerService {
     newCustomer.email = customer.email;
     newCustomer.phone = customer.phone;
     newCustomer.password = customer.password;
-
-    return this.customerRepository.register(newCustomer);
+    const typeId = 'ab27c9ac-a01c-4c22-a6d6-ce5ab3b79185';
+    const account = new AccountEntity();
+    account.accountType = this.accountTypeRepository.findOneById(typeId);
+    account.customer = newCustomer;
+    return {
+      customer: this.customerRepository.register(newCustomer),
+      account: this.accountRepository.register(account),
+    };
   }
 
   /**

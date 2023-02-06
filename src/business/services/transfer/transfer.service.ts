@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferDTO } from 'src/business/dtos';
 import {
   DataRangeModel,
@@ -9,12 +9,14 @@ import { TransferEntity } from '../../../data/persistence/entities';
 import {
   AccountRepository,
   TransferRepository,
+  DepositRepository,
 } from '../../../data/persistence/repositories';
 @Injectable()
 export class TransferService {
   constructor(
     private readonly transferRepository: TransferRepository,
     private readonly accountRepository: AccountRepository,
+    private readonly depositRepository: DepositRepository,
   ) {}
   /**
    * Crear una transferencia entre cuentas del banco
@@ -25,15 +27,23 @@ export class TransferService {
    */
   createTransfer(transfer: TransferDTO): TransferModel {
     const newTransfer = new TransferEntity();
-    newTransfer.inCome = this.accountRepository.findOneById(transfer.inComeId);
-    newTransfer.outCome = this.accountRepository.findOneById(
-      transfer.outComeId,
-    );
-    newTransfer.amount = Number(transfer.amount);
-    newTransfer.reason = transfer.reason;
-    newTransfer.dateTime = Number(transfer.dateTime);
-
-    return this.transferRepository.register(newTransfer);
+    const inCome = this.accountRepository.findOneById(transfer.inComeId);
+    const outCome = this.accountRepository.findOneById(transfer.outComeId);
+    if (outCome.balance > Number(transfer.amount)) {
+      newTransfer.inCome = inCome;
+      newTransfer.outCome = outCome;
+      newTransfer.amount = Number(transfer.amount);
+      newTransfer.reason = transfer.reason;
+      outCome.balance -= Number(transfer.amount);
+      this.accountRepository.update(outCome.id, outCome);
+      this.accountRepository.update(outCome.id, outCome);
+      inCome.balance += Number(transfer.amount);
+      this.accountRepository.update(inCome.id, inCome);
+      newTransfer.dateTime = Date.now();
+      return this.transferRepository.register(newTransfer);
+    } else {
+      throw new NotFoundException(`fondos insuficientes`);
+    }
   }
 
   /**

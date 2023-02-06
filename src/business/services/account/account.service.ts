@@ -54,6 +54,10 @@ export class AccountService {
     return newAccount.balance;
   }
 
+  getAccountByCustomerId(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+
   findAll(): AccountEntity[] {
     return this.accountRepository.findAll();
   }

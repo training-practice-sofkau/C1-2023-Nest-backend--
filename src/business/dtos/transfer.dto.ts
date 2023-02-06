@@ -1,10 +1,4 @@
-import {
-  IsDateString,
-  IsNumberString,
-  IsString,
-  IsUUID,
-  MaxLength,
-} from 'class-validator';
+import { IsNumberString, IsString, IsUUID, MaxLength } from 'class-validator';
 
 export class TransferDTO {
   @IsUUID()
@@ -19,7 +13,4 @@ export class TransferDTO {
   @IsString()
   @MaxLength(500)
   reason: string;
-
-  @IsString()
-  dateTime: string;
 }

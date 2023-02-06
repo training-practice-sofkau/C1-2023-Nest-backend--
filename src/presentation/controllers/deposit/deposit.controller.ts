@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Param, Post, Get } from '@nestjs/common';
 import { DataRangeDTO, DepositDTO, PaginationDTO } from 'src/business/dtos';
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositService } from '../../../business/services';
-import { DataRangeModel, PaginationModel } from 'src/data/models';
 
 @Controller('deposit')
 export class DepositController {

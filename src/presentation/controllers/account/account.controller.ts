@@ -50,7 +50,12 @@ export class AccountController {
     return '' + this.accountService.getBalance(id);
   }
 
-  @Get('/balance/amount/:id')
+  @Get('/customer/:id')
+  getAccountByCustomerId(@Param('id') id: string): AccountEntity[] {
+    return this.accountService.getAccountByCustomerId(id);
+  }
+
+  @Get('/account/:id')
   amountBalance(
     @Param('id') id: string,
     @Body() body: { amount: number },

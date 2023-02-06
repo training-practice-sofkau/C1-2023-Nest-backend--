@@ -6,7 +6,4 @@ export class DepositDTO {
 
   @IsNumberString()
   amount: string;
-
-  @IsString()
-  dateTime: string;
 }
