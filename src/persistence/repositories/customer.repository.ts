@@ -14,7 +14,7 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const index = this.database.findIndex(
-      (item) => item.id === id && (item.deleteAt ?? true) === true,
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
     if (index >= 0) {
       this.database[index] = {
@@ -31,23 +31,23 @@ export class CustomerRepository
   delete(id: string, soft?: boolean): void {
     const customer = this.findOneById(id);
     if (soft || soft === undefined) {
-      customer.deleteAt = Date.now();
+      customer.deletedAt = Date.now();
       this.update(id, customer);
     } else {
       const index = this.database.findIndex(
-        (item) => item.id === id && (item.deleteAt ?? true) === true,
+        (item) => item.id === id && (item.deletedAt ?? true) === true,
       );
       this.database.splice(index, 1);
     }
   }
 
   findAll(): CustomerEntity[] {
-    return this.database.filter((item) => item.deleteAt === undefined);
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
 
   findOneById(id: string): CustomerEntity {
     const customer = this.database.find(
-      (item) => item.id === id && (item.deleteAt ?? true) === true,
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
     if (customer) return customer;
     else 
@@ -58,7 +58,7 @@ export class CustomerRepository
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.deleteAt === 'undefined',
+        typeof item.deletedAt === 'undefined',
     );
     return index >= 0 ? true : false;
   }
@@ -67,7 +67,7 @@ export class CustomerRepository
       (item) =>
         item.documentType.id === documentType &&
         item.document === document &&
-        typeof item.deleteAt === 'undefined',
+        typeof item.deletedAt === 'undefined',
     );
     return index >= 0 ? true : false;
   }
@@ -81,14 +81,14 @@ export class CustomerRepository
   }
   findByState(state: boolean): CustomerEntity[] {
     const stState = this.database.filter(
-      (item) => item.state == state && typeof item.deleteAt === 'undefined',
+      (item) => item.state == state && typeof item.deletedAt === 'undefined',
     );
     return stState;
   }
   findByFullName(fullName: string): CustomerEntity[] {
     const fname= this.database.filter(
       (item) =>
-        item.fullName == fullName && typeof item.deleteAt === 'undefined',
+        item.fullName == fullName && typeof item.deletedAt === 'undefined',
     );
     return fname;
   }
