@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
-import { DepositModel } from 'src/data/models';
-import { DataRangeModel } from 'src/data/models/data-range.model';
-import { PaginationModel } from 'src/data/models/pagination.model';
-import { DepositEntity } from 'src/data/persistence/entities/deposite.entity';
 import { DepositService } from 'src/business/services/deposit/deposit.service';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { DepositEntity } from 'src/data/persistence/entities/deposite.entity';
+import { NewDepositDTO } from 'src/business/dtos/deposit.dro';
+import { PaginationEntity } from 'src/data/persistence/entities/pagination.entity';
+import { DataRangeEntity } from 'src/data/persistence/entities/data_range.entity';
 
 @Controller('deposit')
 export class DepositController {
@@ -16,14 +16,10 @@ export class DepositController {
      * @return {*}  {DepositEntity}
      * @memberof DepositController
      */
-    @Post('register')
-    async createDeposit(@Body() deposit: DepositModel): Promise<DepositEntity> {
-        try {
-            return await this.depositService.createDeposit(deposit);
-        } catch (error) {
-            throw new NotFoundException(error.message);
-        }
-    }
+    @Post('create')
+    createDeposit(@Body() deposit: NewDepositDTO): DepositEntity {
+    return this.depositService.createDeposit(deposit);
+  }
 
     /**
      * Borrar un deposito
@@ -31,7 +27,7 @@ export class DepositController {
      * @param {string} depositId
      * @memberof DepositController
      */
-    @Delete(':id')
+    @Delete('delete/:id')
     deleteDeposit(@Param('id') depositId: string): void {
         this.depositService.deleteDeposit(depositId);
     }
@@ -45,12 +41,15 @@ export class DepositController {
      * @return {*}  {DepositEntity[]}
      * @memberof DepositController
      */
-    @Get('/history/:accountId')
-    async getHistory(
-        @Param('accountId') accountId: string,
-        @Body() pagination: PaginationModel,
-        @Body() dataRange?: DataRangeModel,
-    ): Promise<DepositEntity[]> {
-        return await this.depositService.getHistory(accountId, pagination, dataRange);
-    }
+    @Post('/gethistory/:id')
+    getHistory(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ): DepositEntity[] {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    return this.depositService.getHistory(id, newPagination, newDataRange);
+  }
 }

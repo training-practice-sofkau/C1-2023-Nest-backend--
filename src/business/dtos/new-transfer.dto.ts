@@ -1,13 +1,12 @@
-import { IsNumberString, IsString, IsUUID, MaxLength } from "class-validator";
+import { IsNumber, IsNumberString, IsString, IsUUID, MaxLength } from "class-validator";
 
 export class NewTransferDTO {
     @IsUUID()
-    outcome: number;
+    outcome: string;
     @IsUUID()
-    income:number;
-    @IsNumberString()
+    income: string;
+    @IsNumber()
     amount: number;
     @IsString()
-    @MaxLength(500)
     reason: string;
-}
+  }

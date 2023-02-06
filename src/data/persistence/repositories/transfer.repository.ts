@@ -3,19 +3,24 @@ import { TransferEntity } from '../entities/transfer.entity';
 import { BaseRepository } from './base/base.repository';
 import { TransferRepositoryInterface } from './interfaces/transfer.repository.interface';
 
-
 @Injectable()
-export class TransferReoisitory extends BaseRepository<TransferEntity> implements TransferRepositoryInterface{
-  findByDateRange(accountId: string, arg1: number, arg2: number) {
-    throw new Error("Method not implemented.");
-  }
-  findByIncomeId(accountId: string): TransferEntity[] {
-    return this.findAll().filter(t => t.income.id === accountId);
+export class TransferRepository
+  extends BaseRepository<TransferEntity>
+  implements TransferRepositoryInterface
+{
+  public static instance: TransferRepository;
+
+  public static getInstance(): TransferRepository {
+    if (!TransferRepository.instance) {
+      TransferRepository.instance = new TransferRepository();
+    }
+    return TransferRepository.instance;
   }
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
+
   update(id: string, entity: TransferEntity): TransferEntity {
     const index = this.database.findIndex(
       (item) => item.id === id && (item.deletedAt ?? true) === true,
@@ -25,49 +30,86 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
         ...this.database[index],
         ...entity,
         id,
-      }
+      } as TransferEntity;
     } else {
       throw new NotFoundException(`El ID ${id} no existe en base de datos`);
     }
     return this.database[index];
   }
-  delete(id: string, soft?: boolean | undefined): void {
-    if (!soft) {
+
+  delete(id: string, soft?: boolean): void {
+    if (soft || soft === undefined) {
       const index = this.database.findIndex((item) => item.id === id);
-      if (index >= 0) {
-        this.database.splice(index, 1);
-      } else {
-        throw new NotFoundException(`El ID ${id} no existe en base de datos`);
-      }
+      this.softDelete(index);
     } else {
       const index = this.database.findIndex((item) => item.id === id);
-      if (index >= 0) {
-        this.database[index].deletedAt = Date.now();
-      } else {
-        throw new NotFoundException(`El ID ${id} no existe en base de datos`);
-      }
+      this.hardDelete(index);
     }
   }
+
+  private hardDelete(index: number): void {
+    this.database.splice(index, 1);
+  }
+  private softDelete(index: number): void {
+    this.database[index].deletedAt = Date.now();
+  }
+
   findAll(): TransferEntity[] {
     return this.database.filter((item) => item.deletedAt === undefined);
   }
+
   findOneById(id: string): TransferEntity {
-    const customer = this.database.find(
+    const transfer = this.database.find(
       (item) => item.id === id && (item.deletedAt ?? true) === true,
     );
-    if (customer) return customer;
+    if (transfer) return transfer;
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
+  findByIncomeCustomerId(id: string): TransferEntity {
+    const transferIndex = this.database.findIndex(
+      (transfer) => transfer.income.customer.id === id,
+    );
+    if (transferIndex >= 0) {
+      return this.database[transferIndex];
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+  findByIncomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
+      (transfer) => transfer.income.id === id,
+    );
+    if (transferArray.length > 0) {
+      return transferArray;
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+  findByOutcomeId(id: string): TransferEntity[] {
+    const transferArray = this.database.filter(
+      (transfer) => transfer.outcome.id === id,
+    );
+    if (transferArray.length > 0) {
+      return transferArray;
+    } else {
+      throw new NotFoundException('No se encontro transferencia');
+    }
+  }
+
   findOutcomeByDataRange(
     accountId: string,
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    const currentTransfers = this.findByOutcomeId(accountId).filter(
-      (t) => t.dateTime <= dateEnd && t.dateTime >= dateInit,
+    const outcomeR = this.database.filter(
+      (item) =>
+        item.outcome.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
     );
-    return currentTransfers;
-  
+    if (outcomeR === undefined) throw new NotFoundException();
+    return outcomeR;
   }
 
   findIncomeByDataRange(
@@ -75,17 +117,28 @@ export class TransferReoisitory extends BaseRepository<TransferEntity> implement
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
-    const currentTransfers = this.findByIncomeId(accountId).filter(
-      (t) => t.dateTime <= dateEnd && t.dateTime >= dateInit,
+    const incomeR = this.database.filter(
+      (item) =>
+        item.income.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd,
     );
-    return currentTransfers;
-  }
-  findByOutcomeId(accountId: string): TransferEntity[] {
-    return this.findAll().filter(t => t.outcome.id === accountId);
-  }
-  
-
+    if (incomeR === undefined) throw new NotFoundException();
+    return incomeR;
   }
 
-
-
+  findByDateRange(
+    id: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[] {
+    const arrayTransfers = this.findAll();
+    return arrayTransfers.filter(
+      (transfer) =>
+        transfer.id === id &&
+        transfer.dateTime >= dateInit &&
+        transfer.dateTime <= dateEnd,
+    );
+  }
+}

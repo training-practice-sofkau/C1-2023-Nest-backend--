@@ -1,84 +1,169 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { TransferModel } from "src/data/models";
+import { TransferRepository } from 'src/data/persistence/repositories';
+import { AccountRepository } from './../../../data/persistence/repositories/account.repository';
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { NewTransferDTO } from "src/business/dtos/new-transfer.dto";
 import { DataRangeModel } from "src/data/models/data-range.model";
 import { PaginationModel } from "src/data/models/pagination.model";
 import { TransferEntity } from "src/data/persistence/entities/transfer.entity";
-import { TransferReoisitory } from "src/data/persistence/repositories";
+
 import { AccountService } from "../account/account.service";
 
 @Injectable()
 export class TransferService {
   constructor(
-    private readonly transferRepository: TransferReoisitory,
+    private readonly transferRepository: TransferRepository,
     private readonly accountService: AccountService,
+    private readonly accountRepository: AccountRepository,
   ) {}
 
-  //Registra la transferancia en el sistema y actualiza el balance en las cuentas afectadas
-  createTransfer(transfer: TransferModel): TransferEntity {
+  findAll(): TransferEntity[] {
+    return this.transferRepository.findAll();
+  }
+  findOneById(id: string): TransferEntity {
+    const findTransfer = this.transferRepository.findOneById(id);
+    if (findTransfer) {
+      return findTransfer;
+    } else {
+      throw new NotFoundException('No existe la Transferencia con ese ID');
+    }
+  }
+  /**
+   * Crear una transferencia entre cuentas del banco
+   *
+   * @param {TransferModel} transfer
+   * @return {*}  {TransferEntity}
+   * @memberof TransferService
+   */
+  createTransfer(transfer: NewTransferDTO): TransferEntity {
     const newTransfer = new TransferEntity();
-    newTransfer.amount = transfer.amount;
-    newTransfer.dateTime = Date.now();
-    newTransfer.income = transfer.income;
-    newTransfer.outcome = transfer.outcome;
-    newTransfer.reason = transfer.reason;
-    this.transferRepository.register(newTransfer);
-    this.accountService.addBalance(transfer.income.id, transfer.amount);
-    this.accountService.removeBalance(transfer.outcome.id, transfer.amount);
-    return newTransfer;
+    const newOutcome = this.accountRepository.findOneById(transfer.outcome);
+    const newIncome = this.accountRepository.findOneById(transfer.income);
+    const incomeAccount = this.accountService.getState(transfer.income);
+    const outcomeAccount = this.accountService.getState(transfer.outcome);
+    if (incomeAccount && outcomeAccount) {
+      if (this.accountService.getBalance(transfer.outcome) >= transfer.amount) {
+        newTransfer.outcome = newOutcome;
+        newTransfer.income = newIncome;
+        newTransfer.amount = transfer.amount;
+        newTransfer.reason = transfer.reason;
+        this.accountService.addBalance(newIncome.id, transfer.amount);
+        this.accountService.removeBalance(newOutcome.id, transfer.amount);
+        return this.transferRepository.register(newTransfer);
+      } else {
+        throw new InternalServerErrorException();
+      }
+    } else {
+      throw new InternalServerErrorException();
+    }
   }
-
-  //Devuelve historial de transferencias con cuenta de entrada enviada junto a paginacion y rangos
-  async getHistoryOut(
+  getHistoryOut(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): Promise<TransferEntity[]> {
-    const currentTransfers =
-      this.transferRepository.findByOutcomeId(accountId);
-    return this.historyPagination(currentTransfers, pagination, dataRange);
+  ): TransferEntity[] {
+    const arrayTransfer = this.transferRepository.findByOutcomeId(accountId);
+    const arrayTransferReturn: TransferEntity[] = [];
+    let range = 0;
+    pagination.size = arrayTransfer.length;
+    if (dataRange?.range === undefined) {
+      range = 10;
+    } else {
+      range = dataRange.range;
+    }
+    pagination.numberPages = Math.round(pagination.size / range);
+    for (
+      let x = 1 + range * (pagination.actualPage - 1);
+      x < 1 + range + range * (pagination.actualPage - 1); x++
+    ) {
+      arrayTransferReturn.push(arrayTransfer[x - 1]);
+    }
+    return arrayTransferReturn;
   }
 
-  //Devuelve historial de transferencias con cuenta de salida enviada junto a paginacion y rangos
-  async getHistoryIn(
+  /**
+   * Obtener historial de transacciones de entrada en una cuenta
+   *
+   * @param {string} accountId
+   * @param {PaginationModel} pagination
+   * @param {DataRangeModel} [dataRange]
+   * @return {*}  {TransferEntity[]}
+   * @memberof TransferService
+   */
+  getHistoryIn(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
-  ): Promise<TransferEntity[]> {
-    const currentTransfers =
-      this.transferRepository.findByIncomeId(accountId);
-    return this.historyPagination(currentTransfers, pagination, dataRange);
+  ): TransferEntity[] {
+    const arrayTransfer = this.transferRepository.findByIncomeId(accountId);
+    const arrayTransferReturn: TransferEntity[] = [];
+    let range = 0;
+    pagination.size = arrayTransfer.length;
+    if (dataRange?.range === undefined) {
+      range = 10;
+    } else {
+      range = dataRange.range;
+    }
+    pagination.numberPages = Math.round(pagination.size / range);
+    for (
+      let x = 1 + range * (pagination.actualPage - 1);
+      x < 1 + range + range * (pagination.actualPage - 1);
+      x++
+    ) {
+      arrayTransferReturn.push(arrayTransfer[x - 1]);
+    }
+    return arrayTransferReturn;
   }
 
-  //Devuelve todas las transferencias realizadas segun paginacion y rango
+  /**
+   * Obtener historial de transacciones de una cuenta
+   *
+   * @param {string} accountId
+   * @param {PaginationModel} pagination
+   * @param {DataRangeModel} [dataRange]
+   * @return {*}  {TransferEntity[]}
+   * @memberof TransferService
+   */
   getHistory(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    const currentTransfersOut =
-      this.transferRepository.findByOutcomeId(accountId);
-    const currentTransfersIn =
-      this.transferRepository.findByIncomeId(accountId);
-    const currentTransfers = [...currentTransfersIn, ...currentTransfersOut];
-    return this.historyPagination(currentTransfers, pagination, dataRange);
-  }
-
-  //Borrado de la transferencia enviada
-  deleteTransfer(transferId: string): void {
-    this.transferRepository.delete(transferId, true);
-  }
-
-  //Metodo generico para paginacion
-  private historyPagination(transfersList: TransferEntity[], pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
-    const transfers: TransferEntity[] = [];
-    let range = dataRange && dataRange.range > 0 ? dataRange.range : 10;
-    pagination.numberPages = Math.ceil(transfersList.length / range);
-    const start = (pagination.actualPage - 1) * range;
-    const end = start + range;
-    for (let i = start; i < end && i < transfersList.length; i++) {
-      transfers.push(transfersList[i]);
+    const arrayTransfer = this.transferRepository.findByDateRange(
+      accountId,
+      0,
+      Date.now(),
+    );
+    const arrayTransferReturn: TransferEntity[] = [];
+    let range = 0;
+    pagination.size = arrayTransfer.length;
+    if (dataRange?.range === undefined) {
+      range = 10;
+    } else {
+      range = dataRange.range;
     }
-    return transfers;
+    pagination.numberPages = Math.round(pagination.size / range);
+    for (
+      let x = 1 + range * (pagination.actualPage - 1);
+      x < 1 + range + range * (pagination.actualPage - 1);
+      x++
+    ) {
+      arrayTransferReturn.push(arrayTransfer[x - 1]);
+    }
+    return arrayTransferReturn;
   }
-  
+
+  /**
+   * Borrar una transacción
+   *
+   * @param {string} transferId
+   * @memberof TransferService
+   */
+  deleteTransfer(transferId: string): void {
+    const transfer = this.transferRepository.findOneById(transferId);
+    if (transfer.deletedAt === undefined) {
+      this.transferRepository.delete(transferId, true);
+    } else {
+      this.transferRepository.delete(transferId, false);
+    }
+  }
 }

@@ -1,37 +1,48 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { DataRangeModel } from 'src/data/models/data-range.model';
-import { PaginationModel } from 'src/data/models/pagination.model';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query } from '@nestjs/common';
 import { TransferEntity } from 'src/data/persistence/entities/transfer.entity';
 import { TransferService } from 'src/business/services/transfer/transfer.service';
+import { NewTransferDTO } from 'src/business/dtos/new-transfer.dto';
+import { PaginationEntity } from 'src/data/persistence/entities/pagination.entity';
+import { DataRangeEntity } from 'src/data/persistence/entities/data_range.entity';
 
-@Controller('transfers')
+@Controller('transfer')
 export class TransferController {
   constructor(private readonly transferService: TransferService) {}
-
-  @Get('/:accountId/history/out')
-  async getHistoryOut(
-    @Param('accountId') accountId: string,
-    @Query() pagination: PaginationModel,
-    @Query() dataRange?: DataRangeModel,
-  ):Promise<TransferEntity[]> {
-    return this.transferService.getHistoryOut(accountId, pagination, dataRange);
+  @Get()
+  findAll() {
+    return this.transferService.findAll();
   }
 
-  @Get('/:accountId/history/in')
-  async getHistoryIn(
-    @Param('accountId') accountId: string,
-    @Query() pagination: PaginationModel,
-    @Query() dataRange?: DataRangeModel,
-  ): Promise <TransferEntity[]>{
-    return this.transferService.getHistoryIn(accountId, pagination, dataRange);
+  @Get(':id')
+  findOneById(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.transferService.findOneById(id);
   }
 
-  @Get('/:accountId/history')
-  getHistory(
-    @Param('accountId') accountId: string,
-    @Query() pagination: PaginationModel,
-    @Query() dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    return this.transferService.getHistory(accountId, pagination, dataRange);
+  @Post()
+  createTransfer(@Body() transfer: NewTransferDTO): TransferEntity {
+    return this.transferService.createTransfer(transfer);
+  }
+  @Post('/hOut/:id')
+  getHistoryOut(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ) {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    return this.transferService.getHistoryOut(id, newPagination, newDataRange);
+  }
+
+  @Post('/hIncome/:id')
+  getHistoryIncome(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ) {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    return this.transferService.getHistoryIn(id, newPagination, newDataRange);
   }
 }

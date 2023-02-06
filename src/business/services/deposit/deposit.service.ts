@@ -1,3 +1,5 @@
+import { AccountRepository } from './../../../data/persistence/repositories/account.repository';
+import { NewDepositDTO } from './../../dtos/deposit.dro';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositModel } from 'src/data/models';
 import { DataRangeModel } from 'src/data/models/data-range.model';
@@ -8,7 +10,8 @@ import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class DepositService {
-    constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService) { }
+    constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService,
+        private readonly accountRepository: AccountRepository) { }
     /**
    * Crear un deposito
    *
@@ -16,17 +19,20 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-    createDeposit(deposit: DepositModel): DepositEntity {
+    createDeposit(deposit: NewDepositDTO): DepositEntity {
         const newDeposit = new DepositEntity();
-        newDeposit.account = deposit.account;
-        newDeposit.amount = deposit.amount;
-        newDeposit.dateTime = Date.now();
-        this.depositRepository.register(newDeposit);
-        this.accountService.addBalance(newDeposit.account.id, newDeposit.amount);
-        return newDeposit;
+        const newAccount = this.accountRepository.findOneById(deposit.account);
+        if (this.accountService.getState(deposit.account)) {
+          newDeposit.amount = deposit.amount;
+          newDeposit.dateTime = Date.now();
+          newAccount.id = deposit.account;
+          newDeposit.account = newAccount;
+          this.accountService.addBalance(deposit.account, deposit.amount);
+          return this.depositRepository.register(newDeposit);
+    } else {
+      throw new NotFoundException('La cuenta no se encuentra activa');
+    }
   }
-    
-
     /**
      * Borrar un deposito
      *
@@ -57,7 +63,7 @@ export class DepositService {
         pagination: PaginationModel,
         dataRange?: DataRangeModel,
     ): DepositEntity[] {
-        const arrayTransfer = this.depositRepository.findByDateRange(accountId, 0, Date.now())
+        const arrayTransfer = this.depositRepository.findByDataRange(accountId, 0, Date.now())
         const arrayTransferReturn: DepositEntity[] = []
         let range = 0
         pagination.size = arrayTransfer.length;

@@ -3,7 +3,7 @@ import { AccountTypeRepository } from './data/persistence/repositories/account-t
 import { AccountRepository, CustomerRepository } from './data/persistence/repositories';
 import { DepositRepository } from './data/persistence/repositories/deposit.repository';
 import { DepositService } from './business/services/deposit/deposit.service';
-import { TransferReoisitory } from './data/persistence/repositories';
+import { TransferRepository } from './data/persistence/repositories';
 import { Module } from '@nestjs/common';
 import { SecurityController } from './presentation/controllers';
 import { AccountService } from './business/services/account/account.service';
@@ -17,6 +17,6 @@ import { TransferService } from './business/services/transfer/transfer.service';
 @Module({
   imports: [],
   controllers: [UserController, AccountController, TransferController, DepositController],
-  providers: [AccountService, AccountRepository, CustomerService, CustomerRepository, TransferService, TransferReoisitory, DepositService, DepositRepository, AccountTypeRepository, AccountTypeEntity],
+  providers: [AccountService, AccountRepository, CustomerService, CustomerRepository, TransferService, TransferRepository, DepositService, DepositRepository, AccountTypeRepository, AccountTypeEntity],
 })
 export class AppModule { }

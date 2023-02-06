@@ -1,5 +1,5 @@
 export interface PaginationModel {
-    size?: number;
+    size: number;
     numberPages: number;
     actualPage: number
 }

@@ -52,16 +52,9 @@ export class DepositRepository extends BaseRepository<DepositEntity> implements 
   findByAccountId(accountId: string): DepositEntity[] {
     return this.database.filter((item) => item.account.id === accountId && (item.deletedAt ?? true) === true);
   }
-  findByDataRange(
-    dateInit: Date | number,
-    dateEnd: Date | number,
-  ): DepositEntity[] {
-    throw new Error('This method is not implemented');
-  }
-  findByDateRange(id: string, DateMin: number | Date, DateMax: Number | Date): DepositEntity[] {
+  findByDataRange(id: string, DateMin: number | Date, DateMax: Number | Date): DepositEntity[] {
     const arrayDeposites = this.findAll()
     return arrayDeposites.filter(deposit => (deposit.id === id && deposit.dateTime >= DateMin && deposit.dateTime <= DateMax))
   }
-
-}
+  }
 
