@@ -1,28 +1,30 @@
 import { Module } from '@nestjs/common';
-import { SecurityController } from './controllers';
-import { AccountService, SecurityService } from './services';
-import { UserController } from './controllers/user/user.controller';
-import { AccountController } from './controllers/account/account.controller';
-import { TransferController } from './controllers/transfer/transfer.controller';
-import { DepositController } from './controllers/deposit/deposit.controller';
-import { DepositService } from './services/deposit/deposit.service';
-import { TransferService } from './services/transfer/transfer.service';
-import { CustomerService } from './services/customer/customer.service';
+import { SecurityController } from './presentation/controllers';
+import { AccountService, SecurityService } from './business/services';
+import { UsersController } from './presentation/controllers/users/users.controller';
+import { AccountsController } from './presentation/controllers/accounts/accounts.controller';
+import { TransfersController } from './presentation/controllers/transfers/transfers.controller';
+import { DepositsController } from './presentation/controllers/deposits/deposits.controller';
+import { DepositService } from './business/services/deposit/deposit.service';
+import { TransferService } from './business/services/transfer/transfer.service';
+import { CustomerService } from './business/services/customer/customer.service';
 import {
   AccountRepository,
   AccountTypeRepository,
   CustomerRepository,
   DepositRepository,
+  DocumentTypeRepository,
   TransferRepository,
-} from './persistence/repositories';
+} from './data/persistence/repositories';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   controllers: [
     SecurityController,
-    UserController,
-    AccountController,
-    TransferController,
-    DepositController,
+    UsersController,
+    AccountsController,
+    TransfersController,
+    DepositsController,
   ],
   providers: [
     AccountService,
@@ -35,6 +37,8 @@ import {
     TransferRepository,
     DepositRepository,
     CustomerRepository,
+    DocumentTypeRepository,
+    JwtService,
   ],
   exports: [
     AccountService,
@@ -47,6 +51,8 @@ import {
     TransferRepository,
     DepositRepository,
     CustomerRepository,
+    DocumentTypeRepository,
+    JwtService,
   ],
 })
 export class AppModule {}
