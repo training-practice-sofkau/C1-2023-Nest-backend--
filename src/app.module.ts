@@ -17,6 +17,10 @@ import {
   TransferRepository,
 } from './data/persistence/repositories';
 import { JwtService } from '@nestjs/jwt';
+import { Calculator } from './Week2Day3/observer/calculator';
+import { CrearFiguras } from './Week2Day3/factory/CrearFiguras';
+import { Strategy } from './Week2Day3/strategy/strategy';
+import { Singleton } from './Week2Day3/singleton/singleton';
 
 @Module({
   controllers: [
@@ -25,6 +29,10 @@ import { JwtService } from '@nestjs/jwt';
     AccountsController,
     TransfersController,
     DepositsController,
+    Calculator,
+    CrearFiguras,
+    Strategy,
+    Singleton,
   ],
   providers: [
     AccountService,

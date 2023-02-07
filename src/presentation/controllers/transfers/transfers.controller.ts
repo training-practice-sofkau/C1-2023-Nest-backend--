@@ -83,7 +83,8 @@ export class TransfersController {
   }
 
   @Delete(':id')
-  deleteTransfer(@Param('id', ParseUUIDPipe) depositId: string): void {
+  deleteTransfer(@Param('id', ParseUUIDPipe) depositId: string): boolean {
     this.transferService.deleteTransfer(depositId);
+    return true;
   }
 }

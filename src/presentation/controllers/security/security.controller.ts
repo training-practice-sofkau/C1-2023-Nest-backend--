@@ -1,5 +1,5 @@
 // Libraries
-import { Body, Controller, Headers, Param, Post } from '@nestjs/common';
+import { Body, Controller, Headers, Post } from '@nestjs/common';
 import { CreateCustomerDto, SecurityDto } from 'src/business/dtos';
 import { SecurityService } from 'src/business/services';
 

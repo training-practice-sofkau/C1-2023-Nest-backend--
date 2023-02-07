@@ -44,6 +44,7 @@ export class AccountRepository
 
   upate(id: string, entity: AccountEntity): AccountEntity {
     const currentAccount = this.findOneById(id);
+    console.log(entity);
     if (JSON.stringify(currentAccount) === JSON.stringify(entity)) {
       throw new ConflictException(
         'Los datos de la cuenta a actualizar ya existen',

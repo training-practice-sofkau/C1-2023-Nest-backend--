@@ -7,7 +7,11 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { CreateDepositDto, DateRangeDto, PaginationDto } from 'src/business';
+import {
+  CreateDepositDto,
+  DateRangeDto,
+  PaginationDto,
+} from 'src/business/dtos';
 import { DepositService } from 'src/business/services';
 import { DateRangeModel, PaginationModel } from 'src/data/models';
 
@@ -16,8 +20,12 @@ export class DepositsController {
   constructor(private readonly depositService: DepositService) {}
 
   @Get()
-  getAll(): JSON {
-    return JSON.parse(JSON.stringify(this.depositService.getAll()));
+  getAll(@Body() paginationDto: PaginationDto): JSON {
+    return JSON.parse(
+      JSON.stringify(
+        this.depositService.getAll(<PaginationModel>paginationDto),
+      ),
+    );
   }
 
   @Get(':id')
@@ -45,7 +53,8 @@ export class DepositsController {
   }
 
   @Delete(':id')
-  deleteDeposit(@Param('id', ParseUUIDPipe) depositId: string): void {
+  deleteDeposit(@Param('id', ParseUUIDPipe) depositId: string): boolean {
     this.depositService.deleteDeposit(depositId);
+    return true;
   }
 }

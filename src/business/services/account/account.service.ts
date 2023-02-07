@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from 'src/business/dtos';
+import { PaginationModel } from 'src/data';
 import {
   AccountEntity,
   AccountTypeEntity,
@@ -22,8 +23,9 @@ export class AccountService {
     private readonly customerRepository: CustomerRepository,
   ) {}
   //Retorna el liestado de todas las cuentas, este metodo solo se usaria para administradores pero por ahora todos
-  getAllAccounts(): AccountEntity[] {
-    return this.accountRepository.findAll();
+  getAllAccounts(paginationModel: PaginationModel): AccountEntity[] {
+    const accounts = this.accountRepository.findAll();
+    return this.historyPagination(accounts, paginationModel);
   }
 
   //Retorna la cuenta segun el id
@@ -91,7 +93,7 @@ export class AccountService {
   //Actualiza o cambia el estado de una cuenta
   changeState(accountId: string, newState: boolean): void {
     const currentAccount = this.accountRepository.findOneById(accountId);
-    if (this.getBalance(accountId) != 0 && this.getState(accountId)) {
+    if (this.accountRepository.findOneById(accountId).balance != 0) {
       throw new ConflictException('No se puede inactivar una cuenta con saldo');
     }
     currentAccount.state = newState;
@@ -148,5 +150,20 @@ export class AccountService {
   //Trae todas las cuentas relacionadas al cliente
   getAccountsByCustomer(customerId: string): AccountEntity[] {
     return this.accountRepository.findByCustomer(customerId);
+  }
+
+  private historyPagination(
+    accountsList: AccountEntity[],
+    pagination: PaginationModel,
+  ): AccountEntity[] {
+    const currentPage = pagination?.currentPage ?? 1;
+    const range = pagination?.range ?? 10;
+    const accounts: AccountEntity[] = [];
+    const start = currentPage * range - range;
+    const end = start + range;
+    for (let i = start; i < end; i++) {
+      accountsList[i] ? accounts.push(accountsList[i]) : (i = end);
+    }
+    return accounts;
   }
 }
