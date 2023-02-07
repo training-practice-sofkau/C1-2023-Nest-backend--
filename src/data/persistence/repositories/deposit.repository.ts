@@ -47,9 +47,15 @@ export class DepositRepository
   }
 
   private softDelete(index: number): void {
-    const account = this.database[index];
-    account.deletedAt = Date.now();
-    this.update(account.id, account);
+    let newDeposit = new DepositEntity();
+    const deposit = this.database[index];
+    newDeposit = {
+      ...newDeposit,
+      ...deposit,
+      id: deposit.id,
+    };
+    newDeposit.deletedAt = Date.now();
+    this.update(deposit.id, newDeposit);
   }
 
   findAll(): DepositEntity[] {
@@ -74,8 +80,9 @@ export class DepositRepository
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[] {
-    return this.database.filter(
-      (item) => item.dateTime >= dateInit && item.dateTime <= dateEnd,
+    return this.findAll().filter(
+      (item) =>
+        item.dateTime >= Number(dateInit) && item.dateTime <= Number(dateEnd),
     );
   }
 }

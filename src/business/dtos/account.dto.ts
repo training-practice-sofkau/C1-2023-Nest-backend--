@@ -17,7 +17,4 @@ export class AccountDTO {
 
   @IsBoolean()
   state: boolean;
-
-  @IsDateString()
-  deletedAt?: string;
 }

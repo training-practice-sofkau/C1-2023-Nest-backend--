@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
-import { DepositDTO } from 'src/business/dtos';
+import { Body, Controller, Delete, Param, Post, Get } from '@nestjs/common';
+import { DataRangeDTO, DepositDTO, PaginationDTO } from 'src/business/dtos';
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositService } from '../../../business/services';
 
@@ -11,8 +11,24 @@ export class DepositController {
     return this.depositService.createDeposit(account);
   }
 
-  @Delete()
-  deleteDeposit(@Body() despositId: string): void {
-    this.depositService.deleteDeposit(despositId);
+  @Get('all')
+  GetAll(
+    @Body()
+    body: {
+      accountId: string;
+      pagination: PaginationDTO;
+      dataRange?: DataRangeDTO;
+    },
+  ): DepositEntity[] {
+    return this.depositService.getHistory(
+      body.accountId,
+      body.pagination,
+      body.dataRange,
+    );
+  }
+
+  @Delete(':id')
+  deleteDeposit(@Param('id') id: string): void {
+    this.depositService.deleteDeposit(id);
   }
 }

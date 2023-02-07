@@ -1,14 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerDTO } from 'src/business/dtos';
+import { CustomerUpdateDTO } from 'src/business/dtos/update-customer.dto';
 import {
+  AccountEntity,
   CustomerEntity,
   DocumentTypeEntity,
 } from '../../../data/persistence/entities';
-import { CustomerRepository } from '../../../data/persistence/repositories';
+import {
+  AccountRepository,
+  AccountTypeRepository,
+  CustomerRepository,
+} from '../../../data/persistence/repositories';
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly accountRepository: AccountRepository,
+    private readonly accountTypeRepository: AccountTypeRepository,
+  ) {}
 
   /**
    * Obtener información de un cliente
@@ -23,10 +33,28 @@ export class CustomerService {
   }
 
   findAll(): CustomerEntity[] {
-    return this.customerRepository.findAll();
+    return this.customerRepository
+      .findAll()
+      .filter((item) => (item.deletedAt ?? true) === true);
   }
 
-  newCustomer(customer: CustomerDTO): CustomerEntity {
+  transform(customer: CustomerDTO): CustomerEntity {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = customer.documentTypeId;
+    const newCustomer = new CustomerEntity();
+    newCustomer.documentType = documentType;
+    newCustomer.document = customer.document;
+    newCustomer.fullName = customer.fullName;
+    newCustomer.email = customer.email;
+    newCustomer.phone = customer.phone;
+    newCustomer.password = customer.password;
+    return newCustomer;
+  }
+
+  newCustomer(customer: CustomerDTO): {
+    customer: CustomerEntity;
+    account: AccountEntity;
+  } {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentTypeId;
 
@@ -37,8 +65,14 @@ export class CustomerService {
     newCustomer.email = customer.email;
     newCustomer.phone = customer.phone;
     newCustomer.password = customer.password;
-
-    return this.customerRepository.register(newCustomer);
+    const typeId = 'ab27c9ac-a01c-4c22-a6d6-ce5ab3b79185';
+    const account = new AccountEntity();
+    account.accountType = this.accountTypeRepository.findOneById(typeId);
+    account.customer = newCustomer;
+    return {
+      customer: this.customerRepository.register(newCustomer),
+      account: this.accountRepository.register(account),
+    };
   }
 
   /**
@@ -49,17 +83,13 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerDTO): CustomerEntity {
+  updatedCustomer(id: string, customer: CustomerUpdateDTO): CustomerEntity {
     if (this.customerRepository.findOneById(id)) {
-      const documentType = new DocumentTypeEntity();
-      documentType.id = customer.documentTypeId;
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = documentType;
       newCustomer.document = customer.document;
       newCustomer.fullName = customer.fullName;
       newCustomer.email = customer.email;
       newCustomer.phone = customer.phone;
-      newCustomer.password = customer.password;
       return this.customerRepository.update(id, newCustomer);
     }
     return new CustomerEntity();
@@ -72,7 +102,17 @@ export class CustomerService {
    * @return {*}  {boolean}
    * @memberof CustomerService
    */
-  unsubscribe(id: string): boolean {
+  unsuscribe(id: string): boolean {
+    if (this.customerRepository.findOneById(id).deletedAt === undefined) {
+      const customer = this.customerRepository.findOneById(id);
+      customer.state = false;
+      this.customerRepository.update(id, customer);
+      return true;
+    }
+    return false;
+  }
+
+  deleteCustomer(id: string): boolean {
     if (this.customerRepository.findOneById(id).deletedAt === undefined) {
       this.customerRepository.delete(id, true);
       return true;

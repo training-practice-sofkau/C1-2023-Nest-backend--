@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferDTO } from 'src/business/dtos';
 import {
   DataRangeModel,
@@ -9,12 +9,14 @@ import { TransferEntity } from '../../../data/persistence/entities';
 import {
   AccountRepository,
   TransferRepository,
+  DepositRepository,
 } from '../../../data/persistence/repositories';
 @Injectable()
 export class TransferService {
   constructor(
     private readonly transferRepository: TransferRepository,
     private readonly accountRepository: AccountRepository,
+    private readonly depositRepository: DepositRepository,
   ) {}
   /**
    * Crear una transferencia entre cuentas del banco
@@ -25,14 +27,23 @@ export class TransferService {
    */
   createTransfer(transfer: TransferDTO): TransferModel {
     const newTransfer = new TransferEntity();
-    newTransfer.inCome = this.accountRepository.findOneById(transfer.inComeId);
-    newTransfer.outCome = this.accountRepository.findOneById(
-      transfer.outComeId,
-    );
-    newTransfer.amount = Number(transfer.amount);
-    newTransfer.reason = transfer.reason;
-
-    return this.transferRepository.register(newTransfer);
+    const inCome = this.accountRepository.findOneById(transfer.inComeId);
+    const outCome = this.accountRepository.findOneById(transfer.outComeId);
+    if (outCome.balance > Number(transfer.amount)) {
+      newTransfer.inCome = inCome;
+      newTransfer.outCome = outCome;
+      newTransfer.amount = Number(transfer.amount);
+      newTransfer.reason = transfer.reason;
+      outCome.balance -= Number(transfer.amount);
+      this.accountRepository.update(outCome.id, outCome);
+      this.accountRepository.update(outCome.id, outCome);
+      inCome.balance += Number(transfer.amount);
+      this.accountRepository.update(inCome.id, inCome);
+      newTransfer.dateTime = Date.now();
+      return this.transferRepository.register(newTransfer);
+    } else {
+      throw new NotFoundException(`fondos insuficientes`);
+    }
   }
 
   /**
@@ -50,21 +61,24 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     if (dataRange) {
-      const array = this.transferRepository.findOutcomeByDataRange(
-        accountId,
-        dataRange.start,
-        dataRange.end,
+      const array = this.transferRepository
+        .findOutcomeByDataRange(
+          accountId,
+          dataRange.startDate ?? 0,
+          dataRange.endDate ?? Date.now(),
+        )
+        .filter(
+          (item) =>
+            item.outCome.id === accountId &&
+            item.amount > (dataRange.startAmount ?? 0) &&
+            item.amount < (dataRange.endAmount ?? Number.MAX_SAFE_INTEGER),
+        );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
       );
-      const arrayReturn = [];
-      for (let i = 0; i < array.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
     }
-    const array = this.transferRepository
-      .findAll()
-      .filter((item) => item.outCome.id === accountId);
-    return array;
+    return [];
   }
 
   /**
@@ -82,21 +96,24 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     if (dataRange) {
-      const array = this.transferRepository.findIncomeByDataRange(
-        accountId,
-        dataRange.start,
-        dataRange.end,
+      const array = this.transferRepository
+        .findIncomeByDataRange(
+          accountId,
+          dataRange.startDate ?? 0,
+          dataRange.endDate ?? Date.now(),
+        )
+        .filter(
+          (item) =>
+            item.inCome.id === accountId &&
+            item.amount > (dataRange.startAmount ?? 0) &&
+            item.amount < (dataRange.endAmount ?? Number.MAX_SAFE_INTEGER),
+        );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
       );
-      const arrayReturn = [];
-      for (let i = 0; i < array.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
     }
-    const array = this.transferRepository
-      .findAll()
-      .filter((item) => item.outCome.id === accountId);
-    return array;
+    return [];
   }
 
   /**
@@ -114,16 +131,29 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     if (dataRange) {
-      const array = this.transferRepository.findAll();
-      const arrayReturn = [];
-      for (let i = 0; i < array.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
+      const newArray = this.transferRepository.findByDataRange(
+        dataRange.startDate ?? 0,
+        dataRange.endDate ?? Date.now(),
+      );
+      const array = newArray.filter(
+        (item) =>
+          (item.inCome.id === accountId || item.outCome.id === accountId) &&
+          (item.amount >= Number(dataRange.startAmount) ?? 0) &&
+          (item.amount <= Number(dataRange.endAmount) ?? Number.MAX_VALUE),
+      );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
+      );
     }
+    const start = pagination.length * pagination.page;
+    const end = start + Number(pagination.length);
     const array = this.transferRepository
       .findAll()
-      .filter((item) => item.outCome.id === accountId);
+      .filter(
+        (item) => item.inCome.id === accountId || item.outCome.id === accountId,
+      )
+      .slice(start, end);
     return array;
   }
 
@@ -135,5 +165,9 @@ export class TransferService {
    */
   deleteTransfer(transferId: string): void {
     this.transferRepository.delete(transferId);
+  }
+
+  selectTransfer(transferId: string): TransferEntity {
+    return this.transferRepository.findOneById(transferId);
   }
 }

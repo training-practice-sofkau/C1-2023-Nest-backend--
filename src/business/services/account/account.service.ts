@@ -34,6 +34,7 @@ export class AccountService {
     newAccount.accountType = this.accountTypeRepository.findOneById(
       account.accountTypeId,
     );
+    newAccount.balance = Number(account.balance);
     return this.accountRepository.register(newAccount);
   }
 
@@ -51,6 +52,14 @@ export class AccountService {
     let newAccount = new AccountEntity();
     newAccount = this.accountRepository.findOneById(accountId);
     return newAccount.balance;
+  }
+
+  getAccountByCustomerId(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+
+  findAll(): AccountEntity[] {
+    return this.accountRepository.findAll();
   }
 
   /**
@@ -84,7 +93,7 @@ export class AccountService {
     if (this.verifyAmountIntoBalance(accountId, amount)) {
       let newAccount = new AccountEntity();
       newAccount = this.accountRepository.findOneById(accountId);
-      newAccount.balance -= amount;
+      newAccount.balance -= Number(amount);
       this.accountRepository.update(accountId, newAccount);
     }
   }
@@ -170,7 +179,8 @@ export class AccountService {
     newAccount = this.accountRepository.findOneById(accountId);
     const accountType = this.accountTypeRepository.findOneById(accountTypeId);
     newAccount.accountType = accountType;
-    return accountType;
+
+    return this.accountRepository.update(accountId, newAccount).accountType;
   }
 
   /**

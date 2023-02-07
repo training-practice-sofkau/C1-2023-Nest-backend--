@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DepositDTO } from 'src/business/dtos';
-import { PaginationModel, DataRangeModel } from '../../../data/models';
-import { DepositEntity } from '../../../data/persistence/entities';
+import { DataRangeDTO, DepositDTO, PaginationDTO } from 'src/business/dtos';
+import {
+  AccountEntity,
+  DepositEntity,
+} from '../../../data/persistence/entities';
 import {
   AccountRepository,
   DepositRepository,
@@ -26,6 +28,12 @@ export class DepositService {
     depositEntity.account = this.accountRepository.findOneById(
       deposit.accountId,
     );
+    depositEntity.amount = Number(deposit.amount);
+    depositEntity.dateTime = Date.now();
+    let newAccount = new AccountEntity();
+    newAccount = this.accountRepository.findOneById(deposit.accountId);
+    newAccount.balance += Number(deposit.amount);
+    this.accountRepository.update(deposit.accountId, newAccount);
     return this.depositRepository.register(depositEntity);
   }
 
@@ -50,24 +58,31 @@ export class DepositService {
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination: PaginationDTO,
+    dataRange?: DataRangeDTO,
   ): DepositEntity[] {
     if (dataRange) {
       const newArray = this.depositRepository.findByDataRange(
-        dataRange.start,
-        dataRange.end,
+        dataRange.startDate ?? 0,
+        dataRange.endDate ?? Date.now(),
       );
-      const array = newArray.filter((item) => item.account.id === accountId);
-      const arrayReturn = [];
-      for (let i = 0; i < newArray.length; i += 10) {
-        arrayReturn.push(array.slice(i, i + 10));
-      }
-      return arrayReturn[pagination.page];
+      const array = newArray.filter(
+        (item) =>
+          item.account.id === accountId &&
+          (item.amount >= Number(dataRange.startAmount) ?? 0) &&
+          (item.amount <= Number(dataRange.endAmount) ?? Number.MAX_VALUE),
+      );
+      return array.slice(
+        pagination.length * pagination.page,
+        pagination.length * pagination.page + pagination.length,
+      );
     }
+    const start = pagination.length * pagination.page;
+    const end = start + Number(pagination.length);
     const array = this.depositRepository
       .findAll()
-      .filter((item) => item.account.id === accountId);
+      .filter((item) => item.account.id === accountId)
+      .slice(start, end);
     return array;
   }
 }

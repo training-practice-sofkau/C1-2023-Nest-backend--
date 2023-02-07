@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 // Repositories
 import {
@@ -19,7 +20,7 @@ import {
   AccountTypeEntity,
   CustomerEntity,
 } from '../../../data/persistence/entities';
-import { AccountDTO, CustomerDTO } from 'src/business/dtos';
+import { AccountDTO, CustomerDTO, SignDTO } from 'src/business/dtos';
 
 @Injectable()
 export class SecurityService {
@@ -27,6 +28,7 @@ export class SecurityService {
     private readonly customerRepository: CustomerRepository,
     private readonly documentTypeRepository: DocumentTypeRepository,
     private readonly accountService: AccountService,
+    private jwtService: JwtService,
   ) {}
 
   /**
@@ -36,13 +38,16 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: CustomerDTO): string {
+  signIn(user: SignDTO) {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
     );
-    if (answer) return 'Falta retornar un JWT';
-    else throw new UnauthorizedException('Datos de identificación inválidos');
+    if (answer) {
+      const customer = this.customerRepository.findOneByEmail(user.email);
+      const payload = { email: customer.email, sub: customer.id };
+      return { access_token: this.jwtService.sign(payload) };
+    } else throw new UnauthorizedException('Datos de identificación inválidos');
   }
 
   /**
@@ -52,7 +57,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: CustomerDTO): string {
+  signUp(user: CustomerDTO) {
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = this.documentTypeRepository.findOneById(
       user.documentTypeId,
@@ -66,16 +71,17 @@ export class SecurityService {
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {
-      const accountType = new AccountTypeEntity();
       const newAccount = new AccountDTO();
-      accountType.id = 'ab27c9ac-a01c-4c22-a6d6-ce5ab3b79185';
       newAccount.customerId = customer.id;
-      newAccount.accountTypeId = customer.documentType.id;
+      newAccount.accountTypeId = 'ab27c9ac-a01c-4c22-a6d6-ce5ab3b79185';
 
       const account = this.accountService.createAccount(newAccount);
 
-      if (account) return 'Falta retornar un JWT';
-      else throw new InternalServerErrorException();
+      if (account) {
+        const payload = { email: customer.email, sub: customer.id };
+        return { access_token: this.jwtService.sign(payload) };
+      } else
+        throw new UnauthorizedException('Datos de identificación inválidos');
     } else throw new InternalServerErrorException();
   }
 
@@ -85,7 +91,9 @@ export class SecurityService {
    * @param {string} JWToken
    * @memberof SecurityService
    */
-  signOut(JWToken: string): void {
-    throw new Error('Method not implemented.');
+  signOut(JWT: string): boolean {
+    if (this.jwtService.verify(JWT)) return true;
+
+    return false;
   }
 }
