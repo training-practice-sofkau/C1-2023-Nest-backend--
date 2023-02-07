@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from "@nestjs/common";
-import { Patch } from "@nestjs/common/decorators";
-import { AccountEntity } from "src/business/persistence";
-import { AccountService, NewAccountDTO } from "src/data";
+import { AccountEntity, AccountTypeEntity } from "src/data/persistence";
+import { AccountService } from "src/business/services";
+import { NewAccountDTO } from "src/business/dtos";
 
 @Controller("account")
 export class AccountController {
@@ -25,6 +25,22 @@ export class AccountController {
     @Post("verifiAmount/:id")
     verifyAmount(@Param("id", new ParseUUIDPipe()) id: string, @Body() amount: { amount: number }): boolean {
         return this.accountServices.verifyAmountIntoBalance(id, amount.amount)
+    }
+
+    @Post("/changeState/:id")
+    changeState(@Param("id", new ParseUUIDPipe()) id: string, @Body() state: { state: boolean }): AccountEntity {
+        return this.accountServices.changeState(id, state.state)
+    }
+
+    @Post("/createAccountType")
+    createAccounType(@Body() body: { name: string }): AccountTypeEntity {
+        return this.accountServices.createTypeAccount(body.name)
+    }
+
+    @Put("/changeAccountType/:id")
+    changeAccountType(@Param("id", new ParseUUIDPipe()) id: string, @Body() accountTypeId: { id: "string" }): AccountTypeEntity {
+        console.log(accountTypeId.id)
+        return this.accountServices.changeAccountType(id, accountTypeId.id);
     }
 
     @Put("/addBalance/:id")

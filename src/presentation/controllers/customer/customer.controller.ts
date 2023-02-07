@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { CustomerEntity } from 'src/business/persistence';
-import { CustomerService, newCustomerDTO, SecurityService } from 'src/data';
+import { CustomerEntity } from 'src/data/persistence';
+import { CustomerService, SecurityService } from 'src/business/services';
+import { newCustomerDTO } from 'src/business/dtos';
 
 @Controller("user")
 export class CustomerController {
@@ -35,5 +36,10 @@ export class CustomerController {
     @Delete(":id")
     deleteUser(@Param("id", new ParseUUIDPipe()) id: string) {
         return this.customerService.deleteCustomer(id)
+    }
+
+    @Post("/findByFullName")
+    findByFullName(@Body() name:{name:string}){
+        return this.customerService.findByFullName(name.name)
     }
 }
