@@ -85,7 +85,7 @@ export class CustomerRepository
     const customer = this.database.filter(
       (customer) => customer.email === email && customer.password === password,
     );
-    if (customer) {
+    if (customer && customer.length>0) {
       return true;
     } else {
       return false;
