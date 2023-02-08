@@ -1,1 +1,2 @@
-export * from './decorators.decorator';
+export * from './auth.decorator';
+export * from './get-customer.decorator';

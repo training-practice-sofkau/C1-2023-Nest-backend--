@@ -1,4 +1,4 @@
-import { IsInt, IsNumber, IsPositive, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsPositive, IsString, IsUUID } from 'class-validator';
 
 export class CreateDepositDto {
   @IsString()
@@ -7,6 +7,4 @@ export class CreateDepositDto {
   @IsPositive()
   @IsInt()
   readonly amount: number;
-  @IsNumber()
-  readonly dateTime: Date | number;
 }

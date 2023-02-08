@@ -1,6 +1,7 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
   IsUrl,
@@ -15,7 +16,7 @@ export class CreateCustomerDto {
   @IsUUID()
   readonly documentTypeId: string;
   @IsNotEmpty()
-  @IsString()
+  @IsNumberString()
   @MaxLength(12)
   readonly document: string;
   @IsString()
@@ -25,7 +26,7 @@ export class CreateCustomerDto {
   @IsString()
   @IsEmail()
   readonly email: string;
-  @IsString()
+  @IsNumberString()
   @IsNotEmpty()
   @MaxLength(30)
   readonly phone: string;

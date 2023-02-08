@@ -14,47 +14,72 @@ import {
   UpdateAccountDto,
 } from 'src/business/dtos';
 import { AccountService } from 'src/business/services';
-import { PaginationModel } from 'src/data';
+import { Auth, GetCustomer } from 'src/common/decorators';
+import { PaginationModel } from 'src/data/models';
 
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountService: AccountService) {}
 
   @Get()
-  getAllAccounts(@Body() pagination: PaginationDto): JSON {
+  @Auth()
+  getAllAccounts(
+    @Body() pagination: PaginationDto,
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+  ): JSON {
     return JSON.parse(
       JSON.stringify(
-        this.accountService.getAllAccounts(<PaginationModel>pagination),
+        this.accountService.getAllAccounts(
+          customerId,
+          <PaginationModel>pagination,
+        ),
       ),
     );
   }
 
   @Get(':id')
-  getAccountByCustomerId(@Param('id', ParseUUIDPipe) customerId: string): JSON {
+  @Auth()
+  getAccountById(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+  ): JSON {
     return JSON.parse(
-      JSON.stringify(this.accountService.getAccountsByCustomer(customerId)),
+      JSON.stringify(this.accountService.getAccountById(customerId, accountId)),
     );
   }
 
   @Post()
-  createAccount(@Body() accountDto: CreateAccountDto): JSON {
+  @Auth()
+  createAccount(
+    @Body() accountDto: CreateAccountDto,
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+  ): JSON {
     return JSON.parse(
-      JSON.stringify(this.accountService.createAccount(accountDto)),
+      JSON.stringify(this.accountService.createAccount(customerId, accountDto)),
     );
   }
 
+  @Auth()
   @Delete(':id')
-  deleteAccount(@Param('id', ParseUUIDPipe) accountId: string): boolean {
-    this.accountService.deleteAccount(accountId);
+  deleteAccount(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+  ): boolean {
+    this.accountService.deleteAccount(customerId, accountId);
     return true;
   }
 
   @Patch(':id')
   changeState(
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
     @Param('id', ParseUUIDPipe) accountId: string,
     @Body() updateAccountDto: UpdateAccountDto,
   ): string {
-    this.accountService.changeState(accountId, updateAccountDto.state);
+    this.accountService.changeState(
+      customerId,
+      accountId,
+      updateAccountDto.state,
+    );
     return 'true';
   }
 }

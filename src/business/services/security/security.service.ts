@@ -13,7 +13,7 @@ import {
   CustomerRepository,
   DocumentTypeRepository,
 } from 'src/data/persistence/repositories';
-import { AccountService, jwtConstants } from 'src/business/services';
+import { AccountService } from 'src/business/services';
 import { hashSync, compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -68,7 +68,7 @@ export class SecurityService {
         customerId: customer.id,
       };
       const { id, fullName, email, document, phone, avatarUrl } = customer;
-      this.accountService.createAccount(newAccountDto);
+      this.accountService.createAccount(customer.id, newAccountDto);
       return JSON.stringify({
         id,
         fullName,
@@ -86,21 +86,13 @@ export class SecurityService {
   signOut(jwtToken: string): void {
     jwtToken = jwtToken.replace('Bearer ', '');
     try {
-      const a = this.jwtService.verify(jwtToken, {
-        secret: jwtConstants.secret,
-      });
+      this.jwtService.verify(jwtToken);
     } catch (e) {
       throw new UnauthorizedException(`Error token invalido`);
     }
   }
 
   private jwt(payload: string): string {
-    return this.jwtService.sign(
-      { id: payload },
-      {
-        secret: jwtConstants.secret,
-        expiresIn: 2 * 60 * 60,
-      },
-    );
+    return this.jwtService.sign({ id: payload });
   }
 }

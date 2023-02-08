@@ -3,6 +3,7 @@ import { AccountService, CreateDepositDto } from 'src/business';
 import { DateRangeModel, PaginationModel } from 'src/data/models';
 import { DepositEntity } from 'src/data/persistence/entities';
 import { DepositRepository } from 'src/data/persistence/repositories';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class DepositService {
@@ -12,15 +13,21 @@ export class DepositService {
   ) {}
 
   //Retorna todos los depositos registrados a la fecha
-  getAll(paginationModel: PaginationModel): DepositEntity[] {
-    const deposits = this.depositRepository.findAll();
-    return this.historyPagination(deposits, paginationModel);
+  getAll(
+    customerId: string,
+    pagination: PaginationModel,
+    dateRange?: DateRangeModel,
+  ): DepositEntity[] {
+    return this.getHistoryByCustomer(customerId, pagination, dateRange);
   }
 
   //Creacion de un deposito y actualiza el balance de la cuenta afectada
-  createDeposit(deposit: CreateDepositDto): DepositEntity {
+  createDeposit(customerId: string, deposit: CreateDepositDto): DepositEntity {
     const newDeposit = new DepositEntity();
-    newDeposit.account = this.accountService.getAccountById(deposit.accountId);
+    newDeposit.account = this.accountService.getAccountById(
+      customerId,
+      deposit.accountId,
+    );
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = Date.now();
     this.depositRepository.register(newDeposit);
@@ -29,12 +36,15 @@ export class DepositService {
   }
 
   //Eliminacion de un deposito
-  deleteDeposit(depositId: string): void {
+  deleteDeposit(customerId: string, depositId: string): void {
+    const account = this.depositRepository.findOneById(depositId).account;
+    this.accountService.getAccountById(customerId, account.id);
     this.depositRepository.delete(depositId, true);
   }
 
   //Retorna el listado de depositos relacionados a la cuenta de acuerdo a la paginacion solicitada
   getHistory(
+    customerId: string,
     accountId: string,
     pagination: PaginationModel,
     dateRange?: DateRangeModel,
@@ -42,6 +52,7 @@ export class DepositService {
     if (!pagination) {
       throw new BadRequestException(`Se debe paginar la solicitud`);
     }
+    this.accountService.getAccountById(customerId, accountId);
     let currentDeposits: DepositEntity[];
     if (dateRange) {
       const dateInit = dateRange.dateInit ?? new Date('1999-01-01').getTime();
@@ -54,6 +65,21 @@ export class DepositService {
       currentDeposits = this.depositRepository.findByAccountId(accountId);
     }
     return this.historyPagination(currentDeposits, pagination);
+  }
+
+  getHistoryByCustomer(
+    customerId: string,
+    pagination: PaginationModel,
+    dateRange?: DateRangeModel,
+  ): DepositEntity[] {
+    const accounts = this.accountService.getAccountsByCustomer(customerId);
+    const totalDeposits: DepositEntity[] = [];
+    for (const account of accounts) {
+      totalDeposits.push(
+        ...this.getHistory(customerId, account.id, pagination, dateRange),
+      );
+    }
+    return totalDeposits;
   }
 
   private historyPagination(
