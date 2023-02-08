@@ -1,13 +1,27 @@
+//Libraries
 import { Module } from '@nestjs/common';
-import { SecurityController } from './presentation/controllers';
-import { AccountService, SecurityService } from './business/services';
-import { UsersController } from './presentation/controllers/users/users.controller';
-import { AccountsController } from './presentation/controllers/accounts/accounts.controller';
-import { TransfersController } from './presentation/controllers/transfers/transfers.controller';
-import { DepositsController } from './presentation/controllers/deposits/deposits.controller';
-import { DepositService } from './business/services/deposit/deposit.service';
-import { TransferService } from './business/services/transfer/transfer.service';
-import { CustomerService } from './business/services/customer/customer.service';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './business/services/security/jwt.strategy';
+//Controllers
+import {
+  AccountsController,
+  DepositsController,
+  SecurityController,
+  TransfersController,
+  UsersController,
+} from './presentation/controllers';
+//Services
+import {
+  TransferService,
+  CustomerService,
+  DepositService,
+  SecurityService,
+  AccountService,
+  jwtConstants,
+  // jwtConstants,
+} from './business/services';
+//Repositories
 import {
   AccountRepository,
   AccountTypeRepository,
@@ -16,11 +30,6 @@ import {
   DocumentTypeRepository,
   TransferRepository,
 } from './data/persistence/repositories';
-import { JwtService } from '@nestjs/jwt';
-import { Calculator } from './Week2Day3/observer/calculator';
-import { CrearFiguras } from './Week2Day3/factory/CrearFiguras';
-import { Strategy } from './Week2Day3/strategy/strategy';
-import { Singleton } from './Week2Day3/singleton/singleton';
 
 @Module({
   controllers: [
@@ -29,10 +38,6 @@ import { Singleton } from './Week2Day3/singleton/singleton';
     AccountsController,
     TransfersController,
     DepositsController,
-    Calculator,
-    CrearFiguras,
-    Strategy,
-    Singleton,
   ],
   providers: [
     AccountService,
@@ -46,7 +51,15 @@ import { Singleton } from './Week2Day3/singleton/singleton';
     DepositRepository,
     CustomerRepository,
     DocumentTypeRepository,
-    JwtService,
+    JwtStrategy,
+    // JwtService,
+  ],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: jwtConstants.JTW_SECRET,
+      signOptions: { expiresIn: '2h' },
+    }),
   ],
   exports: [
     AccountService,
@@ -60,7 +73,9 @@ import { Singleton } from './Week2Day3/singleton/singleton';
     DepositRepository,
     CustomerRepository,
     DocumentTypeRepository,
-    JwtService,
+    PassportModule,
+    JwtModule,
+    JwtStrategy,
   ],
 })
 export class AppModule {}

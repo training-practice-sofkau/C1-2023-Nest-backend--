@@ -8,6 +8,7 @@ import { DateRangeModel, PaginationModel } from 'src/data/models';
 import { TransferEntity } from 'src/data/persistence/entities';
 import { TransferRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class TransferService {
@@ -21,10 +22,61 @@ export class TransferService {
     return this.transferRepository.findAll();
   }
 
+  getHistoryByCustomer(
+    customerId: string,
+    pagination: PaginationModel,
+    dateRange?: DateRangeModel,
+  ): TransferEntity[] {
+    const accounts = this.accountService.getAccountsByCustomer(customerId);
+    const totalTransfers: TransferEntity[] = [];
+    for (const account of accounts) {
+      totalTransfers.push(
+        ...this.getHistory(account.id, pagination, dateRange),
+      );
+    }
+    return totalTransfers;
+  }
+
+  getHistoryOutByCustomer(
+    customerId: string,
+    pagination: PaginationModel,
+    dateRange?: DateRangeModel,
+  ): TransferEntity[] {
+    const accounts = this.accountService.getAccountsByCustomer(customerId);
+    const totalTransfers: TransferEntity[] = [];
+    for (const account of accounts) {
+      totalTransfers.push(
+        ...this.getHistoryOut(account.id, pagination, dateRange),
+      );
+    }
+    return totalTransfers;
+  }
+
+  getHistoryInByCustomer(
+    customerId: string,
+    pagination: PaginationModel,
+    dateRange?: DateRangeModel,
+  ): TransferEntity[] {
+    const accounts = this.accountService.getAccountsByCustomer(customerId);
+    const totalTransfers: TransferEntity[] = [];
+    for (const account of accounts) {
+      totalTransfers.push(
+        ...this.getHistoryIn(account.id, pagination, dateRange),
+      );
+    }
+    return totalTransfers;
+  }
   //Registra la transferancia en el sistema y actualiza el balance en las cuentas afectadas
-  createTransfer(transfer: CreateTransferDto): TransferEntity {
-    const incomeAccount = this.accountService.getAccountById(transfer.incomeId);
+  createTransfer(
+    customerId: string,
+    transfer: CreateTransferDto,
+  ): TransferEntity {
+    const incomeAccount = this.accountService.getAccountById(
+      customerId,
+      transfer.incomeId,
+    );
     const outcomeAccount = this.accountService.getAccountById(
+      customerId,
       transfer.outcomeId,
     );
     const newTransfer = new TransferEntity();
@@ -38,9 +90,11 @@ export class TransferService {
       this.accountService.addBalance(incomeAccount.id, transfer.amount);
       this.accountService.removeBalance(outcomeAccount.id, transfer.amount);
       newTransfer.income = this.accountService.getAccountById(
+        customerId,
         transfer.incomeId,
       );
       newTransfer.outcome = this.accountService.getAccountById(
+        customerId,
         transfer.outcomeId,
       );
       return newTransfer;
@@ -106,7 +160,15 @@ export class TransferService {
   }
 
   //Borrado de la transferencia enviada
-  deleteTransfer(transferId: string): void {
+  deleteTransfer(customerId: string, transferId: string): void {
+    if (
+      this.transferRepository.findOneById(transferId).outcome.customer.id !==
+      customerId
+    ) {
+      throw new UnauthorizedException(
+        'La transferencia a eliminar no pertenece al cliente',
+      );
+    }
     this.transferRepository.delete(transferId, true);
   }
 
@@ -122,11 +184,6 @@ export class TransferService {
     const end = start + range;
     for (let i = start; i < end; i++) {
       transfersList[i] ? transfers.push(transfersList[i]) : (i = end);
-    }
-    if (Math.ceil(Math.round(transfersList.length / range)) < currentPage) {
-      throw new BadRequestException(
-        `La pagina ${currentPage} no existe o está vacía`,
-      );
     }
     return transfers;
   }

@@ -14,17 +14,33 @@ import {
 } from 'src/business/dtos';
 import { DateRangeModel, PaginationModel } from 'src/data/models';
 import { TransferService } from 'src/business/services';
+import { Auth, GetCustomer } from 'src/common/decorators';
 
 @Controller('transfers')
 export class TransfersController {
   constructor(private readonly transferService: TransferService) {}
 
-  @Get()
-  getAll(): JSON {
-    return JSON.parse(JSON.stringify(this.transferService.getAll()));
+  @Get('')
+  @Auth()
+  //@UseGuards(AuthGuard())
+  getAll(
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+    @Body('pagination') pagination: PaginationDto,
+    @Body('dateRange') dateRange?: DateRangeDto,
+  ): JSON {
+    return JSON.parse(
+      JSON.stringify(
+        this.transferService.getHistoryByCustomer(
+          customerId,
+          <PaginationModel>pagination,
+          <DateRangeModel>dateRange,
+        ),
+      ),
+    );
   }
 
-  @Get(':id')
+  @Get('account/:id')
+  @Auth()
   getAllByAccount(
     @Param('id', ParseUUIDPipe) accountId: string,
     @Body('pagination') pagination: PaginationDto,
@@ -42,7 +58,8 @@ export class TransfersController {
   }
 
   @Get('income/:id')
-  getByIncomeAccountAndDateRange(
+  @Auth()
+  getByIncomeAccount(
     @Param('id', ParseUUIDPipe) accountId: string,
     @Body('pagination') pagination: PaginationDto,
     @Body('dateRange') dateRange?: DateRangeDto,
@@ -59,7 +76,8 @@ export class TransfersController {
   }
 
   @Get('outcome/:id')
-  getByOutcomeAccountAndDateRange(
+  @Auth()
+  getByOutcomeAccount(
     @Param('id', ParseUUIDPipe) accountId: string,
     @Body('pagination') pagination: PaginationDto,
     @Body('dateRange') dateRange?: DateRangeDto,
@@ -76,15 +94,25 @@ export class TransfersController {
   }
 
   @Post()
-  createTransfer(@Body() createTransferDto: CreateTransferDto): JSON {
+  @Auth()
+  createTransfer(
+    @Body() createTransferDto: CreateTransferDto,
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+  ): JSON {
     return JSON.parse(
-      JSON.stringify(this.transferService.createTransfer(createTransferDto)),
+      JSON.stringify(
+        this.transferService.createTransfer(customerId, createTransferDto),
+      ),
     );
   }
 
   @Delete(':id')
-  deleteTransfer(@Param('id', ParseUUIDPipe) depositId: string): boolean {
-    this.transferService.deleteTransfer(depositId);
+  @Auth()
+  deleteTransfer(
+    @Param('id', ParseUUIDPipe) depositId: string,
+    @GetCustomer('id', ParseUUIDPipe) customerId: string,
+  ): boolean {
+    this.transferService.deleteTransfer(customerId, depositId);
     return true;
   }
 }

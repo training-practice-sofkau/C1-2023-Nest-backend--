@@ -1,7 +1,6 @@
 import {
   IsInt,
   IsNotEmpty,
-  IsNumber,
   IsPositive,
   IsString,
   IsUUID,
@@ -22,6 +21,4 @@ export class CreateTransferDto {
   @IsNotEmpty()
   @MaxLength(500)
   readonly reason: string;
-  @IsNumber()
-  readonly dateTime: Date | number;
 }

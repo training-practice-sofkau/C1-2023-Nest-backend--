@@ -37,7 +37,7 @@ export class CustomerRepository
 
   findOneByEmail(email: string): CustomerEntity {
     const currentCustomer = this.findAll().find(
-      (c) => c.email.toLowerCase() === email.toLowerCase(),
+      (c) => c.email?.toLowerCase() === email?.toLowerCase(),
     );
     if (currentCustomer) return currentCustomer;
     throw new NotFoundException(`No existe cliente con el email: ${email}`);

@@ -4,6 +4,7 @@ import { PaginationModel } from 'src/data';
 import { CustomerEntity } from 'src/data/persistence/entities';
 import { CustomerRepository } from 'src/data/persistence/repositories';
 import { AccountService } from '../account';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class CustomerService {
@@ -26,9 +27,15 @@ export class CustomerService {
 
   //Actualiza informacion del ususario solicitado
   updateCustomer(
+    currentCustomerId: string,
     customerId: string,
     customer: UpdateCustomerDto,
   ): CustomerEntity {
+    if (currentCustomerId !== customerId) {
+      throw new UnauthorizedException(
+        'El usuario a eliminar no existe o es el mismo cliente',
+      );
+    }
     const currentCustomer = this.customerRepository.findOneById(customerId);
     let updatedCustomer = new CustomerEntity();
     updatedCustomer = {
@@ -40,10 +47,17 @@ export class CustomerService {
   }
 
   //Elimina el usuario solicitado de forma logica
-  unsubscribe(customerId: string): boolean {
+  unsubscribe(currentCustomerId: string, customerId: string): boolean {
+    if (currentCustomerId !== customerId) {
+      throw new UnauthorizedException(
+        'El usuario a eliminar no existe o es el mismo cliente',
+      );
+    }
     const currentAccounts =
       this.accountService.getAccountsByCustomer(customerId);
-    currentAccounts.forEach((a) => this.accountService.deleteAccount(a.id));
+    currentAccounts.forEach((a) =>
+      this.accountService.deleteAccount(customerId, a.id),
+    );
     return true;
   }
 

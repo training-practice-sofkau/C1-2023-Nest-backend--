@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from 'src/business/dtos';
 import { PaginationModel } from 'src/data';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 import {
   AccountEntity,
   AccountTypeEntity,
@@ -23,22 +24,29 @@ export class AccountService {
     private readonly customerRepository: CustomerRepository,
   ) {}
   //Retorna el liestado de todas las cuentas, este metodo solo se usaria para administradores pero por ahora todos
-  getAllAccounts(paginationModel: PaginationModel): AccountEntity[] {
-    const accounts = this.accountRepository.findAll();
+  getAllAccounts(
+    customerId: string,
+    paginationModel: PaginationModel,
+  ): AccountEntity[] {
+    const accounts = this.accountRepository.findByCustomer(customerId);
     return this.historyPagination(accounts, paginationModel);
   }
 
   //Retorna la cuenta segun el id
-  getAccountById(accountId: string): AccountEntity {
+  getAccountById(customerId: string, accountId: string): AccountEntity {
+    const account = this.accountRepository.findOneById(accountId);
+    if (account.customer.id !== customerId) {
+      throw new UnauthorizedException(
+        'El id de cuenta no existe o no pertenece al cliente ',
+      );
+    }
     return this.accountRepository.findOneById(accountId);
   }
 
   //Creacion de cuentas
-  createAccount(account: CreateAccountDto): AccountEntity {
+  createAccount(customerId: string, account: CreateAccountDto): AccountEntity {
     const currentAccountType = this.getAccountType(account.accountTypeId);
-    const currentCustomer = this.customerRepository.findOneById(
-      account.customerId,
-    );
+    const currentCustomer = this.customerRepository.findOneById(customerId);
     const newAccount = new AccountEntity();
     newAccount.accountType = currentAccountType;
     newAccount.customer = currentCustomer;
@@ -91,8 +99,13 @@ export class AccountService {
   }
 
   //Actualiza o cambia el estado de una cuenta
-  changeState(accountId: string, newState: boolean): void {
+  changeState(customerId: string, accountId: string, newState: boolean): void {
     const currentAccount = this.accountRepository.findOneById(accountId);
+    if (currentAccount.customer.id !== customerId) {
+      throw new UnauthorizedException(
+        'La cuenta no existe o el no le pertenece al cliente',
+      );
+    }
     if (this.accountRepository.findOneById(accountId).balance != 0) {
       throw new ConflictException('No se puede inactivar una cuenta con saldo');
     }
@@ -115,8 +128,13 @@ export class AccountService {
   }
 
   //Eliminar una cuenta
-  deleteAccount(accountId: string): void {
+  deleteAccount(customerId: string, accountId: string): void {
     const currentAccount = this.accountRepository.findOneById(accountId);
+    if (currentAccount.customer.id !== customerId) {
+      throw new UnauthorizedException(
+        'Cuenta a eliminar no exite o no pertenece al Cliente',
+      );
+    }
     const balance = currentAccount.balance;
     if (balance === 0) {
       const currentDeposits = this.depositRepository.findByAccountId(accountId);
