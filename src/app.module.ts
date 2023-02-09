@@ -21,9 +21,12 @@ import {
   DocumentTypeRepository,
   TransferRepository,
 } from './data/persistence/repository';
+import { JwtModule } from '@nestjs/jwt/dist';
 
 @Module({
-  imports: [],
+  imports: [
+    JwtModule.register({ secret: '123456', signOptions: { expiresIn: '1h' } }),
+  ],
   controllers: [
     UserController,
     AccountController,
