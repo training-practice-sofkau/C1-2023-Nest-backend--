@@ -85,7 +85,7 @@ export class SecurityService {
 
   /**
    * Salir del sistema
-   *
+   *fin
    * @param {string} JWToken
    * @memberof SecurityService
    */
