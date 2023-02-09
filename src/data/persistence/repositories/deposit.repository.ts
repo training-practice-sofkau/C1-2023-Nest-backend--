@@ -54,7 +54,7 @@ export class DepositRepository extends BaseRepository<DepositEntity> implements 
   }
   findByDataRange(id: string, DateMin: number | Date, DateMax: Number | Date): DepositEntity[] {
     const arrayDeposites = this.findAll()
-    return arrayDeposites.filter(deposit => (deposit.id === id && deposit.dateTime >= DateMin && deposit.dateTime <= DateMax))
+    return arrayDeposites.filter(deposit => (deposit.account.id === id && deposit.dateTime >= DateMin && deposit.dateTime <= DateMax))
   }
   }
 

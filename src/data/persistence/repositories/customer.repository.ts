@@ -48,7 +48,7 @@ export class CustomerRepository extends BaseRepository<CustomerEntity> implement
     else throw new NotFoundException(`El ID ${id} no existe en base de datos`);
   }
    
-  findOneByEmailAndPassword(email: string, password: string): boolean {
+  findOneByEmailAndPassword(email: string, password: string): any {
     const index = this.database.findIndex(
       (item) =>
         item.email === email &&
@@ -57,6 +57,7 @@ export class CustomerRepository extends BaseRepository<CustomerEntity> implement
     );
     return index >= 0 ? true : false;
   }
+  
 
   findOneByDocumentTypeAndDocument(
     documentTypeId: string,
@@ -72,13 +73,14 @@ export class CustomerRepository extends BaseRepository<CustomerEntity> implement
     else throw new NotFoundException(`No se encontró ningún cliente con el tipo de documento ${documentTypeId} y el número de documento ${document}`);
   }
   findOneByEmail(email: string): CustomerEntity {
-    const customer = this.database.find(
-      (item) =>
-        item.email === email &&
-        item.deletedAt === undefined
+    const index = this.database.findIndex(
+      (item) => item.email === email && typeof item.deletedAt === 'undefined',
     );
-    if (customer) return customer;
-    else throw new NotFoundException(`No se encontró ningún cliente con el email ${email}`);
+    if (index < 0) {
+      throw new NotFoundException(`no existe en base de datos`);
+    }
+    const customer = this.database[index];
+    return customer;
   }
   findOneByPhone(phone: string): CustomerEntity {
     const customer = this.database.find(

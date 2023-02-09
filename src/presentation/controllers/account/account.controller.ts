@@ -1,3 +1,4 @@
+import { NewAccountDTO } from 'src/business/dtos/new-account.dto';
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { AccountModel } from 'src/data/models';
 import { AccountTypeEntity } from 'src/data/persistence/entities/account-type.entity';
@@ -9,7 +10,7 @@ import { AccountService } from 'src/business/services/account/account.service';
 export class AccountController {
     constructor (private readonly accountService: AccountService){}
     @Post()
-    createAccount(@Body() account: AccountModel): AccountEntity {
+    createAccount(@Body() account: NewAccountDTO): AccountEntity {
       return this.accountService.createAccount(account);
     }
   
