@@ -17,4 +17,8 @@ export class SecurityController {
     return this.securityService.signIn(signIn);
   }
   //Salir del sistema
+  @Get('logout')
+  logout(@Body() body: { JWT: string }): boolean {
+    return this.securityService.signOut(body.JWT);
+  }
 }

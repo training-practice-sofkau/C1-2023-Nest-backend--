@@ -89,7 +89,9 @@ export class SecurityService {
    * @param {string} JWToken
    * @memberof SecurityService
    */
-  // signOut(JWToken: string): void {
-  //   throw new Error('Method not implemented.');
-  // }
+  signOut(JWT: string): boolean {
+    if (this.jwtService.verify(JWT)) return true;
+
+    return false;
+  }
 }
