@@ -1,25 +1,34 @@
 import { Module } from '@nestjs/common';
-import { AccountController } from './controllers/account/account.controller';
-import { TransferController } from './controllers/transfer/transfer.controller';
-import { DepositController } from './controllers/deposit/deposit.controller';
-import { AccountTypeRepository } from './persistence/repositories/account-type.repository';
-import { AccountRepository } from './persistence/repositories/account.repository';
-import { CustomerRepository } from './persistence/repositories/customer.respository';
-import { AccountService } from './services/account/account.service';
-import { CustomerService } from './services/customer/customer.service';
-import { UserController } from './controllers/user/user.controller';
-import { DepositService } from './services/deposit/deposit.service';
-import { DepositRepository } from './persistence/repositories/deposit.repository';
-import { TransferService } from './services/transfer/transfer.service';
-import { TransferRepository } from './persistence/repositories/transfer.repository';
+import { AccountController } from './presentation/controllers/account/account.controller';
+import { TransferController } from './presentation/controllers/transfer/transfer.controller';
+import { DepositController } from './presentation/controllers/deposit/deposit.controller';
+import { CustomerRepository } from './data/persistence';
+import { AccountRepository } from './data/persistence/repositories/account.repository';
+import { AccountTypeRepository } from './data/persistence/repositories/account-type.repository';
+import { DepositRepository } from './data/persistence/repositories/deposit.repository';
+import { TransferRepository } from './data/persistence/repositories/transfer.repository';
+import { CustomerService } from './business/services';
+import { AccountService } from './business/services/account/account.service';
+import { DepositService } from './business/services/deposit/deposit.service';
+import { TransferService } from './business/services/transfer/transfer.service';
+import { SecurityController } from './presentation/controllers/security/security.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { SecurityService } from './business/services/security/security.service';
+import { CustomerController } from './presentation/controllers/customer/customer.controller';
 
 @Module({
-  imports: [],
+  imports: [
+    JwtModule.register({
+      secret: '1234',
+      signOptions: { expiresIn: '20h' },
+    }),
+  ],
   controllers: [
-    UserController,
     AccountController,
     DepositController,
     TransferController,
+    SecurityController,
+    CustomerController,
   ],
   providers: [
     CustomerService,
@@ -31,6 +40,7 @@ import { TransferRepository } from './persistence/repositories/transfer.reposito
     DepositRepository,
     TransferService,
     TransferRepository,
+    SecurityService,
   ],
 })
 export class AppModule {}
