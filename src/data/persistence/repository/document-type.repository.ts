@@ -8,6 +8,14 @@ export class DocumentTypeRepository
   extends BaseRepository<DocumentTypeEntity>
   implements DocumentTypeRepositoryInterface
 {
+  constructor(){
+    super();
+    this.database.push({
+      id: '7a361cba-2546-4d9b-80fe-28e07bc41e1f',
+      name: 'cedula',
+      state: true,
+    })}
+
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

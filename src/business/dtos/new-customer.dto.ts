@@ -31,6 +31,5 @@ export class NewCustomerDTO {
   @MinLength(8)
   password: string;
 
-  @IsBoolean()
-  state: boolean;
+
 }

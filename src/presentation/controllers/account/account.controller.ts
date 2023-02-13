@@ -17,6 +17,16 @@ import {
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
+
+  @Get()
+  findAllUsers(): AccountEntity[] {
+    return this.accountService.findAll();
+  }
+  //traer cuenta
+  @Get(':id')
+  getCustomerInf(@Param('id') AccountId: string): AccountEntity {
+    return this.accountService.findOneById(AccountId);
+  }
   //crear cuenta
   @Post('new')
   createAccoun(@Body() account: NewAccountDto): AccountEntity {

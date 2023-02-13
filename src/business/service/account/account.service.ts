@@ -18,6 +18,10 @@ export class AccountService {
     private readonly customerRepository: CustomerRepository,
   ) {}
 
+  findAll(): AccountEntity[] {
+    return this.accountRepository.findAll();
+  }
+
   findOneById(id: string): AccountEntity {
     return this.accountRepository.findOneById(id);
   }
