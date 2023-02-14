@@ -1,13 +1,15 @@
+import { NewAccountDTO } from 'src/business/dtos/new-account.dto';
 import { Injectable } from '@nestjs/common';
 import { AccountEntity } from 'src/data/persistence/entities/account.entity';
-import { AccountRepository } from 'src/data/persistence/repositories';
+import { AccountRepository, AccountTypeRepository, CustomerRepository } from 'src/data/persistence/repositories';
 import { AccountModel } from 'src/data/models';
 import { AccountTypeEntity } from 'src/data/persistence/entities/account-type.entity';
 
 
 @Injectable()
 export class AccountService {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository,) {}
 
   /**
    * Crear una cuenta
@@ -16,11 +18,13 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: NewAccountDTO): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
-    newAccount.balance = account.balance;
+    newAccount.customer = this.customerRepository.findOneById(account.Customer);
+    newAccount.accountType = this.accountTypeRepository.findOneById(
+      account.accountType,
+    );
+    newAccount.balance = Number(account.balance);
     return this.accountRepository.register(newAccount);
   }
 

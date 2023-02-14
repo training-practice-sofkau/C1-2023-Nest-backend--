@@ -18,7 +18,7 @@ export class TransferController {
     return this.transferService.findOneById(id);
   }
 
-  @Post()
+  @Post('create')
   createTransfer(@Body() transfer: NewTransferDTO): TransferEntity {
     return this.transferService.createTransfer(transfer);
   }

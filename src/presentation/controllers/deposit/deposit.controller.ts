@@ -48,8 +48,7 @@ export class DepositController {
   ): DepositEntity[] {
     const newPagination = new PaginationEntity();
     newPagination.actualPage = data.actualPage;
-    const newDataRange = new DataRangeEntity();
-    newDataRange.range = data.range;
-    return this.depositService.getHistory(id, newPagination, newDataRange);
+    newPagination.numberPages = data.range;
+    return this.depositService.getHistory(id, newPagination);
   }
 }
