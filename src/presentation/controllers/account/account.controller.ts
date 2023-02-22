@@ -7,12 +7,14 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AccountService, NewAccountDto } from 'src/business';
 import {
   AccountEntity,
   AccountTypeEntity,
 } from 'src/data/persistence/entities';
+import { ProtecGuard } from 'src/presentation/guards/protec/protec.guard';
 
 @Controller('account')
 export class AccountController {
@@ -29,8 +31,14 @@ export class AccountController {
   }
   //crear cuenta
   @Post('new')
+  @UseGuards(ProtecGuard)
   createAccoun(@Body() account: NewAccountDto): AccountEntity {
     return this.accountService.createAccount(account);
+  }
+  //traer usuario con cuentas
+  @Get('customer/:id')
+  findByCustomer(@Param('id') id: string): AccountEntity[] {
+    return this.accountService.findByCustomer(id);
   }
   //obtener balance
   @Get('balance/:accountId')

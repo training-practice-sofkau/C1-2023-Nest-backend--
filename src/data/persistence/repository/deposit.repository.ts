@@ -78,4 +78,9 @@ export class DepositRepository
         deposit.dateTime <= dateEnd,
     );
   }
+  getByCustomerId(id: string): DepositEntity[] {
+    return this.database.filter(
+      (deposit) => deposit.account.customer.id === id,
+    );
+  }
 }

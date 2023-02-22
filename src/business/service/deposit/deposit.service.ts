@@ -102,4 +102,7 @@ export class DepositService {
     }
     return arrayTransferReturn;
   }
+  getByCustomerId(id: string): DepositEntity[] {
+    return this.depositRepository.getByCustomerId(id);
+  }
 }

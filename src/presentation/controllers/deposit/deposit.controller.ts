@@ -53,4 +53,9 @@ export class DepositController {
     newDataRange.range = data.range;
     return this.depositService.getHistory(id, newPagination, newDataRange);
   }
+
+  @Get('history/:id')
+  history(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.depositService.getByCustomerId(id);
+  }
 }

@@ -48,6 +48,7 @@ export class TransferService {
         newTransfer.income = newIncome;
         newTransfer.amount = transfer.amount;
         newTransfer.reason = transfer.reason;
+        newTransfer.dateTime = Date.now();
         this.accountService.addBalance(newIncome.id, transfer.amount);
         this.accountService.removeBalance(newOutcome.id, transfer.amount);
         return this.transferRepository.register(newTransfer);

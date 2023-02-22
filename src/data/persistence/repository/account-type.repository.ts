@@ -17,7 +17,7 @@ export class AccountTypeRepository
         state: true,
       },
       {
-        id: '42ac6b77-5b78-4926-b3b2-92c8329257ef',
+        id: '4bf840bf-4fa5-46f2-a5bf-ec926237217b',
         name: 'corriente',
         state: true,
       },
@@ -57,7 +57,6 @@ export class AccountTypeRepository
   }
 
   findOneById(id: string): AccountTypeEntity {
-    // const account = this.database.find((item) => item.id === id);
     const accounts = [
       {
         id: 'bb0f82fc-46f7-453e-9875-f95044c4c799',

@@ -4,8 +4,9 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { NewCustomerDTO } from 'src/business/dtos';
+import { NewAccountDto, NewCustomerDTO } from 'src/business/dtos';
 import {
+  AccountEntity,
   AccountTypeEntity,
   CustomerEntity,
   DocumentTypeEntity,
@@ -30,14 +31,17 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: NewSecurityDTO): { access_token: string } {
+  signIn(user: NewSecurityDTO): { access_token: string; id: string } {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
     );
     if (answer) {
       const mail = this.customerRepository.findOneByEmail(user.email);
-      return { access_token: this.jwtService.sign({ id: mail.id }) };
+      return {
+        access_token: this.jwtService.sign({ id: mail.id }),
+        id: mail.id,
+      };
     } else throw new UnauthorizedException('Datos de identificación inválidos');
   }
   transmap(customer: NewCustomerDTO): CustomerEntity {
@@ -60,25 +64,24 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: NewCustomerDTO): { access_token: string } {
+  signUp(user: NewCustomerDTO): { access_token: string; id: string } {
     const newCustomer = this.transmap(user);
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {
       const accountType = new AccountTypeEntity();
       accountType.id = 'bb0f82fc-46f7-453e-9875-f95044c4c799';
-      const newAccount = {
-        CustomerEntityId: customer.id,
-        accontType: accountType.id,
-        id: '',
-        balance: '5',
-        state: true,
-      };
-
+      const newAccount = new NewAccountDto();
+      newAccount.accontType = 'bb0f82fc-46f7-453e-9875-f95044c4c799';
+      newAccount.CustomerEntityId = customer.id;
+      newAccount.balance = '0';
       const account = this.accountService.createAccount(newAccount);
 
       if (account)
-        return { access_token: this.jwtService.sign({ id: customer.id }) };
+        return {
+          access_token: this.jwtService.sign({ id: customer.id }),
+          id: customer.id,
+        };
       else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();
   }

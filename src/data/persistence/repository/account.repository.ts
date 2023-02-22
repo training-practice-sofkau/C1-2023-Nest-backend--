@@ -66,6 +66,7 @@ export class AccountRepository
   }
 
   findByCustomer(customer: string): AccountEntity[] {
+    console.log(customer)
     const client = this.database.filter(
       (item) =>
         item.customer.id == customer && typeof item.deletedAt === 'undefined',

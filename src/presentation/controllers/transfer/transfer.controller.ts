@@ -30,7 +30,7 @@ export class TransferController {
     return this.transferService.createTransfer(transfer);
   }
 
-  @Post('/hOut/:id')
+  @Get('/hOut/:id')
   getHistoryOut(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: { actualPage: number; range: number },
@@ -42,7 +42,7 @@ export class TransferController {
     return this.transferService.getHistoryOut(id, newPagination, newDataRange);
   }
 
-  @Post('/hIncome/:id')
+  @Get('/hIncome/:id')
   getHistoryIncome(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() data: { actualPage: number; range: number },
@@ -52,5 +52,39 @@ export class TransferController {
     const newDataRange = new DataRangeEntity();
     newDataRange.range = data.range;
     return this.transferService.getHistoryIn(id, newPagination, newDataRange);
+  }
+
+  @Post('history/:id')
+  getTransferHistory(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() data: { actualPage: number; range: number },
+  ) {
+    const newPagination = new PaginationEntity();
+    newPagination.actualPage = data.actualPage;
+    const newDataRange = new DataRangeEntity();
+    newDataRange.range = data.range;
+    let historyOut: TransferEntity[];
+    try {
+      historyOut = this.transferService.getHistoryOut(
+        id,
+        newPagination,
+        newDataRange,
+      );
+    } catch (error) {
+      historyOut = [];
+    }
+
+    let historyIn: TransferEntity[];
+    try {
+      historyIn = this.transferService.getHistoryIn(
+        id,
+        newPagination,
+        newDataRange,
+      );
+    } catch (error) {
+      historyIn = [];
+    }
+
+    return [...historyOut, ...historyIn];
   }
 }
