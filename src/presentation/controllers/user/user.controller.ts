@@ -30,6 +30,10 @@ export class UserController {
     return this.customerService.getCustomerInfo(customerId);
   }
 
+  @Get('google/:email')
+  getCustomerEmail(@Param('email') email: string): CustomerEntity {
+    return this.customerService.getCustomerEmail(email);
+  }
   //Desactivar cuenta
   @Post(':id')
   unsubscribe(@Param('id', ParseUUIDPipe) customerId: string): boolean {

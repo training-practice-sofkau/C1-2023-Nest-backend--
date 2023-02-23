@@ -53,7 +53,9 @@ export class CustomerService {
   getCustomerInfo(customerId: string): CustomerEntity {
     return this.costumerRepository.findOneById(customerId);
   }
-
+  getCustomerEmail(email: string): CustomerEntity {
+    return this.costumerRepository.findOneByEmail(email);
+  }
   /**
    * Actualizar información de un cliente
    *
